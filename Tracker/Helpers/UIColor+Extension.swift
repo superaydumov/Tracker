@@ -8,15 +8,15 @@
 import UIKit
 
 extension UIColor {
-    static var trackerBackgroundDay: UIColor! { UIColor(named: "tracker_Background_Day")}
+    static var trackerBackground: UIColor! { UIColor(named: "tracker_Background")}
     static var trackerBackgroundNight: UIColor! { UIColor(named: "tracker_Background_Night")}
-    static var trackerBlackDay: UIColor! { UIColor(named: "tracker_Black_Day")}
+    static var trackerBlack: UIColor! { UIColor(named: "tracker_Black")}
     static var trackerBlackNight: UIColor! { UIColor(named: "tracker_Black_Night")}
     static var trackerBlue: UIColor! { UIColor(named: "tracker_Blue")}
     static var trackerGray: UIColor! { UIColor(named: "tracker_Gray")}
     static var trackerLightGray: UIColor! { UIColor(named: "tracker_Light_Gray")}
     static var trackerRed: UIColor! { UIColor(named: "tracker_Red")}
-    static var trackerWhiteDay: UIColor! { UIColor(named: "tracker_White_Day")}
+    static var trackerWhite: UIColor! { UIColor(named: "tracker_White")}
     static var trackerWhiteNight: UIColor! { UIColor(named: "tracker_White_Night")}
 }
 
