@@ -12,7 +12,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - Stored proprties
     
     private var currentDate: Int?
-    
+    private var searchText: String = ""
+    private var widthAnchor: NSLayoutConstraint?
     private var datePicker = UIDatePicker()
     
     // MARK: - Computed properties
@@ -60,10 +61,20 @@ final class TrackersViewController: UIViewController {
         searchTextField.backgroundColor = .trackerBackground
         searchTextField.layer.cornerRadius = 10
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
-//        searchTextField.addTarget(self, action: #selector(<#T##@objc method#>), for: <#T##UIControl.Event#>)
-//        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(textFieldDidChanged(sender:)), for: .editingChanged)
+        searchTextField.delegate = self
         
         return searchTextField
+    }()
+    
+    private lazy var cancelSearchTextFieldButton: UIButton = {
+        let cancelButton = UIButton()
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitleColor(.trackerBlue, for: .normal)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.addTarget(self, action: #selector(cancelButtonDidTap(sender:)), for: .touchUpInside)
+        
+        return cancelButton
     }()
     
     // MARK: - Lifecycle
@@ -81,6 +92,7 @@ final class TrackersViewController: UIViewController {
         navBarSetup()
         addSubViews()
         constraintsSetup()
+        additionalConstraintsSetup()
     }
     
     // MARK: - Private methods
@@ -111,15 +123,11 @@ final class TrackersViewController: UIViewController {
         view.addSubview(plugImageView)
         view.addSubview(plugLabel)
         view.addSubview(searchTextField)
+        view.addSubview(cancelSearchTextFieldButton)
     }
     
     private func constraintsSetup() {
         NSLayoutConstraint.activate([
-            searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7),
-            searchTextField.heightAnchor.constraint(equalToConstant: 36),
-            
             collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -137,6 +145,22 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    private func additionalConstraintsSetup() {
+        widthAnchor = cancelSearchTextFieldButton.widthAnchor.constraint(equalToConstant: 0)
+        
+        NSLayoutConstraint.activate([
+            searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchTextField.trailingAnchor.constraint(equalTo: cancelSearchTextFieldButton.leadingAnchor, constant: -5),
+            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7),
+            searchTextField.heightAnchor.constraint(equalToConstant: 36),
+            
+            cancelSearchTextFieldButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            cancelSearchTextFieldButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7),
+            cancelSearchTextFieldButton.centerXAnchor.constraint(equalTo: searchTextField.centerXAnchor),
+            widthAnchor!
+        ])
+    }
+    
     // MARK: - Obj-C methods
     
     @objc func didTapAddTrackerButton(sender: AnyObject) {
@@ -149,6 +173,20 @@ final class TrackersViewController: UIViewController {
             currentDate = day
             //TODO: update categories method
         }
+    }
+    
+    @objc func textFieldDidChanged(sender: AnyObject) {
+        searchText = searchTextField.text ?? ""
+        widthAnchor?.constant = 85
+        //TODO: update categories method
+    }
+    
+    @objc func cancelButtonDidTap(sender: AnyObject) {
+        searchTextField.text = ""
+        searchText = ""
+        widthAnchor?.constant = 0
+        constraintsSetup()
+        //TODO: update categories method
     }
 }
 
@@ -176,5 +214,17 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDelegate {
     //TODO: add methods to these extension
+}
+
+    // MARK: - UICollectionViewDelegate
+
+extension TrackersViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        widthAnchor?.constant = 85
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        additionalConstraintsSetup()
+    }
 }
 
