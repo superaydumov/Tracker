@@ -23,7 +23,7 @@ final class TrackerCreatorViewController: UIViewController {
     }()
     
     private lazy var habitButton: UIButton = {
-        let habitButton = UIButton()
+        let habitButton = UIButton(type: .system)
         habitButton.setTitle("Привычка", for: .normal)
         habitButton.setTitleColor(.trackerWhite, for: .normal)
         habitButton.backgroundColor = .trackerBlack
@@ -35,7 +35,7 @@ final class TrackerCreatorViewController: UIViewController {
     }()
     
     private lazy var nonRegularButton: UIButton = {
-        let nonRegularButton = UIButton()
+        let nonRegularButton = UIButton(type: .system)
         nonRegularButton.setTitle("Нерегулярное событие", for: .normal)
         nonRegularButton.setTitleColor(.trackerWhite, for: .normal)
         nonRegularButton.backgroundColor = .trackerBlack
@@ -85,12 +85,12 @@ final class TrackerCreatorViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc func habitButtonDidTap(sender: AnyObject) {
-//        let eventCreator = EventCreatorViewController()
-//        present(eventCreator, animated: true)
+        let eventCreator = EventCreatorViewController(event: .habit)
+        present(eventCreator, animated: true)
     }
     
     @objc func nonRegularButtonDidTap(sender: AnyObject) {
-//        let eventCreator = EventCreatorViewController()
-//        present(eventCreator, animated: true)
+        let eventCreator = EventCreatorViewController(event: .nonRegular)
+        present(eventCreator, animated: true)
     }
 }

@@ -68,7 +68,7 @@ final class TrackersViewController: UIViewController {
     }()
     
     private lazy var cancelSearchTextFieldButton: UIButton = {
-        let cancelButton = UIButton()
+        let cancelButton = UIButton(type: .system)
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.trackerBlue, for: .normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
