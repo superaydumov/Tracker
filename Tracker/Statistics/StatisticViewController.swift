@@ -24,7 +24,7 @@ final class StatisticViewController: UIViewController {
         plugLabel.textColor = .trackerBlack
         plugLabel.text = "Анализировать пока нечего"
         plugLabel.textAlignment = .center
-        plugLabel.font = .systemFont(ofSize: 12)
+        plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
         plugLabel.translatesAutoresizingMaskIntoConstraints = false
         
         return plugLabel

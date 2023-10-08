@@ -47,7 +47,7 @@ final class TrackersViewController: UIViewController {
         plugLabel.textColor = .trackerBlack
         plugLabel.text = "Что будем отслеживать?"
         plugLabel.textAlignment = .center
-        plugLabel.font = .systemFont(ofSize: 12)
+        plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
         plugLabel.translatesAutoresizingMaskIntoConstraints = false
         
         return plugLabel
@@ -164,7 +164,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc func didTapAddTrackerButton(sender: AnyObject) {
-        // TODO: add method to jump to other view controller
+        let trackerCreator = TrackerCreatorViewController()
+        present(trackerCreator, animated: true)
     }
     
     @objc func didTapDateButton(sender: UIDatePicker) {
