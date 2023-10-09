@@ -14,7 +14,6 @@ final class TrackersViewController: UIViewController {
     private var currentDate: Int?
     private var searchText: String = ""
     private var widthAnchor: NSLayoutConstraint?
-    private var datePicker = UIDatePicker()
     
     // MARK: - Computed properties
     
@@ -32,6 +31,21 @@ final class TrackersViewController: UIViewController {
         formatter.dateFormat = "dd.MM.yy"
         
         return formatter
+    }()
+    
+    private lazy var datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.layer.backgroundColor = UIColor.trackerBackground.cgColor
+        datePicker.layer.cornerRadius = 8
+        datePicker.layer.masksToBounds = true
+        
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.calendar.firstWeekday = 2
+        datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
+        
+        return datePicker
     }()
     
     private lazy var plugImageView: UIImageView = {
@@ -106,14 +120,9 @@ final class TrackersViewController: UIViewController {
             addTrackerButton.tintColor = .trackerBlack
             navigationItem.leftBarButtonItem = addTrackerButton
             
-            datePicker.datePickerMode = .date
-            datePicker.preferredDatePickerStyle = .compact
-            datePicker.locale = Locale(identifier: "ru_RU")
-            datePicker.calendar.firstWeekday = 2
-            datePicker.accessibilityLabel = dateFormatter.string(from: datePicker.date)
-            datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
-            datePicker.tintColor = .trackerBlue
             let datePickerButton = UIBarButtonItem(customView: datePicker)
+            datePickerButton.accessibilityLabel = dateFormatter.string(from: datePicker.date)
+            datePickerButton.customView?.tintColor = .trackerBlue
             navigationItem.rightBarButtonItem = datePickerButton
         }
     }
