@@ -335,6 +335,7 @@ extension EventCreatorViewController: UITextFieldDelegate {
 extension EventCreatorViewController: ScheduleViewControllerDelegate {
     func createSchedule(schedule: [WeekDay]) {
         self.schedule = schedule
+        print("schedule in EventCreatorViewController")
         //TODO: add code
     }
 }

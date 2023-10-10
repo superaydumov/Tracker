@@ -15,6 +15,10 @@ final class TrackersViewController: UIViewController {
     private var searchText: String = ""
     private var widthAnchor: NSLayoutConstraint?
     
+    private var categories: [TrackerCategory]?
+    private var visibleCategories = [TrackerCategory]()
+    private var completedTrackers = [TrackerRecord]()
+    
     // MARK: - Computed properties
     
     private lazy var collectionView: UICollectionView = {
