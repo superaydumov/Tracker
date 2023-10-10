@@ -297,11 +297,13 @@ final class EventCreatorViewController: UIViewController {
     }
     
     @objc func categoryButtonDidTap(sender: AnyObject) {
-        //TODO: add code to jump to category viewController
+        let categoryViewController = CategoryViewController()
+        present(categoryViewController, animated: true)
     }
     
     @objc func scheduleButtonDidTap(sender: AnyObject) {
-        //TODO: add code to jump to schedule view controller
+        let scheduleViewController = ScheduleViewController()
+        present(scheduleViewController, animated: true)
     }
     
     @objc func cancelButtonDidTap(sender: AnyObject) {

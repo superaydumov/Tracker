@@ -107,6 +107,7 @@ final class TrackersViewController: UIViewController {
         addSubViews()
         constraintsSetup()
         additionalConstraintsSetup()
+        setWeekDay()
     }
     
     // MARK: - Private methods
@@ -145,7 +146,7 @@ final class TrackersViewController: UIViewController {
             plugImageView.widthAnchor.constraint(equalToConstant: 80),
             plugImageView.heightAnchor.constraint(equalToConstant: 80),
             plugImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            plugImageView.centerYAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 230),
+            plugImageView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 230),
             
             plugLabel.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
             plugLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -168,6 +169,11 @@ final class TrackersViewController: UIViewController {
             cancelSearchTextFieldButton.centerXAnchor.constraint(equalTo: searchTextField.centerXAnchor),
             widthAnchor!
         ])
+    }
+    
+    private func setWeekDay() {
+        let components = Calendar.current.dateComponents([.weekday], from: Date())
+        currentDate = components.weekday
     }
     
     // MARK: - Obj-C methods

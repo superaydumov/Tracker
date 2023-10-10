@@ -61,7 +61,7 @@ final class StatisticViewController: UIViewController {
             plugImageView.widthAnchor.constraint(equalToConstant: 80),
             plugImageView.heightAnchor.constraint(equalToConstant: 80),
             plugImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            plugImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 273),
+            plugImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 273),
             
             plugLabel.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
             plugLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
