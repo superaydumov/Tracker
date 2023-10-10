@@ -29,6 +29,7 @@ final class EventCreatorViewController: UIViewController {
     private var charactersNumber = 0
     private let charactersLimitNumber = 38
     private var heightAnchor: NSLayoutConstraint?
+    private var schedule = [WeekDay]()
     
     // MARK: - Computed properties
     
@@ -303,6 +304,7 @@ final class EventCreatorViewController: UIViewController {
     
     @objc func scheduleButtonDidTap(sender: AnyObject) {
         let scheduleViewController = ScheduleViewController()
+        scheduleViewController.delegate = self
         present(scheduleViewController, animated: true)
     }
     
@@ -324,6 +326,16 @@ extension EventCreatorViewController: UITextFieldDelegate {
         let updatedString = currentString.replacingCharacters(in: range, with: string)
         
         return updatedString.count <= maximumLength
+    }
+}
+
+
+    // MARK: - ScheduleViewControllerDelegate
+
+extension EventCreatorViewController: ScheduleViewControllerDelegate {
+    func createSchedule(schedule: [WeekDay]) {
+        self.schedule = schedule
+        //TODO: add code
     }
 }
 

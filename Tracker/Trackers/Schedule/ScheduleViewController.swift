@@ -12,6 +12,7 @@ final class ScheduleViewController: UIViewController {
     // MARK: - Stored properties
     
     private var schedule = [WeekDay]()
+    weak var delegate: ScheduleViewControllerDelegate?
     
     // MARK: - Computed properties
     
@@ -88,7 +89,7 @@ final class ScheduleViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc func performButtonDidTap(sender: AnyObject) {
-        //TODO: add code to maintain schedule creating
+        delegate?.createSchedule(schedule: schedule)
         dismiss(animated: true)
     }
 }
@@ -106,6 +107,7 @@ extension ScheduleViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.cellLabel.text = WeekDay.allCases[indexPath.row].rawValue
         cell.weekDay = WeekDay.allCases[indexPath.row]
+        cell.delegate = self
         
         if indexPath.row == 6 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)

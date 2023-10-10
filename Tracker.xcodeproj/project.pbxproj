@@ -23,6 +23,7 @@
 		C9D31EB42AD4A1D000B9B596 /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EB32AD4A1D000B9B596 /* WeekDay.swift */; };
 		C9D31EB62AD4B98100B9B596 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EB52AD4B98100B9B596 /* ScheduleTableViewCell.swift */; };
 		C9D31EB82AD5606300B9B596 /* ScheduleTableViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EB72AD5606200B9B596 /* ScheduleTableViewCellDelegate.swift */; };
+		C9D31EBA2AD58EE700B9B596 /* ScheduleViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EB92AD58EE700B9B596 /* ScheduleViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		C9D31EB32AD4A1D000B9B596 /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
 		C9D31EB52AD4B98100B9B596 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		C9D31EB72AD5606200B9B596 /* ScheduleTableViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCellDelegate.swift; sourceTree = "<group>"; };
+		C9D31EB92AD58EE700B9B596 /* ScheduleViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 				C9D31EB02AD48DC400B9B596 /* ScheduleViewController.swift */,
 				C9D31EB52AD4B98100B9B596 /* ScheduleTableViewCell.swift */,
 				C9D31EB72AD5606200B9B596 /* ScheduleTableViewCellDelegate.swift */,
+				C9D31EB92AD58EE700B9B596 /* ScheduleViewControllerDelegate.swift */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				C9D31EA92AD2100700B9B596 /* TrackerCreatorViewController.swift in Sources */,
 				C94D23FF2AC85110004D9ADC /* Tracker.xcdatamodeld in Sources */,
 				C94D23F92AC85110004D9ADC /* TrackersViewController.swift in Sources */,
+				C9D31EBA2AD58EE700B9B596 /* ScheduleViewControllerDelegate.swift in Sources */,
 				C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */,
 				C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */,
 				C9D31EB82AD5606300B9B596 /* ScheduleTableViewCellDelegate.swift in Sources */,

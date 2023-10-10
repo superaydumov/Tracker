@@ -11,7 +11,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     // MARK: - Stored properties
     
-    private weak var delegate: ScheduleTableViewCellDelegate?
+    weak var delegate: ScheduleTableViewCellDelegate?
     var weekDay: WeekDay?
     static let reuseIdentifier = "ScheduleTableViewCell"
     
