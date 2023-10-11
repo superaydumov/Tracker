@@ -24,7 +24,7 @@ final class TrackersViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .trackerWhite
-//        collectionView.register(EmojisCollectionViewCell.self, forCellWithReuseIdentifier: Keys.cellIdentifier)
+        collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.cellIdentifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return collectionView
@@ -133,19 +133,19 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addSubViews() {
-        view.addSubview(collectionView)
         view.addSubview(plugImageView)
         view.addSubview(plugLabel)
         view.addSubview(searchTextField)
         view.addSubview(cancelSearchTextFieldButton)
+        view.addSubview(collectionView)
     }
     
     private func constraintsSetup() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             plugImageView.widthAnchor.constraint(equalToConstant: 80),
             plugImageView.heightAnchor.constraint(equalToConstant: 80),
@@ -215,25 +215,30 @@ final class TrackersViewController: UIViewController {
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //TODO: add code to these method
-        return Int()
+        return 10
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //TODO: add code to these method
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersCollectionViewCell.cellIdentifier, for: indexPath) as? TrackersCollectionViewCell else { return UICollectionViewCell() }
+        return cell
     }
 }
 
     // MARK: - UICollectionViewDelegateFlowLayout
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
-    //TODO: add methods to these extension
-}
-
-    // MARK: - UICollectionViewDelegate
-
-extension TrackersViewController: UICollectionViewDelegate {
-    //TODO: add methods to these extension
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellSize = CGSize(width: 167, height: 148)
+        return cellSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 9
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
 }
 
     // MARK: - UICollectionViewDelegate
