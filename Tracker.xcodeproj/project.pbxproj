@@ -28,6 +28,7 @@
 		C9D31EBE2AD5FCB900B9B596 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EBD2AD5FCB900B9B596 /* TrackerCategory.swift */; };
 		C9D31EC02AD5FD1F00B9B596 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EBF2AD5FD1F00B9B596 /* TrackerRecord.swift */; };
 		C9D31EC22AD7371000B9B596 /* TrackersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EC12AD7370F00B9B596 /* TrackersCollectionViewCell.swift */; };
+		C9D31EC52AD8892100B9B596 /* TrackersCellSuplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EC42AD8892100B9B596 /* TrackersCellSuplementaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		C9D31EBD2AD5FCB900B9B596 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		C9D31EBF2AD5FD1F00B9B596 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		C9D31EC12AD7370F00B9B596 /* TrackersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCell.swift; sourceTree = "<group>"; };
+		C9D31EC42AD8892100B9B596 /* TrackersCellSuplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCellSuplementaryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				C9D31EC12AD7370F00B9B596 /* TrackersCollectionViewCell.swift */,
+				C9D31EC42AD8892100B9B596 /* TrackersCellSuplementaryView.swift */,
 			);
 			path = TrackersCollectionView;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */,
 				C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */,
 				C9D31EBC2AD5FBB000B9B596 /* Trackers.swift in Sources */,
+				C9D31EC52AD8892100B9B596 /* TrackersCellSuplementaryView.swift in Sources */,
 				C9D31EB82AD5606300B9B596 /* ScheduleTableViewCellDelegate.swift in Sources */,
 				C9D31EB42AD4A1D000B9B596 /* WeekDay.swift in Sources */,
 				C9D31EAB2AD2E49700B9B596 /* EventCreatorViewController.swift in Sources */,

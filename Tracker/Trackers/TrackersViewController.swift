@@ -25,6 +25,7 @@ final class TrackersViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .trackerWhite
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.cellIdentifier)
+        collectionView.register(TrackersCellSuplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackersCellSuplementaryView.reuseIdentifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return collectionView
@@ -222,6 +223,25 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersCollectionViewCell.cellIdentifier, for: indexPath) as? TrackersCollectionViewCell else { return UICollectionViewCell() }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var id: String
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "header"
+        case UICollectionView.elementKindSectionFooter:
+            id = "footer"
+        default:
+            id = ""
+        }
+        
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? TrackersCellSuplementaryView else { return UICollectionReusableView() }
+        
+        //view.titleLabel.text = visibleCategories[indexPath.section].categoryName
+        
+        return view
+    }
 }
 
     // MARK: - UICollectionViewDelegateFlowLayout
@@ -238,6 +258,16 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        let headerViewSize = headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                                       height: UIView.layoutFittingExpandedSize.height),
+                                                                withHorizontalFittingPriority: .required,
+                                                                verticalFittingPriority: .fittingSizeLevel)
+        return headerViewSize
     }
 }
 
