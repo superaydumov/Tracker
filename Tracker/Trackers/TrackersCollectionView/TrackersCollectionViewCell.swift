@@ -12,6 +12,10 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - Stored proprties
     
     static let cellIdentifier = "trackerCell"
+    private var trackerID: UUID? = nil
+    private var isCompletedToday: Bool = false
+    
+    weak var delegate: TrackersCollectionViewCellDelegate?
     
     // MARK: - Computed proprties
     
@@ -19,7 +23,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let view = UIView()
         view.layer.cornerRadius = 16
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .trackerRed //remove later
         
         return view
     }()
@@ -36,7 +39,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "🥑" //remove later
         
         return label
     }()
@@ -45,7 +47,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .trackerWhite
         label.numberOfLines = 2
-        label.text = "Название трекера\nв две строки"
+        label.text = "Название трекера"
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -67,9 +69,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .trackerWhite
-        button.backgroundColor = .trackerRed //remove later
+        button.addTarget(self, action: #selector(checckButtonDidTap(sender:)), for: .touchUpInside)
         button.layer.cornerRadius = 17
-        
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -130,5 +131,50 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             daysLabel.trailingAnchor.constraint(equalTo: checkButton.leadingAnchor, constant: -8),
             daysLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
+    }
+    
+    // MARK: - Public methods
+    
+    func configureCell(id: UUID,
+                       name: String,
+                       color: UIColor,
+                       emoji: String,
+                       isCompleted: Bool,
+                       isEnabled: Bool,
+                       completedCount: Int) {
+        trackerID = id
+        nameLabel.text = name
+        colorView.backgroundColor = color
+        emojiLabel.text = emoji
+        isCompletedToday = isCompleted
+        checkButton.setImage(isCompletedToday ? UIImage(systemName: "checkmark")! : UIImage(systemName: "plus")!, for: .normal)
+        checkButton.isEnabled = isEnabled
+        
+        let dividedBy10 = completedCount % 10
+        let dividedBy100 = completedCount % 100
+        let notFrom10To20 = dividedBy100 < 10 || dividedBy100 > 20
+        var daysString = "\(completedCount) "
+        
+        if completedCount == 0 {
+            daysString += "дней"
+        } else if dividedBy10 == 1 && notFrom10To20 {
+            daysString += "день"
+        } else if (dividedBy10 == 2 || dividedBy10 == 3 || dividedBy10 == 4) && notFrom10To20 {
+            daysString += "дня"
+        } else {
+            daysString += "дней"
+        }
+        
+        daysLabel.text = daysString
+    }
+    
+    // MARK: - Objc methods
+    
+    @objc func checckButtonDidTap(sender: AnyObject) {
+        guard let id = trackerID else {
+            print("ID didn't set!")
+            return }
+        
+        delegate?.completedTrackers(id: id)
     }
 }

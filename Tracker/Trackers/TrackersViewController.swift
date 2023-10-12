@@ -215,12 +215,30 @@ final class TrackersViewController: UIViewController {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //TODO: add code to these method
-        return 10
+        return visibleCategories[section].trackers.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersCollectionViewCell.cellIdentifier, for: indexPath) as? TrackersCollectionViewCell else { return UICollectionViewCell() }
+        cell.delegate = self
+        
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        let isCompleted = completedTrackers.contains(where: { record in
+            record.trackerID == tracker.id && record.date == datePicker.date
+        })
+        let isEnabled = datePicker.date <= Date()
+        let completedCount = completedTrackers.filter({ record in
+            record.trackerID == tracker.id
+        }).count
+        
+        cell.configureCell(id: tracker.id,
+                           name: tracker.name,
+                           color: tracker.color,
+                           emoji: tracker.emoji,
+                           isCompleted: isCompleted,
+                           isEnabled: isEnabled,
+                           completedCount: completedCount)
+        
         return cell
     }
     
@@ -238,7 +256,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? TrackersCellSuplementaryView else { return UICollectionReusableView() }
         
-        //view.titleLabel.text = visibleCategories[indexPath.section].categoryName
+        view.titleLabel.text = visibleCategories[indexPath.section].categoryName
         
         return view
     }
@@ -280,6 +298,21 @@ extension TrackersViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         additionalConstraintsSetup()
+    }
+}
+
+    // MARK: - TrackersCollectionViewCellDelegate
+
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    func completedTrackers(id: UUID) {
+        if let index = completedTrackers.firstIndex(where: { record in
+            record.trackerID == id && record.date == datePicker.date
+        }) {
+            completedTrackers.remove(at: index)
+        } else {
+            completedTrackers.append(TrackerRecord(trackerID: id, date: datePicker.date))
+        }
+        collectionView.reloadData()
     }
 }
 

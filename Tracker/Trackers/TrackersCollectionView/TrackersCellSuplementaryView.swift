@@ -17,7 +17,6 @@ final class TrackersCellSuplementaryView: UICollectionReusableView {
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Название категории трекеров" //remove later
         
         return label
     }()
