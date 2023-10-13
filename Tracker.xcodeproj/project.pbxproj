@@ -30,6 +30,9 @@
 		C9D31EC22AD7371000B9B596 /* TrackersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EC12AD7370F00B9B596 /* TrackersCollectionViewCell.swift */; };
 		C9D31EC52AD8892100B9B596 /* TrackersCellSuplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EC42AD8892100B9B596 /* TrackersCellSuplementaryView.swift */; };
 		C9D31EC72AD8AB5800B9B596 /* TrackersCollectionViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EC62AD8AB5800B9B596 /* TrackersCollectionViewCellDelegate.swift */; };
+		C9D31EC92AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31EC82AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift */; };
+		C9D31ECB2AD8B72900B9B596 /* TrackersCreatorViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31ECA2AD8B72900B9B596 /* TrackersCreatorViewControllerDelegate.swift */; };
+		C9D31ECD2AD8BDC600B9B596 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D31ECC2AD8BDC600B9B596 /* MockData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +61,9 @@
 		C9D31EC12AD7370F00B9B596 /* TrackersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCell.swift; sourceTree = "<group>"; };
 		C9D31EC42AD8892100B9B596 /* TrackersCellSuplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCellSuplementaryView.swift; sourceTree = "<group>"; };
 		C9D31EC62AD8AB5800B9B596 /* TrackersCollectionViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCellDelegate.swift; sourceTree = "<group>"; };
+		C9D31EC82AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreatorViewControllerDelegate.swift; sourceTree = "<group>"; };
+		C9D31ECA2AD8B72900B9B596 /* TrackersCreatorViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCreatorViewControllerDelegate.swift; sourceTree = "<group>"; };
+		C9D31ECC2AD8BDC600B9B596 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +107,7 @@
 				C94D24022AC85114004D9ADC /* LaunchScreen.storyboard */,
 				C94D24052AC85114004D9ADC /* Info.plist */,
 				C94D23FD2AC85110004D9ADC /* Tracker.xcdatamodeld */,
+				C9D31ECC2AD8BDC600B9B596 /* MockData.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -122,6 +129,8 @@
 				C94D23F82AC85110004D9ADC /* TrackersViewController.swift */,
 				C9D31EA82AD2100700B9B596 /* TrackerCreatorViewController.swift */,
 				C9D31EAA2AD2E49700B9B596 /* EventCreatorViewController.swift */,
+				C9D31EC82AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift */,
+				C9D31ECA2AD8B72900B9B596 /* TrackersCreatorViewControllerDelegate.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -255,10 +264,13 @@
 				C9D31EC22AD7371000B9B596 /* TrackersCollectionViewCell.swift in Sources */,
 				C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */,
 				C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */,
+				C9D31ECB2AD8B72900B9B596 /* TrackersCreatorViewControllerDelegate.swift in Sources */,
 				C9D31EBC2AD5FBB000B9B596 /* Trackers.swift in Sources */,
+				C9D31ECD2AD8BDC600B9B596 /* MockData.swift in Sources */,
 				C9D31EC52AD8892100B9B596 /* TrackersCellSuplementaryView.swift in Sources */,
 				C9D31EB82AD5606300B9B596 /* ScheduleTableViewCellDelegate.swift in Sources */,
 				C9D31EC72AD8AB5800B9B596 /* TrackersCollectionViewCellDelegate.swift in Sources */,
+				C9D31EC92AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift in Sources */,
 				C9D31EB42AD4A1D000B9B596 /* WeekDay.swift in Sources */,
 				C9D31EAB2AD2E49700B9B596 /* EventCreatorViewController.swift in Sources */,
 				C9886D602AD03B0400E3C85F /* TabBarViewController.swift in Sources */,

@@ -29,8 +29,8 @@ final class TrackersCellSuplementaryView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
+            titleLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
     }
     

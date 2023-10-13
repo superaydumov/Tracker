@@ -31,6 +31,8 @@ final class EventCreatorViewController: UIViewController {
     private var heightAnchor: NSLayoutConstraint?
     private var schedule = [WeekDay]()
     
+    weak var delegate: EventCreatorViewControllerDelegate?
+    
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
@@ -313,7 +315,8 @@ final class EventCreatorViewController: UIViewController {
     }
     
     @objc func createButtonDidTap(sender: AnyObject) {
-        //TODO: code to add tracker
+        let tracker = Trackers(id: UUID(), name: textField.text ?? "Без названия", color: .colorSelection7, emoji: "🥌", schedule: schedule)
+        delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
     }
 }
 

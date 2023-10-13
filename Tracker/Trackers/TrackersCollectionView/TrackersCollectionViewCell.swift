@@ -69,7 +69,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .trackerWhite
-        button.addTarget(self, action: #selector(checckButtonDidTap(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(checkButtonDidTap(sender:)), for: .touchUpInside)
         button.layer.cornerRadius = 17
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -148,6 +148,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.text = emoji
         isCompletedToday = isCompleted
         checkButton.setImage(isCompletedToday ? UIImage(systemName: "checkmark")! : UIImage(systemName: "plus")!, for: .normal)
+        checkButton.backgroundColor = color
         checkButton.isEnabled = isEnabled
         
         let dividedBy10 = completedCount % 10
@@ -170,7 +171,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Objc methods
     
-    @objc func checckButtonDidTap(sender: AnyObject) {
+    @objc func checkButtonDidTap(sender: AnyObject) {
         guard let id = trackerID else {
             print("ID didn't set!")
             return }

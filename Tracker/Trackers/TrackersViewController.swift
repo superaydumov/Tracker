@@ -15,7 +15,7 @@ final class TrackersViewController: UIViewController {
     private var searchText: String = ""
     private var widthAnchor: NSLayoutConstraint?
     
-    private var categories: [TrackerCategory]?
+    private var categories: [TrackerCategory] = MockData.categories
     private var visibleCategories = [TrackerCategory]()
     private var completedTrackers = [TrackerRecord]()
     
@@ -113,6 +113,7 @@ final class TrackersViewController: UIViewController {
         constraintsSetup()
         additionalConstraintsSetup()
         setWeekDay()
+        visibleCategories = categories //remove after adding updateCategories method
     }
     
     // MARK: - Private methods
@@ -185,6 +186,7 @@ final class TrackersViewController: UIViewController {
     
     @objc func didTapAddTrackerButton(sender: AnyObject) {
         let trackerCreator = TrackerCreatorViewController()
+        trackerCreator.delegate = self
         present(trackerCreator, animated: true)
     }
     
@@ -313,6 +315,31 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             completedTrackers.append(TrackerRecord(trackerID: id, date: datePicker.date))
         }
         collectionView.reloadData()
+    }
+}
+
+extension TrackersViewController: TrackersCreatorViewControllerDelegate {
+    func createTracker(tracker: Trackers, categoryName: String) {
+        var updatedCategory: TrackerCategory?
+        var index: Int?
+        
+        for item in 0..<categories.count {
+            if categories[item].categoryName == categoryName {
+                updatedCategory = categories[item]
+                index = item
+            }
+        }
+        if updatedCategory == nil {
+            categories.append(TrackerCategory(categoryName: categoryName, trackers: [tracker]))
+        } else {
+            let trackerCategory = TrackerCategory(categoryName: categoryName, trackers: [tracker] + (updatedCategory?.trackers ?? []))
+            categories.remove(at: index ?? 0)
+            categories.append(trackerCategory)
+        }
+        visibleCategories = categories
+        //TODO: update categories method
+        collectionView.reloadData()
+        print("createTracker in TrackersViewController")
     }
 }
 

@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackerCreatorViewController: UIViewController {
     
+    weak var delegate: TrackersCreatorViewControllerDelegate?
+    
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
@@ -86,11 +88,20 @@ final class TrackerCreatorViewController: UIViewController {
     
     @objc func habitButtonDidTap(sender: AnyObject) {
         let eventCreator = EventCreatorViewController(event: .habit)
+        eventCreator.delegate = self
         present(eventCreator, animated: true)
     }
     
     @objc func nonRegularButtonDidTap(sender: AnyObject) {
         let eventCreator = EventCreatorViewController(event: .nonRegular)
+        eventCreator.delegate = self
         present(eventCreator, animated: true)
+    }
+}
+
+extension TrackerCreatorViewController: EventCreatorViewControllerDelegate {
+    func createTracker(tracker: Trackers, categoryName: String) {
+        delegate?.createTracker(tracker: tracker, categoryName: categoryName)
+        dismiss(animated: true)
     }
 }
