@@ -226,9 +226,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         let isCompleted = completedTrackers.contains(where: { record in
-            record.trackerID == tracker.id && record.date == datePicker.date
+            record.trackerID == tracker.id && record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
         })
-        let isEnabled = datePicker.date <= Date()
+        let isEnabled = datePicker.date <= Date() || Date().yearMonthDayComponents == datePicker.date.yearMonthDayComponents
         let completedCount = completedTrackers.filter({ record in
             record.trackerID == tracker.id
         }).count
@@ -308,7 +308,7 @@ extension TrackersViewController: UITextFieldDelegate {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func completedTrackers(id: UUID) {
         if let index = completedTrackers.firstIndex(where: { record in
-            record.trackerID == id && record.date == datePicker.date
+            record.trackerID == id && record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
         }) {
             completedTrackers.remove(at: index)
         } else {
