@@ -114,7 +114,6 @@ final class TrackersViewController: UIViewController {
         addSubViews()
         constraintsSetup()
         additionalConstraintsSetup()
-        //visibleCategories = categories //remove after adding updateCategories method
     }
     
     // MARK: - Private methods
@@ -323,7 +322,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-    // MARK: - UICollectionViewDelegate
+    // MARK: - UITextFieldDelegate
 
 extension TrackersViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {

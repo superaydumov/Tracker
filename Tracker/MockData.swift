@@ -15,7 +15,8 @@ final class MockData {
                                             color: .colorSelection2,
                                             emoji: "🥷🏻",
                                             schedule: [.monday, .wednesday, .friday]),
-                                   Trackers(id: UUID(), name: "Стать самураем", color: .colorSelection12, emoji: "🐥", schedule: [.tuesday, .thursday, .saturday])]),
+                                   Trackers(id: UUID(), name: "Стать самураем", color: .colorSelection12, emoji: "🐥", schedule: [.tuesday, .thursday, .saturday])]
+                       ),
         
         TrackerCategory(categoryName: "Радостные мелочи",
                         trackers: [Trackers(id: UUID(),
@@ -32,7 +33,8 @@ final class MockData {
                                             name: "Выпить кофе",
                                             color: .colorSelection11,
                                             emoji: "☕️",
-                                            schedule: [.monday, .tuesday, .thursday])]),
+                                            schedule: [.monday, .tuesday, .thursday])]
+                       ),
         
         TrackerCategory(categoryName: "Важное",
                         trackers: [Trackers(id: UUID(),
@@ -49,6 +51,7 @@ final class MockData {
                                             name: "Разжечь костер",
                                             color: .colorSelection14,
                                             emoji: "🔥",
-                                            schedule: [.tuesday, .wednesday, .friday])])
+                                            schedule: [.tuesday, .wednesday, .friday])]
+                       )
     ]
 }
