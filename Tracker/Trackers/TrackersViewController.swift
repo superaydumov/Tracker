@@ -108,12 +108,13 @@ final class TrackersViewController: UIViewController {
         
         collectionView.allowsMultipleSelection = false
         
+        setWeekDay()
+        updateCategories()
         navBarSetup()
         addSubViews()
         constraintsSetup()
         additionalConstraintsSetup()
-        setWeekDay()
-        visibleCategories = categories //remove after adding updateCategories method
+        //visibleCategories = categories //remove after adding updateCategories method
     }
     
     // MARK: - Private methods
@@ -182,6 +183,27 @@ final class TrackersViewController: UIViewController {
         currentDate = components.weekday
     }
     
+    private func updateCategories() {
+        var newCategories = [TrackerCategory]()
+        for category in categories {
+            var newTrackers = [Trackers]()
+            for tracker in category.trackers {
+                guard let schedule = tracker.schedule else { return }
+                let scheduleNumbers = schedule.map { $0.numberOfDay }
+                if let day = currentDate, scheduleNumbers.contains(day) && (searchText.isEmpty || tracker.name.contains(searchText)) {
+                    newTrackers.append(tracker)
+                }
+            }
+            if newTrackers.count > 0 {
+                let newCategory = TrackerCategory(categoryName: category.categoryName, trackers: newTrackers)
+                newCategories.append(newCategory)
+            }
+        }
+        visibleCategories = newCategories
+        collectionView.reloadData()
+    }
+
+    
     // MARK: - Obj-C methods
     
     @objc func didTapAddTrackerButton(sender: AnyObject) {
@@ -194,14 +216,14 @@ final class TrackersViewController: UIViewController {
         let components = Calendar.current.dateComponents([.weekday], from: sender.date)
         if let day = components.weekday {
             currentDate = day
-            //TODO: update categories method
+            updateCategories()
         }
     }
     
     @objc func textFieldDidChanged(sender: AnyObject) {
         searchText = searchTextField.text ?? ""
         widthAnchor?.constant = 85
-        //TODO: update categories method
+        updateCategories()
     }
     
     @objc func cancelButtonDidTap(sender: AnyObject) {
@@ -209,7 +231,7 @@ final class TrackersViewController: UIViewController {
         searchText = ""
         widthAnchor?.constant = 0
         constraintsSetup()
-        //TODO: update categories method
+        updateCategories()
     }
 }
 
@@ -261,6 +283,16 @@ extension TrackersViewController: UICollectionViewDataSource {
         view.titleLabel.text = visibleCategories[indexPath.section].categoryName
         
         return view
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        let count = visibleCategories.count
+        if count == 0 {
+            collectionView.isHidden = true
+        } else {
+            collectionView.isHidden = false
+        }
+        return count
     }
 }
 
@@ -318,7 +350,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
 }
 
-extension TrackersViewController: TrackersCreatorViewControllerDelegate {
+extension TrackersViewController: TrackerCreatorViewControllerDelegate {
     func createTracker(tracker: Trackers, categoryName: String) {
         var updatedCategory: TrackerCategory?
         var index: Int?
@@ -337,9 +369,8 @@ extension TrackersViewController: TrackersCreatorViewControllerDelegate {
             categories.append(trackerCategory)
         }
         visibleCategories = categories
-        //TODO: update categories method
+        updateCategories()
         collectionView.reloadData()
-        print("createTracker in TrackersViewController")
     }
 }
 

@@ -317,6 +317,7 @@ final class EventCreatorViewController: UIViewController {
     @objc func createButtonDidTap(sender: AnyObject) {
         let tracker = Trackers(id: UUID(), name: textField.text ?? "Без названия", color: .colorSelection7, emoji: "🥌", schedule: schedule)
         delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
+        print("tracker created in EventCreatorViewController")
     }
 }
 

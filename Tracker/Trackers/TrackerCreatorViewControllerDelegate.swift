@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TrackersCreatorViewControllerDelegate: AnyObject {
+protocol TrackerCreatorViewControllerDelegate: AnyObject {
     func createTracker(tracker: Trackers, categoryName: String)
 }

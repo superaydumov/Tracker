@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerCreatorViewController: UIViewController {
     
-    weak var delegate: TrackersCreatorViewControllerDelegate?
+    weak var delegate: TrackerCreatorViewControllerDelegate?
     
     // MARK: - Computed properties
     
@@ -103,5 +103,6 @@ extension TrackerCreatorViewController: EventCreatorViewControllerDelegate {
     func createTracker(tracker: Trackers, categoryName: String) {
         delegate?.createTracker(tracker: tracker, categoryName: categoryName)
         dismiss(animated: true)
+        print("createTracker in TrackerCreatorViewController")
     }
 }
