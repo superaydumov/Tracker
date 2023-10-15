@@ -363,8 +363,18 @@ final class EventCreatorViewController: UIViewController {
     }
     
     @objc func createButtonDidTap(sender: AnyObject) {
-        let tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection7, emoji: "🥌", schedule: schedule)
-        delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
+        var tracker: Trackers?
+        if event == .habit {
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection7, emoji: "🥌", schedule: schedule)
+            
+            guard let tracker else { return }
+            delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
+        } else {
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection12, emoji: "🔫", schedule: WeekDay.allCases)
+            
+            guard let tracker else { return }
+            delegate?.createTracker(tracker: tracker, categoryName: "Важное")
+        }
     }
 }
 
