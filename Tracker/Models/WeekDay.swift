@@ -18,7 +18,7 @@ enum WeekDay: String, CaseIterable {
     
     var numberOfDay: Int {
         switch self {
-            
+
         case .monday:
             return 2
         case .tuesday:
@@ -33,6 +33,26 @@ enum WeekDay: String, CaseIterable {
             return 7
         case .sunday:
             return 1
+        }
+    }
+    
+    var shortName: String {
+        switch self {
+            
+        case .monday:
+            return "Пн"
+        case .tuesday:
+            return "Вт"
+        case .wednesday:
+            return "Ср"
+        case .thursday:
+            return "Чт"
+        case .friday:
+            return "Пт"
+        case .saturday:
+            return "Сб"
+        case .sunday:
+            return "Вс"
         }
     }
 }

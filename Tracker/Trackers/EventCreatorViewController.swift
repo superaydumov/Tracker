@@ -29,6 +29,8 @@ final class EventCreatorViewController: UIViewController {
     private var charactersNumber = 0
     private let charactersLimitNumber = 38
     private var heightAnchor: NSLayoutConstraint?
+    
+    private var scheduleSubtitle = ""
     private var schedule = [WeekDay]() {
         didSet {
             createButtonUpdate()
@@ -135,13 +137,22 @@ final class EventCreatorViewController: UIViewController {
         let scheduleButton = UIButton(type: .system)
         scheduleButton.setTitle("Расписание", for: .normal)
         scheduleButton.setTitleColor(.trackerBlack, for: .normal)
-        scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         scheduleButton.titleLabel?.font = .systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
         scheduleButton.addTarget(self, action: #selector(scheduleButtonDidTap(sender:)), for: .touchUpInside)
         scheduleButton.translatesAutoresizingMaskIntoConstraints = false
         
         return scheduleButton
+    }()
+    
+    private lazy var scheduleButtonSubtitle: UILabel = {
+        let subtitle = UILabel()
+        subtitle.font = .systemFont(ofSize: 17)
+        subtitle.textColor = .trackerGray
+        subtitle.text = scheduleSubtitle
+        subtitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        return subtitle
     }()
     
     private lazy var cancelButton: UIButton = {
@@ -188,6 +199,8 @@ final class EventCreatorViewController: UIViewController {
         
         addSubviews()
         constraintsSetup()
+        
+        scheduleSubtitleUpdate()
     }
     
     // MARK: - Private methods
@@ -289,6 +302,21 @@ final class EventCreatorViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
+    private func scheduleSubtitleUpdate() {
+        if scheduleSubtitle == "" {
+            scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        } else {
+            scheduleButton.titleEdgeInsets = UIEdgeInsets(top: -15, left: 16, bottom: 0, right: 0)
+            scheduleButton.addSubview(scheduleButtonSubtitle)
+            NSLayoutConstraint.activate([
+                scheduleButtonSubtitle.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor, constant: 16),
+                scheduleButtonSubtitle.bottomAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: -14),
+                scheduleButtonSubtitle.heightAnchor.constraint(equalToConstant: 22)
+            ])
+            scheduleButtonSubtitle.text = scheduleSubtitle
+        }
+    }
+    
     private func createButtonUpdate() {
         createButton.isEnabled = textField.text?.isEmpty == false
         
@@ -358,7 +386,16 @@ extension EventCreatorViewController: UITextFieldDelegate {
 extension EventCreatorViewController: ScheduleViewControllerDelegate {
     func createSchedule(schedule: [WeekDay]) {
         self.schedule = schedule
-        print("schedule in EventCreatorViewController")
-        //TODO: add code
+        let scheduleString = schedule.map { $0.shortName}.joined(separator: ", ")
+        
+        let daysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+        let comparingResult: Bool = daysArray.allSatisfy(scheduleString.contains)
+        if comparingResult {
+            scheduleSubtitle = "Каждый день"
+        } else {
+            scheduleSubtitle = scheduleString
+        }
+        
+        scheduleSubtitleUpdate()
     }
 }
