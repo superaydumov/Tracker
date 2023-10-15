@@ -103,6 +103,5 @@ extension TrackerCreatorViewController: EventCreatorViewControllerDelegate {
     func createTracker(tracker: Trackers, categoryName: String) {
         delegate?.createTracker(tracker: tracker, categoryName: categoryName)
         dismiss(animated: true)
-        print("createTracker in TrackerCreatorViewController")
     }
 }

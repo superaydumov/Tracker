@@ -29,7 +29,11 @@ final class EventCreatorViewController: UIViewController {
     private var charactersNumber = 0
     private let charactersLimitNumber = 38
     private var heightAnchor: NSLayoutConstraint?
-    private var schedule = [WeekDay]()
+    private var schedule = [WeekDay]() {
+        didSet {
+            createButtonUpdate()
+        }
+    }
     
     weak var delegate: EventCreatorViewControllerDelegate?
     
@@ -285,9 +289,25 @@ final class EventCreatorViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
+    private func createButtonUpdate() {
+        createButton.isEnabled = textField.text?.isEmpty == false
+        
+        if event == .habit {
+            createButton.isEnabled = createButton.isEnabled && !schedule.isEmpty
+        }
+        
+        if createButton.isEnabled {
+            createButton.backgroundColor = .trackerBlack
+        } else {
+            createButton.backgroundColor = .trackerGray
+        }
+    }
+    
     // MARK: - Obj-C methods
     
     @objc func textFieldDidChange(sender: AnyObject) {
+        createButtonUpdate()
+        
         guard let number = textField.text?.count else { return }
         charactersNumber = number
         if charactersNumber < charactersLimitNumber {
@@ -315,9 +335,8 @@ final class EventCreatorViewController: UIViewController {
     }
     
     @objc func createButtonDidTap(sender: AnyObject) {
-        let tracker = Trackers(id: UUID(), name: textField.text ?? "Без названия", color: .colorSelection7, emoji: "🥌", schedule: schedule)
+        let tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection7, emoji: "🥌", schedule: schedule)
         delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
-        print("tracker created in EventCreatorViewController")
     }
 }
 
@@ -341,15 +360,5 @@ extension EventCreatorViewController: ScheduleViewControllerDelegate {
         self.schedule = schedule
         print("schedule in EventCreatorViewController")
         //TODO: add code
-    }
-}
-
-    // MARK: - UITextField extension
-
-extension UITextField {
-    
-    func indentSize(leftSize:CGFloat) {
-        self.leftView = UIView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: leftSize, height: self.frame.height))
-        self.leftViewMode = .always
     }
 }
