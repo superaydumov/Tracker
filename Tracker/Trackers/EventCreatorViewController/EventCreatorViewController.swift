@@ -56,7 +56,7 @@ final class EventCreatorViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .trackerWhite
         scrollView.frame = view.bounds
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 400)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
@@ -81,6 +81,7 @@ final class EventCreatorViewController: UIViewController {
     private lazy var errorLabel: UILabel = {
         let errorLabel = UILabel()
         errorLabel.textColor = .trackerRed
+        errorLabel.font = .systemFont(ofSize: 17)
         errorLabel.textAlignment = .center
         errorLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -155,6 +156,14 @@ final class EventCreatorViewController: UIViewController {
         return subtitle
     }()
     
+    private lazy var buttonsBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .trackerWhite
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton(type: .system)
         cancelButton.setTitle("Отменить", for: .normal)
@@ -181,6 +190,16 @@ final class EventCreatorViewController: UIViewController {
         return createButton
     }()
     
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .trackerLightGray
+        collectionView.register(EventCreatorCollectionViewCell.self, forCellWithReuseIdentifier: EventCreatorCollectionViewCell.cellIdentifier)
+        collectionView.register(EventCreatorSuplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EventCreatorSuplementaryView.reuseIdentifier)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return collectionView
+    }()
+    
     init(event: Event) {
         self.event = event
         super.init(nibName: nil, bundle: nil)
@@ -196,6 +215,10 @@ final class EventCreatorViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .trackerWhite
+        
+        collectionView.allowsMultipleSelection = true
+        //collectionView.dataSource = self
+        //collectionView.delegate = self
         
         addSubviews()
         constraintsSetup()
@@ -217,8 +240,11 @@ final class EventCreatorViewController: UIViewController {
         
         categoryButton.addSubview(categoryChevronImage)
         
-        scrollView.addSubview(cancelButton)
-        scrollView.addSubview(createButton)
+        scrollView.addSubview(collectionView)
+        scrollView.addSubview(buttonsBackgroundView)
+        
+        buttonsBackgroundView.addSubview(cancelButton)
+        buttonsBackgroundView.addSubview(createButton)
         
         if event == .habit {
             eventCreatorView.addSubview(separatorView)
@@ -248,8 +274,9 @@ final class EventCreatorViewController: UIViewController {
             
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
             errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            heightAnchor!,
             
-            eventCreatorView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32),
+            eventCreatorView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 16),
             eventCreatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             eventCreatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
@@ -260,15 +287,27 @@ final class EventCreatorViewController: UIViewController {
             categoryChevronImage.centerYAnchor.constraint(equalTo: categoryButton.centerYAnchor),
             categoryChevronImage.trailingAnchor.constraint(equalTo: categoryButton.trailingAnchor, constant: -24),
             
+            buttonsBackgroundView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            buttonsBackgroundView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            buttonsBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            buttonsBackgroundView.heightAnchor.constraint(equalToConstant: 80),
+            
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            cancelButton.leadingAnchor.constraint(equalTo: buttonsBackgroundView.leadingAnchor, constant: 20),
             cancelButton.trailingAnchor.constraint(equalTo: createButton.leadingAnchor, constant: -8),
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: buttonsBackgroundView.bottomAnchor),
             
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor)
+            createButton.trailingAnchor.constraint(equalTo: buttonsBackgroundView.trailingAnchor, constant: -20),
+            createButton.bottomAnchor.constraint(equalTo: buttonsBackgroundView.bottomAnchor),
+            createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
+            
+            collectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
+            collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -18),
+            collectionView.bottomAnchor.constraint(equalTo: buttonsBackgroundView.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: eventCreatorView.bottomAnchor, constant: 16),
+            collectionView.widthAnchor.constraint(equalToConstant: scrollView.bounds.width - 32),
+            collectionView.heightAnchor.constraint(equalToConstant: 400)
             ]
         
             if event == .habit {
@@ -288,14 +327,13 @@ final class EventCreatorViewController: UIViewController {
                     scheduleButton.bottomAnchor.constraint(equalTo: eventCreatorView.bottomAnchor),
 
                     scheduleChevronImage.centerYAnchor.constraint(equalTo: scheduleButton.centerYAnchor),
-                    scheduleChevronImage.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor, constant: -24),
-                    
+                    scheduleChevronImage.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor, constant: -24)
                 ]
             } else {
                 constraints += [
                     eventCreatorView.heightAnchor.constraint(equalToConstant: 75),
                     
-                    categoryButton.bottomAnchor.constraint(equalTo: eventCreatorView.bottomAnchor),
+                    categoryButton.bottomAnchor.constraint(equalTo: eventCreatorView.bottomAnchor)
                 ]
             }
         
