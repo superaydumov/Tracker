@@ -67,7 +67,7 @@ final class EventCreatorViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .trackerWhite
         scrollView.frame = view.bounds
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 400)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
@@ -318,7 +318,6 @@ final class EventCreatorViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: buttonsBackgroundView.topAnchor),
             collectionView.topAnchor.constraint(equalTo: eventCreatorView.bottomAnchor, constant: 16),
             collectionView.widthAnchor.constraint(equalToConstant: scrollView.bounds.width - 36),
-            collectionView.heightAnchor.constraint(equalToConstant: 400)
             ]
         
             if event == .habit {
