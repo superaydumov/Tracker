@@ -102,6 +102,6 @@ final class TrackerCreatorViewController: UIViewController {
 extension TrackerCreatorViewController: EventCreatorViewControllerDelegate {
     func createTracker(tracker: Trackers, categoryName: String) {
         delegate?.createTracker(tracker: tracker, categoryName: categoryName)
-        dismiss(animated: true)
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
