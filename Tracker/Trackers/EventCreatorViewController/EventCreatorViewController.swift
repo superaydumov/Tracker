@@ -48,6 +48,9 @@ final class EventCreatorViewController: UIViewController {
     private var selectedEmojiCell: IndexPath? = nil
     private var selectedColorCell: IndexPath? = nil
     
+    private var selectedEmoji: String? = nil
+    private var selectedColor: UIColor? = nil
+    
     weak var delegate: EventCreatorViewControllerDelegate?
     
     // MARK: - Computed properties
@@ -558,6 +561,7 @@ extension EventCreatorViewController: UICollectionViewDelegate {
                 collectionView.cellForItem(at: selectedEmojiCell!)?.backgroundColor = .trackerWhite
             }
             cell.backgroundColor = .trackerLightGray
+            selectedEmoji = cell.emojiLabel.text ?? ""
             selectedEmojiCell = indexPath
         } else if section == 1 {
             if selectedColorCell != nil {
@@ -566,6 +570,7 @@ extension EventCreatorViewController: UICollectionViewDelegate {
             }
             cell.layer.borderWidth = 3
             cell.layer.borderColor = cell.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+            selectedColor = cell.colorView.backgroundColor ?? nil
             selectedColorCell = indexPath
         }
     }
