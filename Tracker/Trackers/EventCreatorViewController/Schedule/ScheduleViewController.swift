@@ -47,7 +47,7 @@ final class ScheduleViewController: UIViewController {
         let performButton = UIButton(type: .system)
         performButton.setTitle("Готово", for: .normal)
         performButton.setTitleColor(.trackerWhite, for: .normal)
-        performButton.backgroundColor = .trackerBlack
+        performButton.backgroundColor = .trackerGray
         performButton.layer.cornerRadius = 16
         performButton.addTarget(self, action: #selector(performButtonDidTap(sender:)), for: .touchUpInside)
         performButton.translatesAutoresizingMaskIntoConstraints = false
@@ -138,5 +138,16 @@ extension ScheduleViewController: ScheduleTableViewCellDelegate {
                 schedule.remove(at: index)
             }
         }
+        
+        if schedule.isEmpty {
+            performButton.isEnabled = false
+            performButton.backgroundColor = .trackerGray
+        } else {
+            performButton.isEnabled = true
+            performButton.backgroundColor = .trackerBlack
+        }
+        
+        let dayDictionary: [WeekDay: Int] = [.monday: 1, .tuesday: 2, .wednesday: 3, .thursday: 4, .friday: 5, .saturday: 6, .sunday: 7]
+        schedule.sort { (dayDictionary[$0] ?? 7) < (dayDictionary[$1] ?? 7)}
     }
 }

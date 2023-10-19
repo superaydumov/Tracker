@@ -447,12 +447,20 @@ extension EventCreatorViewController: UITextFieldDelegate {
 extension EventCreatorViewController: ScheduleViewControllerDelegate {
     func createSchedule(schedule: [WeekDay]) {
         self.schedule = schedule
-        let scheduleString = schedule.map { $0.shortName}.joined(separator: ", ")
         
-        let daysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-        let comparingResult: Bool = daysArray.allSatisfy(scheduleString.contains)
-        if comparingResult {
+        let scheduleString = schedule.map { $0.shortName }.joined(separator: ", ")
+        
+        let allDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+        let workDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт"]
+        let holidaysArray: [String] = ["Сб", "Вс"]
+        
+        
+        if allDaysArray.allSatisfy(scheduleString.contains) {
             scheduleSubtitle = "Каждый день"
+        } else if scheduleString == workDaysArray.map({$0}).joined(separator: ", ") {
+            scheduleSubtitle = "Будни"
+        } else if scheduleString == holidaysArray.map({$0}).joined(separator: ", ") {
+            scheduleSubtitle = "Выходные"
         } else {
             scheduleSubtitle = scheduleString
         }
