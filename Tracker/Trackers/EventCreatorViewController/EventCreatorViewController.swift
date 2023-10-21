@@ -209,6 +209,7 @@ final class EventCreatorViewController: UIViewController {
         collectionView.backgroundColor = .trackerWhite
         collectionView.register(EventCreatorCollectionViewCell.self, forCellWithReuseIdentifier: EventCreatorCollectionViewCell.cellIdentifier)
         collectionView.register(EventCreatorSuplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EventCreatorSuplementaryView.reuseIdentifier)
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return collectionView
