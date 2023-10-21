@@ -11,8 +11,8 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Stored properties
     
-    private var schedule = [WeekDay]()
     weak var delegate: ScheduleViewControllerDelegate?
+    private var schedule = [WeekDay]()
     
     // MARK: - Computed properties
     
@@ -106,7 +106,11 @@ extension ScheduleViewController: UITableViewDataSource {
         cell.contentView.backgroundColor = .trackerBackground
         cell.selectionStyle = .none
         cell.cellLabel.text = WeekDay.allCases[indexPath.row].rawValue
-        cell.weekDay = WeekDay.allCases[indexPath.row]
+        
+        let weekDay = WeekDay.allCases[indexPath.row]
+        cell.weekDay = weekDay
+        cell.cellSwitch.isOn = schedule.contains(weekDay)
+        
         cell.delegate = self
         
         if indexPath.row == 6 {

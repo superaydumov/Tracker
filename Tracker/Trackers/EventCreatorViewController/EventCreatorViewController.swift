@@ -454,7 +454,6 @@ extension EventCreatorViewController: ScheduleViewControllerDelegate {
         let workDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт"]
         let holidaysArray: [String] = ["Сб", "Вс"]
         
-        
         if allDaysArray.allSatisfy(scheduleString.contains) {
             scheduleSubtitle = "Каждый день"
         } else if scheduleString == workDaysArray.map({$0}).joined(separator: ", ") {
