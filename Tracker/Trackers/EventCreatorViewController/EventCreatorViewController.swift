@@ -71,6 +71,7 @@ final class EventCreatorViewController: UIViewController {
         scrollView.backgroundColor = .trackerWhite
         scrollView.frame = view.bounds
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        scrollView.isScrollEnabled = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
@@ -210,6 +211,7 @@ final class EventCreatorViewController: UIViewController {
         collectionView.register(EventCreatorCollectionViewCell.self, forCellWithReuseIdentifier: EventCreatorCollectionViewCell.cellIdentifier)
         collectionView.register(EventCreatorSuplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EventCreatorSuplementaryView.reuseIdentifier)
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.isScrollEnabled = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return collectionView
@@ -256,10 +258,9 @@ final class EventCreatorViewController: UIViewController {
         categoryButton.addSubview(categoryChevronImage)
         
         scrollView.addSubview(collectionView)
-        scrollView.addSubview(buttonsBackgroundView)
         
-        buttonsBackgroundView.addSubview(cancelButton)
-        buttonsBackgroundView.addSubview(createButton)
+        scrollView.addSubview(cancelButton)
+        scrollView.addSubview(createButton)
         
         if event == .habit {
             eventCreatorView.addSubview(separatorView)
@@ -302,26 +303,22 @@ final class EventCreatorViewController: UIViewController {
             categoryChevronImage.centerYAnchor.constraint(equalTo: categoryButton.centerYAnchor),
             categoryChevronImage.trailingAnchor.constraint(equalTo: categoryButton.trailingAnchor, constant: -24),
             
-            buttonsBackgroundView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            buttonsBackgroundView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            buttonsBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            buttonsBackgroundView.heightAnchor.constraint(equalToConstant: 80),
-            
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.leadingAnchor.constraint(equalTo: buttonsBackgroundView.leadingAnchor, constant: 20),
+            cancelButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
             cancelButton.trailingAnchor.constraint(equalTo: createButton.leadingAnchor, constant: -8),
-            cancelButton.bottomAnchor.constraint(equalTo: buttonsBackgroundView.bottomAnchor),
-            
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.trailingAnchor.constraint(equalTo: buttonsBackgroundView.trailingAnchor, constant: -20),
-            createButton.bottomAnchor.constraint(equalTo: buttonsBackgroundView.bottomAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -16),
+
+            createButton.heightAnchor.constraint(equalTo: cancelButton.heightAnchor),
+            createButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            createButton.bottomAnchor.constraint(equalTo: cancelButton.bottomAnchor),
             createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
             
             collectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
             collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -18),
-            collectionView.bottomAnchor.constraint(equalTo: buttonsBackgroundView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             collectionView.topAnchor.constraint(equalTo: eventCreatorView.bottomAnchor, constant: 16),
             collectionView.widthAnchor.constraint(equalToConstant: scrollView.bounds.width - 36),
+            collectionView.heightAnchor.constraint(equalToConstant: 536)
             ]
         
             if event == .habit {
