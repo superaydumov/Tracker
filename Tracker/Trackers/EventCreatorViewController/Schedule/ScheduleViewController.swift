@@ -12,7 +12,7 @@ final class ScheduleViewController: UIViewController {
     // MARK: - Stored properties
     
     weak var delegate: ScheduleViewControllerDelegate?
-    private var schedule = [WeekDay]()
+    var schedule = [WeekDay]()
     
     // MARK: - Computed properties
     
@@ -64,6 +64,8 @@ final class ScheduleViewController: UIViewController {
         
         addSubviews()
         constraintsSetup()
+        
+        updatePerformButton()
     }
     
     // MARK: - Private methods
@@ -86,6 +88,16 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
+    private func updatePerformButton() {
+        if schedule.isEmpty {
+            performButton.isEnabled = false
+            performButton.backgroundColor = .trackerGray
+        } else {
+            performButton.isEnabled = true
+            performButton.backgroundColor = .trackerBlack
+        }
+    }
+    
     // MARK: - Obj-C methods
     
     @objc func performButtonDidTap(sender: AnyObject) {
@@ -103,8 +115,8 @@ extension ScheduleViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleTableViewCell.reuseIdentifier, for: indexPath) as? ScheduleTableViewCell else { return UITableViewCell() }
-        cell.contentView.backgroundColor = .trackerBackground
         cell.selectionStyle = .none
+        cell.contentView.backgroundColor = .trackerBackground
         cell.cellLabel.text = WeekDay.allCases[indexPath.row].rawValue
         
         let weekDay = WeekDay.allCases[indexPath.row]
@@ -143,13 +155,7 @@ extension ScheduleViewController: ScheduleTableViewCellDelegate {
             }
         }
         
-        if schedule.isEmpty {
-            performButton.isEnabled = false
-            performButton.backgroundColor = .trackerGray
-        } else {
-            performButton.isEnabled = true
-            performButton.backgroundColor = .trackerBlack
-        }
+        updatePerformButton()
         
         let dayDictionary: [WeekDay: Int] = [.monday: 1, .tuesday: 2, .wednesday: 3, .thursday: 4, .friday: 5, .saturday: 6, .sunday: 7]
         schedule.sort { (dayDictionary[$0] ?? 7) < (dayDictionary[$1] ?? 7)}

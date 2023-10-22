@@ -50,6 +50,9 @@ final class TrackersViewController: UIViewController {
         datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.calendar.firstWeekday = 2
         datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.heightAnchor.constraint(equalToConstant: 34).isActive = true
+        datePicker.widthAnchor.constraint(equalToConstant: 110).isActive = true
         
         return datePicker
     }()
