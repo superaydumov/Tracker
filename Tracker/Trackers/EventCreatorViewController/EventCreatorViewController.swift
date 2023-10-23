@@ -48,8 +48,16 @@ final class EventCreatorViewController: UIViewController {
     private var selectedEmojiCell: IndexPath? = nil
     private var selectedColorCell: IndexPath? = nil
     
-    private var selectedEmoji: String? = nil
-    private var selectedColor: UIColor? = nil
+    private var selectedEmoji: String? = nil {
+        didSet {
+            createButtonUpdate()
+        }
+    }
+    private var selectedColor: UIColor? = nil{
+        didSet {
+            createButtonUpdate()
+        }
+    }
     
     weak var delegate: EventCreatorViewControllerDelegate?
     
@@ -368,7 +376,7 @@ final class EventCreatorViewController: UIViewController {
     }
     
     private func createButtonUpdate() {
-        createButton.isEnabled = textField.text?.isEmpty == false
+        createButton.isEnabled = textField.text?.isEmpty == false && selectedColor != nil && selectedEmoji != nil
         
         if event == .habit {
             createButton.isEnabled = createButton.isEnabled && !schedule.isEmpty
@@ -415,13 +423,15 @@ final class EventCreatorViewController: UIViewController {
     
     @objc func createButtonDidTap(sender: AnyObject) {
         var tracker: Trackers?
+        guard let selectedEmoji, let selectedColor else { return }
+        
         if event == .habit {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection7, emoji: "🥌", schedule: schedule)
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule)
             
             guard let tracker else { return }
             delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
         } else {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection12, emoji: "🔫", schedule: WeekDay.allCases)
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases)
             
             guard let tracker else { return }
             delegate?.createTracker(tracker: tracker, categoryName: "Важное")
