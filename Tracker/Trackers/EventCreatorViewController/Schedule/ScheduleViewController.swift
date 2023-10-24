@@ -157,7 +157,6 @@ extension ScheduleViewController: ScheduleTableViewCellDelegate {
         
         updatePerformButton()
         
-        let dayDictionary: [WeekDay: Int] = [.monday: 1, .tuesday: 2, .wednesday: 3, .thursday: 4, .friday: 5, .saturday: 6, .sunday: 7]
-        schedule.sort { (dayDictionary[$0] ?? 7) < (dayDictionary[$1] ?? 7)}
+        schedule.sort { $0.numberOfDay < $1.numberOfDay }
     }
 }
