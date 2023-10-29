@@ -40,6 +40,7 @@ final class DatabaseManager {
             do {
                 try context.save()
             } catch {
+                context.rollback()
                 let nserror = error as NSError
                 assertionFailure("Unresolved error \(nserror), \(nserror.userInfo)")
             }
