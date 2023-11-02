@@ -42,6 +42,7 @@
 		C9D74C1D2AF4350700EF794B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D74C1C2AF4350700EF794B /* String+Extension.swift */; };
 		C9F8E6492AE8106E00BE65D0 /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F8E6472AE8106E00BE65D0 /* Tracker.xcdatamodeld */; };
 		C9F8E6502AE9854000BE65D0 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8E64F2AE9854000BE65D0 /* DatabaseManager.swift */; };
+		C9FF828D2AF4529100837113 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF828C2AF4529000837113 /* DatabaseError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		C9D74C1C2AF4350700EF794B /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		C9F8E6482AE8106E00BE65D0 /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		C9F8E64F2AE9854000BE65D0 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		C9FF828C2AF4529000837113 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 		C9D31EB22AD4A1B700B9B596 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C9FF828C2AF4529000837113 /* DatabaseError.swift */,
 				C9D31EBB2AD5FBB000B9B596 /* Trackers.swift */,
 				C9D31EBD2AD5FCB900B9B596 /* TrackerCategory.swift */,
 				C9D31EBF2AD5FD1F00B9B596 /* TrackerRecord.swift */,
@@ -315,6 +318,7 @@
 				C998F5DC2AD944D900351CF9 /* Date+Extension.swift in Sources */,
 				C9D74C1D2AF4350700EF794B /* String+Extension.swift in Sources */,
 				C9D31EAD2AD48D1100B9B596 /* CategoryViewController.swift in Sources */,
+				C9FF828D2AF4529100837113 /* DatabaseError.swift in Sources */,
 				C9D31EB62AD4B98100B9B596 /* ScheduleTableViewCell.swift in Sources */,
 				C9D31EA92AD2100700B9B596 /* TrackerCreatorViewController.swift in Sources */,
 				C94D23F92AC85110004D9ADC /* TrackersViewController.swift in Sources */,
