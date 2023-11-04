@@ -125,6 +125,22 @@ final class TrackerCategoryStore: NSObject {
         category?.addToTrackers(trackerCoreData)
         try context.save()
     }
+    
+    func predicateFetch(trackerName: String) -> [TrackerCategory] {
+        if trackerName.isEmpty {
+            return trackerCategories
+        } else {
+            let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+            request.returnsObjectsAsFaults = false
+            request.predicate = NSPredicate(format: "ANY trackers.category CONTAINS[cd] %@", trackerName)
+            guard let trackerCategoriesCoreData = try? context.fetch(request)
+                else { return [] }
+            guard let categories = try? trackerCategoriesCoreData.map ({ try self.trackerCategory(from: $0) })
+                else { return [] }
+            
+            return categories
+        }
+    }
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
