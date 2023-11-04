@@ -43,6 +43,8 @@
 		C9F8E6492AE8106E00BE65D0 /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F8E6472AE8106E00BE65D0 /* Tracker.xcdatamodeld */; };
 		C9F8E6502AE9854000BE65D0 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8E64F2AE9854000BE65D0 /* DatabaseManager.swift */; };
 		C9FF828D2AF4529100837113 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF828C2AF4529000837113 /* DatabaseError.swift */; };
+		C9FF828F2AF5648900837113 /* TrackerCategoryStoreUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF828E2AF5648900837113 /* TrackerCategoryStoreUpdate.swift */; };
+		C9FF82912AF565B000837113 /* TrackerCategoryStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		C9F8E6482AE8106E00BE65D0 /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		C9F8E64F2AE9854000BE65D0 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		C9FF828C2AF4529000837113 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		C9FF828E2AF5648900837113 /* TrackerCategoryStoreUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStoreUpdate.swift; sourceTree = "<group>"; };
+		C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStoreDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +222,7 @@
 				C9D31EBB2AD5FBB000B9B596 /* Trackers.swift */,
 				C9D31EBD2AD5FCB900B9B596 /* TrackerCategory.swift */,
 				C9D31EBF2AD5FD1F00B9B596 /* TrackerRecord.swift */,
+				C9FF828E2AF5648900837113 /* TrackerCategoryStoreUpdate.swift */,
 				C9D31EB32AD4A1D000B9B596 /* WeekDay.swift */,
 			);
 			path = Models;
@@ -241,6 +246,7 @@
 				C97B8B562AEE9FD000AFCC1F /* TrackerStore.swift */,
 				C97B8B582AEE9FFE00AFCC1F /* TrackerCategoryStore.swift */,
 				C97B8B5A2AEEA01A00AFCC1F /* TrackerRecordStore.swift */,
+				C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -338,6 +344,7 @@
 				C9D31ECD2AD8BDC600B9B596 /* MockData.swift in Sources */,
 				C9D31EC52AD8892100B9B596 /* TrackersCellSuplementaryView.swift in Sources */,
 				C9D31EB82AD5606300B9B596 /* ScheduleTableViewCellDelegate.swift in Sources */,
+				C9FF82912AF565B000837113 /* TrackerCategoryStoreDelegate.swift in Sources */,
 				C9D31EC72AD8AB5800B9B596 /* TrackersCollectionViewCellDelegate.swift in Sources */,
 				C9D31EC92AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift in Sources */,
 				C9D31EB42AD4A1D000B9B596 /* WeekDay.swift in Sources */,
@@ -345,6 +352,7 @@
 				C97B8B592AEE9FFE00AFCC1F /* TrackerCategoryStore.swift in Sources */,
 				C9886D602AD03B0400E3C85F /* TabBarViewController.swift in Sources */,
 				C94FEE9C2ADDCC8A00F6E78F /* EventCreatorCollectionViewCell.swift in Sources */,
+				C9FF828F2AF5648900837113 /* TrackerCategoryStoreUpdate.swift in Sources */,
 				C94D23F72AC85110004D9ADC /* SceneDelegate.swift in Sources */,
 				C9D31EB12AD48DC400B9B596 /* ScheduleViewController.swift in Sources */,
 				C9F8E6492AE8106E00BE65D0 /* Tracker.xcdatamodeld in Sources */,
