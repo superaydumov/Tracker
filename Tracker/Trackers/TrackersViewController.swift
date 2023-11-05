@@ -143,7 +143,7 @@ final class TrackersViewController: UIViewController {
             title = "Трекеры"
             navigationBar.prefersLargeTitles = true
             
-            let addTrackerButton = UIBarButtonItem(image: UIImage(named: "addTrackerButton"), style: .plain, target: self, action: #selector(didTapAddTrackerButton(sender:)))
+            let addTrackerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddTrackerButton(sender:)))
             addTrackerButton.tintColor = .trackerBlack
             navigationItem.leftBarButtonItem = addTrackerButton
             
