@@ -20,19 +20,19 @@ enum WeekDay: String, CaseIterable {
         switch self {
 
         case .monday:
-            return 1
-        case .tuesday:
             return 2
-        case .wednesday:
+        case .tuesday:
             return 3
-        case .thursday:
+        case .wednesday:
             return 4
-        case .friday:
+        case .thursday:
             return 5
-        case .saturday:
+        case .friday:
             return 6
-        case .sunday:
+        case .saturday:
             return 7
+        case .sunday:
+            return 1
         }
     }
     
@@ -54,15 +54,5 @@ enum WeekDay: String, CaseIterable {
         case .sunday:
             return "Вс"
         }
-    }
-}
-
-extension WeekDay: Comparable {
-    static func <(lhs: WeekDay, rhs: WeekDay) -> Bool {
-        lhs.numberOfDay < rhs.numberOfDay
-    }
-    
-    static func ==(lhs: WeekDay, rhs: WeekDay) -> Bool {
-        lhs.numberOfDay == rhs.numberOfDay
     }
 }

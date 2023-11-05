@@ -242,6 +242,8 @@ final class EventCreatorViewController: UIViewController {
         
         view.backgroundColor = .trackerWhite
         
+        self.hideKeyboardWhenTappedAround()
+        
         collectionView.allowsMultipleSelection = true
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -391,7 +393,7 @@ final class EventCreatorViewController: UIViewController {
     
     // MARK: - Obj-C methods
     
-    @objc func textFieldDidChange(sender: AnyObject) {
+    @objc private func textFieldDidChange(sender: AnyObject) {
         createButtonUpdate()
         
         guard let number = textField.text?.count else { return }
@@ -405,23 +407,23 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
-    @objc func categoryButtonDidTap(sender: AnyObject) {
+    @objc private func categoryButtonDidTap(sender: AnyObject) {
         let categoryViewController = CategoryViewController()
         present(categoryViewController, animated: true)
     }
     
-    @objc func scheduleButtonDidTap(sender: AnyObject) {
+    @objc private func scheduleButtonDidTap(sender: AnyObject) {
         let scheduleViewController = ScheduleViewController()
         scheduleViewController.delegate = self
         scheduleViewController.schedule = schedule
         present(scheduleViewController, animated: true)
     }
     
-    @objc func cancelButtonDidTap(sender: AnyObject) {
+    @objc private func cancelButtonDidTap(sender: AnyObject) {
         dismiss(animated: true)
     }
     
-    @objc func createButtonDidTap(sender: AnyObject) {
+    @objc private func createButtonDidTap(sender: AnyObject) {
         var tracker: Trackers?
         guard let selectedEmoji, let selectedColor else { return }
         
@@ -449,8 +451,13 @@ extension EventCreatorViewController: UITextFieldDelegate {
         
         return updatedString.count <= maximumLength
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        
+        return false
+    }
 }
-
 
     // MARK: - ScheduleViewControllerDelegate
 

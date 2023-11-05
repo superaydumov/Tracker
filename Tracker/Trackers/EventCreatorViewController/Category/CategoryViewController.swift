@@ -22,6 +22,14 @@ final class CategoryViewController: UIViewController {
         return topLabel
     }()
     
+    private lazy var plugView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var plugImageView: UIImageView = {
         let plugImageView = UIImageView()
         plugImageView.image = UIImage(named: "trackersPlugImage")
@@ -69,8 +77,11 @@ final class CategoryViewController: UIViewController {
     
     private func addSubViews() {
         view.addSubview(topLabel)
-        view.addSubview(plugImageView)
-        view.addSubview(plugLabel)
+        
+        view.addSubview(plugView)
+        plugView.addSubview(plugImageView)
+        plugView.addSubview(plugLabel)
+        
         view.addSubview(createCategoryButton)
     }
     
@@ -79,14 +90,20 @@ final class CategoryViewController: UIViewController {
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 26),
             topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
+            plugView.heightAnchor.constraint(equalToConstant: 125),
+            plugView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            plugView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            plugView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            plugView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
             plugImageView.widthAnchor.constraint(equalToConstant: 80),
             plugImageView.heightAnchor.constraint(equalToConstant: 80),
-            plugImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            plugImageView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 246),
+            plugImageView.topAnchor.constraint(equalTo: plugView.topAnchor),
+            plugImageView.centerXAnchor.constraint(equalTo: plugView.centerXAnchor),
             
             plugLabel.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
-            plugLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            plugLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            plugLabel.leadingAnchor.constraint(equalTo: plugView.leadingAnchor, constant: 16),
+            plugLabel.trailingAnchor.constraint(equalTo: plugView.trailingAnchor, constant: -16),
             plugLabel.heightAnchor.constraint(equalToConstant: 36),
             
             createCategoryButton.heightAnchor.constraint(equalToConstant: 60),

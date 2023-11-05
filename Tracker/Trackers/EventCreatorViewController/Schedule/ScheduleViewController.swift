@@ -27,14 +27,26 @@ final class ScheduleViewController: UIViewController {
         return topLabel
     }()
     
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .trackerWhite
+        scrollView.frame = view.bounds
+        scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(550))
+        scrollView.isScrollEnabled = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return scrollView
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         var width = view.frame.width - 16 * 2
         var height = 7 * 75
-        tableView.frame = CGRect(x: 16, y: 78, width: Int(width), height: Int(height))
+        tableView.frame = CGRect(x: 16, y: 0, width: Int(width), height: Int(height))
         tableView.layer.cornerRadius = 16
         tableView.separatorColor = .trackerGray
-        tableView.alwaysBounceVertical = false
+        tableView.alwaysBounceVertical = true
+        tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.reuseIdentifier)
         tableView.dataSource = self
@@ -72,7 +84,8 @@ final class ScheduleViewController: UIViewController {
     
     private func addSubviews() {
         view.addSubview(topLabel)
-        view.addSubview(tableView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(tableView)
         view.addSubview(performButton)
     }
     
@@ -80,6 +93,11 @@ final class ScheduleViewController: UIViewController {
         NSLayoutConstraint.activate([
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 26),
             topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            scrollView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 38),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: performButton.topAnchor),
             
             performButton.heightAnchor.constraint(equalToConstant: 60),
             performButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -100,7 +118,7 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Obj-C methods
     
-    @objc func performButtonDidTap(sender: AnyObject) {
+    @objc private func performButtonDidTap(sender: AnyObject) {
         delegate?.createSchedule(schedule: schedule)
         dismiss(animated: true)
     }
@@ -125,7 +143,7 @@ extension ScheduleViewController: UITableViewDataSource {
         
         cell.delegate = self
         
-        if indexPath.row == 6 {
+        if indexPath.row == WeekDay.allCases.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -157,6 +175,7 @@ extension ScheduleViewController: ScheduleTableViewCellDelegate {
         
         updatePerformButton()
         
-        schedule.sort { $0.numberOfDay < $1.numberOfDay }
+        let dayDictionary: [WeekDay: Int] = [.monday: 1, .tuesday: 2, .wednesday: 3, .thursday: 4, .friday: 5, .saturday: 6, .sunday: 7]
+        schedule.sort { (dayDictionary[$0] ?? 7) < (dayDictionary[$1] ?? 7)}
     }
 }

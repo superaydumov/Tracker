@@ -60,6 +60,14 @@ final class TrackersViewController: UIViewController {
         return datePicker
     }()
     
+    private lazy var plugView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var plugImageView: UIImageView = {
         let plugImageView = UIImageView()
         plugImageView.image = UIImage(named: "trackersPlugImage")
@@ -110,6 +118,8 @@ final class TrackersViewController: UIViewController {
         
         view.backgroundColor = .trackerWhite
         
+        self.hideKeyboardWhenTappedAround()
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -145,8 +155,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addSubViews() {
-        view.addSubview(plugImageView)
-        view.addSubview(plugLabel)
+        view.addSubview(plugView)
+        plugView.addSubview(plugImageView)
+        plugView.addSubview(plugLabel)
+        
         view.addSubview(searchTextField)
         view.addSubview(cancelSearchTextFieldButton)
         view.addSubview(collectionView)
@@ -159,14 +171,20 @@ final class TrackersViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
+            plugView.heightAnchor.constraint(equalToConstant: 110),
+            plugView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            plugView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            plugView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            plugView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
             plugImageView.widthAnchor.constraint(equalToConstant: 80),
             plugImageView.heightAnchor.constraint(equalToConstant: 80),
-            plugImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            plugImageView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 230),
+            plugImageView.topAnchor.constraint(equalTo: plugView.topAnchor),
+            plugImageView.centerXAnchor.constraint(equalTo: plugView.centerXAnchor),
             
             plugLabel.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
-            plugLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            plugLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            plugLabel.leadingAnchor.constraint(equalTo: plugView.leadingAnchor, constant: 16),
+            plugLabel.trailingAnchor.constraint(equalTo: plugView.trailingAnchor, constant: -16),
             plugLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
     }
@@ -200,7 +218,7 @@ final class TrackersViewController: UIViewController {
             for tracker in category.visibleTrackers(filterString: searchText) {
                 guard let schedule = tracker.schedule else { return }
                 let scheduleNumbers = schedule.map { $0.numberOfDay }
-                if let day = currentDate, scheduleNumbers.contains(day) && (searchText.isEmpty || tracker.name.contains(searchText)) {
+                if let day = currentDate, scheduleNumbers.contains(day) && (searchText.isEmpty || tracker.name.lowercased().contains(searchText.lowercased())) {
                     newTrackers.append(tracker)
                 }
             }
@@ -216,13 +234,13 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Obj-C methods
     
-    @objc func didTapAddTrackerButton(sender: AnyObject) {
+    @objc private func didTapAddTrackerButton(sender: AnyObject) {
         let trackerCreator = TrackerCreatorViewController()
         trackerCreator.delegate = self
         present(trackerCreator, animated: true)
     }
     
-    @objc func didTapDateButton(sender: UIDatePicker) {
+    @objc private func didTapDateButton(sender: UIDatePicker) {
         let components = Calendar.current.dateComponents([.weekday], from: sender.date)
         if let day = components.weekday {
             currentDate = day
@@ -230,7 +248,7 @@ final class TrackersViewController: UIViewController {
         }
     }
     
-    @objc func textFieldDidChanged(sender: AnyObject) {
+    @objc private func textFieldDidChanged(sender: AnyObject) {
         searchText = searchTextField.text ?? ""
         plugImageView.image = searchText.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
         plugLabel.text = searchText.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
@@ -240,7 +258,7 @@ final class TrackersViewController: UIViewController {
         updateCategories()
     }
     
-    @objc func cancelButtonDidTap(sender: AnyObject) {
+    @objc private func cancelButtonDidTap(sender: AnyObject) {
         searchTextField.text = ""
         searchText = ""
         widthAnchor?.constant = 0
@@ -343,6 +361,12 @@ extension TrackersViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         additionalConstraintsSetup()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        
+        return false
     }
 }
 
