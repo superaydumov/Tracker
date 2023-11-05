@@ -230,6 +230,11 @@ final class TrackersViewController: UIViewController {
         visibleCategories = newCategories
         collectionView.reloadData()
     }
+    
+    private func changePlugs(_ text: String) {
+        plugImageView.image = text.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
+        plugLabel.text = text.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
+    }
 
     
     // MARK: - Obj-C methods
@@ -250,8 +255,9 @@ final class TrackersViewController: UIViewController {
     
     @objc private func textFieldDidChanged(sender: AnyObject) {
         searchText = searchTextField.text ?? ""
-        plugImageView.image = searchText.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
-        plugLabel.text = searchText.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
+        
+        changePlugs(searchText)
+        
         widthAnchor?.constant = 85
         
         visibleCategories = trackerCategoryStore.predicateFetch(trackerName: searchText)
@@ -261,6 +267,9 @@ final class TrackersViewController: UIViewController {
     @objc private func cancelButtonDidTap(sender: AnyObject) {
         searchTextField.text = ""
         searchText = ""
+        
+        changePlugs(searchText)
+        
         widthAnchor?.constant = 0
         constraintsSetup()
         updateCategories()
