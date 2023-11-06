@@ -15,7 +15,7 @@ final class TrackersViewController: UIViewController {
     private var searchText: String = ""
     private var widthAnchor: NSLayoutConstraint?
     
-    private var categories: [TrackerCategory] = []
+    private var categories = [TrackerCategory]()
     private var visibleCategories = [TrackerCategory]()
     private var completedTrackers = [TrackerRecord]()
     
@@ -132,7 +132,12 @@ final class TrackersViewController: UIViewController {
         constraintsSetup()
         additionalConstraintsSetup()
         
-        completedTrackers = try! trackerRecordStore.fetchTrackers()
+        do {
+            completedTrackers = try trackerRecordStore.fetchTrackers()
+        } catch {
+            print("Error with fetchTrackers: \(error.localizedDescription)")
+        }
+        
         trackerCategoryStore.delegate = self
     }
     
