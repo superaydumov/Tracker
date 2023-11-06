@@ -22,6 +22,8 @@ final class TrackersViewController: UIViewController {
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
     
+    private let params = GeometricParams(cellCount: 2, cellSpacing: 9, lineSpacing: 16)
+    
     // MARK: - Computed properties
     
     private lazy var collectionView: UICollectionView = {
@@ -343,16 +345,18 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellSize = CGSize(width: 167, height: 148)
-        return cellSize
+        let availableWidth = collectionView.frame.width - params.paddingWidth
+        let cellWidth = availableWidth / CGFloat(params.cellCount)
+        
+        return CGSize(width: cellWidth, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        return params.cellSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return params.lineSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
