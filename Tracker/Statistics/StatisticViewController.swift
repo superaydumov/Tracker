@@ -11,6 +11,14 @@ final class StatisticViewController: UIViewController {
     
     // MARK: - Computed properties
     
+    private lazy var plugView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var plugImageView: UIImageView = {
         let plugImageView = UIImageView()
         plugImageView.image = UIImage(named: "statisticPlugImage")
@@ -52,20 +60,27 @@ final class StatisticViewController: UIViewController {
     }
     
     private func addSubViews() {
-        view.addSubview(plugImageView)
-        view.addSubview(plugLabel)
+        view.addSubview(plugView)
+        plugView.addSubview(plugImageView)
+        plugView.addSubview(plugLabel)
     }
     
     private func constraintsSetup() {
         NSLayoutConstraint.activate([
+            plugView.heightAnchor.constraint(equalToConstant: 110),
+            plugView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            plugView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            plugView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            plugView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
             plugImageView.widthAnchor.constraint(equalToConstant: 80),
             plugImageView.heightAnchor.constraint(equalToConstant: 80),
-            plugImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            plugImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 273),
+            plugImageView.topAnchor.constraint(equalTo: plugView.topAnchor),
+            plugImageView.centerXAnchor.constraint(equalTo: plugView.centerXAnchor),
             
             plugLabel.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
-            plugLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            plugLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            plugLabel.leadingAnchor.constraint(equalTo: plugView.leadingAnchor, constant: 16),
+            plugLabel.trailingAnchor.constraint(equalTo: plugView.trailingAnchor, constant: -16),
             plugLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
     }

@@ -25,6 +25,15 @@ final class EventCreatorViewController: UIViewController {
     
     // MARK: - Stored properties
     
+    private let emojies = [
+        "🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌",
+        "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
+    ]
+    
+    private let colors: [UIColor] = [
+        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12, .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18
+    ]
+    
     private let event: Event
     private var charactersNumber = 0
     private let charactersLimitNumber = 38
@@ -32,6 +41,19 @@ final class EventCreatorViewController: UIViewController {
     
     private var scheduleSubtitle = ""
     private var schedule = [WeekDay]() {
+        didSet {
+            createButtonUpdate()
+        }
+    }
+    private var selectedEmojiCell: IndexPath? = nil
+    private var selectedColorCell: IndexPath? = nil
+    
+    private var selectedEmoji: String? = nil {
+        didSet {
+            createButtonUpdate()
+        }
+    }
+    private var selectedColor: UIColor? = nil{
         didSet {
             createButtonUpdate()
         }
@@ -57,6 +79,7 @@ final class EventCreatorViewController: UIViewController {
         scrollView.backgroundColor = .trackerWhite
         scrollView.frame = view.bounds
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        scrollView.isScrollEnabled = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
@@ -72,6 +95,7 @@ final class EventCreatorViewController: UIViewController {
         textField.indentSize(leftSize: 16)
         textField.clearButtonMode = .whileEditing
         textField.addTarget(self, action: #selector(textFieldDidChange(sender:)), for: .editingChanged)
+        textField.becomeFirstResponder()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         
@@ -81,6 +105,7 @@ final class EventCreatorViewController: UIViewController {
     private lazy var errorLabel: UILabel = {
         let errorLabel = UILabel()
         errorLabel.textColor = .trackerRed
+        errorLabel.font = .systemFont(ofSize: 17)
         errorLabel.textAlignment = .center
         errorLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -155,6 +180,14 @@ final class EventCreatorViewController: UIViewController {
         return subtitle
     }()
     
+    private lazy var buttonsBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .trackerWhite
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton(type: .system)
         cancelButton.setTitle("Отменить", for: .normal)
@@ -181,6 +214,18 @@ final class EventCreatorViewController: UIViewController {
         return createButton
     }()
     
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .trackerWhite
+        collectionView.register(EventCreatorCollectionViewCell.self, forCellWithReuseIdentifier: EventCreatorCollectionViewCell.cellIdentifier)
+        collectionView.register(EventCreatorSuplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EventCreatorSuplementaryView.reuseIdentifier)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.isScrollEnabled = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return collectionView
+    }()
+    
     init(event: Event) {
         self.event = event
         super.init(nibName: nil, bundle: nil)
@@ -196,6 +241,12 @@ final class EventCreatorViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .trackerWhite
+        
+        self.hideKeyboardWhenTappedAround()
+        
+        collectionView.allowsMultipleSelection = true
+        collectionView.dataSource = self
+        collectionView.delegate = self
         
         addSubviews()
         constraintsSetup()
@@ -216,6 +267,8 @@ final class EventCreatorViewController: UIViewController {
         eventCreatorView.addSubview(categoryButton)
         
         categoryButton.addSubview(categoryChevronImage)
+        
+        scrollView.addSubview(collectionView)
         
         scrollView.addSubview(cancelButton)
         scrollView.addSubview(createButton)
@@ -248,8 +301,9 @@ final class EventCreatorViewController: UIViewController {
             
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
             errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            heightAnchor!,
             
-            eventCreatorView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32),
+            eventCreatorView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 16),
             eventCreatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             eventCreatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
@@ -261,14 +315,21 @@ final class EventCreatorViewController: UIViewController {
             categoryChevronImage.trailingAnchor.constraint(equalTo: categoryButton.trailingAnchor, constant: -24),
             
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            cancelButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
             cancelButton.trailingAnchor.constraint(equalTo: createButton.leadingAnchor, constant: -8),
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -16),
+
+            createButton.heightAnchor.constraint(equalTo: cancelButton.heightAnchor),
+            createButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            createButton.bottomAnchor.constraint(equalTo: cancelButton.bottomAnchor),
+            createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
             
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
+            collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -18),
+            collectionView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: eventCreatorView.bottomAnchor, constant: 16),
+            collectionView.widthAnchor.constraint(equalToConstant: scrollView.bounds.width - 36),
+            collectionView.heightAnchor.constraint(equalToConstant: 536)
             ]
         
             if event == .habit {
@@ -288,14 +349,13 @@ final class EventCreatorViewController: UIViewController {
                     scheduleButton.bottomAnchor.constraint(equalTo: eventCreatorView.bottomAnchor),
 
                     scheduleChevronImage.centerYAnchor.constraint(equalTo: scheduleButton.centerYAnchor),
-                    scheduleChevronImage.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor, constant: -24),
-                    
+                    scheduleChevronImage.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor, constant: -24)
                 ]
             } else {
                 constraints += [
                     eventCreatorView.heightAnchor.constraint(equalToConstant: 75),
                     
-                    categoryButton.bottomAnchor.constraint(equalTo: eventCreatorView.bottomAnchor),
+                    categoryButton.bottomAnchor.constraint(equalTo: eventCreatorView.bottomAnchor)
                 ]
             }
         
@@ -318,7 +378,7 @@ final class EventCreatorViewController: UIViewController {
     }
     
     private func createButtonUpdate() {
-        createButton.isEnabled = textField.text?.isEmpty == false
+        createButton.isEnabled = textField.text?.isEmpty == false && selectedColor != nil && selectedEmoji != nil
         
         if event == .habit {
             createButton.isEnabled = createButton.isEnabled && !schedule.isEmpty
@@ -333,7 +393,7 @@ final class EventCreatorViewController: UIViewController {
     
     // MARK: - Obj-C methods
     
-    @objc func textFieldDidChange(sender: AnyObject) {
+    @objc private func textFieldDidChange(sender: AnyObject) {
         createButtonUpdate()
         
         guard let number = textField.text?.count else { return }
@@ -347,30 +407,33 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
-    @objc func categoryButtonDidTap(sender: AnyObject) {
+    @objc private func categoryButtonDidTap(sender: AnyObject) {
         let categoryViewController = CategoryViewController()
         present(categoryViewController, animated: true)
     }
     
-    @objc func scheduleButtonDidTap(sender: AnyObject) {
+    @objc private func scheduleButtonDidTap(sender: AnyObject) {
         let scheduleViewController = ScheduleViewController()
         scheduleViewController.delegate = self
+        scheduleViewController.schedule = schedule
         present(scheduleViewController, animated: true)
     }
     
-    @objc func cancelButtonDidTap(sender: AnyObject) {
+    @objc private func cancelButtonDidTap(sender: AnyObject) {
         dismiss(animated: true)
     }
     
-    @objc func createButtonDidTap(sender: AnyObject) {
+    @objc private func createButtonDidTap(sender: AnyObject) {
         var tracker: Trackers?
+        guard let selectedEmoji, let selectedColor else { return }
+        
         if event == .habit {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection7, emoji: "🥌", schedule: schedule)
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule)
             
             guard let tracker else { return }
             delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
         } else {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: .colorSelection12, emoji: "🔫", schedule: WeekDay.allCases)
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases)
             
             guard let tracker else { return }
             delegate?.createTracker(tracker: tracker, categoryName: "Важное")
@@ -388,24 +451,167 @@ extension EventCreatorViewController: UITextFieldDelegate {
         
         return updatedString.count <= maximumLength
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        
+        return false
+    }
 }
-
 
     // MARK: - ScheduleViewControllerDelegate
 
 extension EventCreatorViewController: ScheduleViewControllerDelegate {
     func createSchedule(schedule: [WeekDay]) {
         self.schedule = schedule
-        let scheduleString = schedule.map { $0.shortName}.joined(separator: ", ")
         
-        let daysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-        let comparingResult: Bool = daysArray.allSatisfy(scheduleString.contains)
-        if comparingResult {
+        let scheduleString = schedule.map { $0.shortName }.joined(separator: ", ")
+        
+        let allDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+        let workDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт"]
+        let holidaysArray: [String] = ["Сб", "Вс"]
+        
+        if allDaysArray.allSatisfy(scheduleString.contains) {
             scheduleSubtitle = "Каждый день"
+        } else if scheduleString == workDaysArray.map({$0}).joined(separator: ", ") {
+            scheduleSubtitle = "Будни"
+        } else if scheduleString == holidaysArray.map({$0}).joined(separator: ", ") {
+            scheduleSubtitle = "Выходные"
         } else {
             scheduleSubtitle = scheduleString
         }
         
         scheduleSubtitleUpdate()
+    }
+}
+
+    // MARK: - UICollectionViewDataSource
+
+extension EventCreatorViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        var value = Int()
+        
+        if section == 0 {
+            value = emojies.count
+        } else if section == 1 {
+            value = colors.count
+        }
+        
+        return value
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let section = indexPath.section
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventCreatorCollectionViewCell.cellIdentifier, for: indexPath) as? EventCreatorCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.layer.cornerRadius = 16
+        
+        if section == 0 {
+            cell.emojiLabel.text = emojies[indexPath.row]
+        } else if section == 1 {
+            cell.colorView.backgroundColor = colors[indexPath.row]
+        }
+        
+        return cell
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+}
+
+    // MARK: - UICollectionViewDelegateFlowLayout
+
+extension EventCreatorViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 52, height: 52)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let section = indexPath.section
+        var id: String
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "header"
+        case UICollectionView.elementKindSectionFooter:
+            id = "footer"
+        default:
+            id = ""
+        }
+        
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? EventCreatorSuplementaryView else { return UICollectionReusableView() }
+        
+        if section == 0 {
+            view.titleLabel.text = "Emoji"
+        } else if section == 1 {
+            view.titleLabel.text = "Цвета"
+        }
+        
+        return view
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        let headerViewSize = headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                                       height: UIView.layoutFittingExpandedSize.height),
+                                                                withHorizontalFittingPriority: .required,
+                                                                verticalFittingPriority: .fittingSizeLevel)
+        return headerViewSize
+    }
+}
+
+    // MARK: - UICollectionViewDelegate
+
+extension EventCreatorViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let section = indexPath.section
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? EventCreatorCollectionViewCell else { return }
+        
+        if section == 0 {
+            if selectedEmojiCell != nil {
+                collectionView.deselectItem(at: selectedEmojiCell!, animated: true)
+                collectionView.cellForItem(at: selectedEmojiCell!)?.backgroundColor = .trackerWhite
+            }
+            cell.backgroundColor = .trackerLightGray
+            selectedEmoji = cell.emojiLabel.text ?? ""
+            selectedEmojiCell = indexPath
+        } else if section == 1 {
+            if selectedColorCell != nil {
+                collectionView.deselectItem(at: selectedColorCell!, animated: true)
+                collectionView.cellForItem(at: selectedColorCell!)?.layer.borderWidth = 0
+            }
+            cell.layer.borderWidth = 3
+            cell.layer.borderColor = cell.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+            selectedColor = cell.colorView.backgroundColor ?? nil
+            selectedColorCell = indexPath
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let section = indexPath.section
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? EventCreatorCollectionViewCell else { return }
+        
+        collectionView.deselectItem(at: indexPath, animated: true)
+        cell.backgroundColor = .trackerWhite
+        cell.layer.borderWidth = 0
+        
+        if section == 0 {
+            selectedEmojiCell = nil
+        } else if section == 1 {
+            selectedColorCell = nil
+        }
     }
 }

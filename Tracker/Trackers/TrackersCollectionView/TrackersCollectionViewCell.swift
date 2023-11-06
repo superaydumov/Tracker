@@ -148,7 +148,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.text = emoji
         isCompletedToday = isCompleted
         checkButton.setImage(isCompletedToday ? UIImage(systemName: "checkmark")! : UIImage(systemName: "plus")!, for: .normal)
-        checkButton.backgroundColor = color
+        if isCompletedToday {
+            checkButton.backgroundColor = color.withAlphaComponent(0.3)
+        } else {
+            checkButton.backgroundColor = color
+        }
         checkButton.isEnabled = isEnabled
         
         let dividedBy10 = completedCount % 10

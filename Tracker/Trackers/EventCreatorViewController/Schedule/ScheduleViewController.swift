@@ -11,8 +11,8 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Stored properties
     
-    private var schedule = [WeekDay]()
     weak var delegate: ScheduleViewControllerDelegate?
+    var schedule = [WeekDay]()
     
     // MARK: - Computed properties
     
@@ -27,14 +27,26 @@ final class ScheduleViewController: UIViewController {
         return topLabel
     }()
     
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .trackerWhite
+        scrollView.frame = view.bounds
+        scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(550))
+        scrollView.isScrollEnabled = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return scrollView
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         var width = view.frame.width - 16 * 2
         var height = 7 * 75
-        tableView.frame = CGRect(x: 16, y: 78, width: Int(width), height: Int(height))
+        tableView.frame = CGRect(x: 16, y: 0, width: Int(width), height: Int(height))
         tableView.layer.cornerRadius = 16
         tableView.separatorColor = .trackerGray
-        tableView.alwaysBounceVertical = false
+        tableView.alwaysBounceVertical = true
+        tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.reuseIdentifier)
         tableView.dataSource = self
@@ -47,7 +59,7 @@ final class ScheduleViewController: UIViewController {
         let performButton = UIButton(type: .system)
         performButton.setTitle("Готово", for: .normal)
         performButton.setTitleColor(.trackerWhite, for: .normal)
-        performButton.backgroundColor = .trackerBlack
+        performButton.backgroundColor = .trackerGray
         performButton.layer.cornerRadius = 16
         performButton.addTarget(self, action: #selector(performButtonDidTap(sender:)), for: .touchUpInside)
         performButton.translatesAutoresizingMaskIntoConstraints = false
@@ -64,13 +76,16 @@ final class ScheduleViewController: UIViewController {
         
         addSubviews()
         constraintsSetup()
+        
+        updatePerformButton()
     }
     
     // MARK: - Private methods
     
     private func addSubviews() {
         view.addSubview(topLabel)
-        view.addSubview(tableView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(tableView)
         view.addSubview(performButton)
     }
     
@@ -79,6 +94,11 @@ final class ScheduleViewController: UIViewController {
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 26),
             topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
+            scrollView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 38),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: performButton.topAnchor),
+            
             performButton.heightAnchor.constraint(equalToConstant: 60),
             performButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             performButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
@@ -86,9 +106,19 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
+    private func updatePerformButton() {
+        if schedule.isEmpty {
+            performButton.isEnabled = false
+            performButton.backgroundColor = .trackerGray
+        } else {
+            performButton.isEnabled = true
+            performButton.backgroundColor = .trackerBlack
+        }
+    }
+    
     // MARK: - Obj-C methods
     
-    @objc func performButtonDidTap(sender: AnyObject) {
+    @objc private func performButtonDidTap(sender: AnyObject) {
         delegate?.createSchedule(schedule: schedule)
         dismiss(animated: true)
     }
@@ -103,13 +133,17 @@ extension ScheduleViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleTableViewCell.reuseIdentifier, for: indexPath) as? ScheduleTableViewCell else { return UITableViewCell() }
-        cell.contentView.backgroundColor = .trackerBackground
         cell.selectionStyle = .none
+        cell.contentView.backgroundColor = .trackerBackground
         cell.cellLabel.text = WeekDay.allCases[indexPath.row].rawValue
-        cell.weekDay = WeekDay.allCases[indexPath.row]
+        
+        let weekDay = WeekDay.allCases[indexPath.row]
+        cell.weekDay = weekDay
+        cell.cellSwitch.isOn = schedule.contains(weekDay)
+        
         cell.delegate = self
         
-        if indexPath.row == 6 {
+        if indexPath.row == WeekDay.allCases.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -138,5 +172,10 @@ extension ScheduleViewController: ScheduleTableViewCellDelegate {
                 schedule.remove(at: index)
             }
         }
+        
+        updatePerformButton()
+        
+        let dayDictionary: [WeekDay: Int] = [.monday: 1, .tuesday: 2, .wednesday: 3, .thursday: 4, .friday: 5, .saturday: 6, .sunday: 7]
+        schedule.sort { (dayDictionary[$0] ?? 7) < (dayDictionary[$1] ?? 7)}
     }
 }
