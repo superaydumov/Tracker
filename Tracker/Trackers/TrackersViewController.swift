@@ -22,7 +22,7 @@ final class TrackersViewController: UIViewController {
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
     
-    private let params = GeometricParams(cellCount: 2, cellSpacing: 9, lineSpacing: 16)
+    private let params = GeometricParams(cellCount: 2, cellHeight: 148, cellSpacing: 9, lineSpacing: 16)
     
     // MARK: - Computed properties
     
@@ -57,7 +57,7 @@ final class TrackersViewController: UIViewController {
         datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.heightAnchor.constraint(equalToConstant: 34).isActive = true
-        datePicker.widthAnchor.constraint(equalToConstant: 110).isActive = true
+        datePicker.widthAnchor.constraint(equalToConstant: 105).isActive = true
         
         return datePicker
     }()
@@ -348,7 +348,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = collectionView.frame.width - params.paddingWidth
         let cellWidth = availableWidth / CGFloat(params.cellCount)
         
-        return CGSize(width: cellWidth, height: 148)
+        return CGSize(width: cellWidth, height: params.cellHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

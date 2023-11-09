@@ -95,7 +95,6 @@ final class EventCreatorViewController: UIViewController {
         textField.indentSize(leftSize: 16)
         textField.clearButtonMode = .whileEditing
         textField.addTarget(self, action: #selector(textFieldDidChange(sender:)), for: .editingChanged)
-        textField.becomeFirstResponder()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         
