@@ -19,6 +19,8 @@
 		C97B8B592AEE9FFE00AFCC1F /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B8B582AEE9FFE00AFCC1F /* TrackerCategoryStore.swift */; };
 		C97B8B5B2AEEA01A00AFCC1F /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B8B5A2AEEA01A00AFCC1F /* TrackerRecordStore.swift */; };
 		C981C6B32AC87179009D0228 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C981C6B22AC87179009D0228 /* UIColor+Extension.swift */; };
+		C9825C182AFEB630002098BA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9825C172AFEB630002098BA /* OnboardingViewController.swift */; };
+		C9825C1A2AFEFADE002098BA /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9825C192AFEFADE002098BA /* UIView+Extension.swift */; };
 		C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9886D5D2AD033F100E3C85F /* StatisticViewController.swift */; };
 		C9886D602AD03B0400E3C85F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9886D5F2AD03B0400E3C85F /* TabBarViewController.swift */; };
 		C98BBE6E2AF9746E00F91D3A /* GeometricParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98BBE6D2AF9746E00F91D3A /* GeometricParams.swift */; };
@@ -64,6 +66,8 @@
 		C97B8B582AEE9FFE00AFCC1F /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		C97B8B5A2AEEA01A00AFCC1F /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
 		C981C6B22AC87179009D0228 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		C9825C172AFEB630002098BA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		C9825C192AFEFADE002098BA /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		C9886D5D2AD033F100E3C85F /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		C9886D5F2AD03B0400E3C85F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C98BBE6D2AF9746E00F91D3A /* GeometricParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricParams.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 				C9D31EA42AD20E4900B9B596 /* Trackers */,
 				C981C6B12AC87158009D0228 /* Helpers */,
 				C9886D5F2AD03B0400E3C85F /* TabBarViewController.swift */,
+				C9825C172AFEB630002098BA /* OnboardingViewController.swift */,
 				C9D31ECC2AD8BDC600B9B596 /* MockData.swift */,
 				C94D23F42AC85110004D9ADC /* AppDelegate.swift */,
 				C94D23F62AC85110004D9ADC /* SceneDelegate.swift */,
@@ -178,6 +183,7 @@
 				C981C6B22AC87179009D0228 /* UIColor+Extension.swift */,
 				C90F11792ADC27200002D47B /* UITextField+Extension.swift */,
 				C9E3A9FA2AF7D38300983B42 /* UIViewController+Extension.swift */,
+				C9825C192AFEFADE002098BA /* UIView+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -340,10 +346,12 @@
 				C9F8E6502AE9854000BE65D0 /* DatabaseManager.swift in Sources */,
 				C90F117A2ADC27200002D47B /* UITextField+Extension.swift in Sources */,
 				C9D31EC22AD7371000B9B596 /* TrackersCollectionViewCell.swift in Sources */,
+				C9825C182AFEB630002098BA /* OnboardingViewController.swift in Sources */,
 				C97B8B5B2AEEA01A00AFCC1F /* TrackerRecordStore.swift in Sources */,
 				C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */,
 				C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */,
 				C9E3A9FB2AF7D38300983B42 /* UIViewController+Extension.swift in Sources */,
+				C9825C1A2AFEFADE002098BA /* UIView+Extension.swift in Sources */,
 				C9D31ECB2AD8B72900B9B596 /* TrackerCreatorViewControllerDelegate.swift in Sources */,
 				C97B8B572AEE9FD000AFCC1F /* TrackerStore.swift in Sources */,
 				C9D31EBC2AD5FBB000B9B596 /* Trackers.swift in Sources */,
