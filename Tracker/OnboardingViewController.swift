@@ -137,6 +137,8 @@ final class OnboardingViewController: UIPageViewController {
             return assertionFailure("Invalid configuration")
         }
         window.rootViewController = TabBarViewController()
+        
+        UserDefaults.standard.set(true, forKey: "isOnboardingShown")
     }
 }
 
