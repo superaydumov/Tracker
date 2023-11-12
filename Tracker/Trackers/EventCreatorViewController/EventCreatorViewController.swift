@@ -45,6 +45,14 @@ final class EventCreatorViewController: UIViewController {
             createButtonUpdate()
         }
     }
+    
+    private var categorySubtitle = ""
+    private var category: TrackerCategory? = nil {
+        didSet {
+            createButtonUpdate()
+        }
+    }
+    
     private var selectedEmojiCell: IndexPath? = nil
     private var selectedColorCell: IndexPath? = nil
     
@@ -174,6 +182,16 @@ final class EventCreatorViewController: UIViewController {
         subtitle.font = .systemFont(ofSize: 17)
         subtitle.textColor = .trackerGray
         subtitle.text = scheduleSubtitle
+        subtitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        return subtitle
+    }()
+    
+    private lazy var categoryButtonSubtitle: UILabel = {
+        let subtitle = UILabel()
+        subtitle.font = .systemFont(ofSize: 17)
+        subtitle.textColor = .trackerGray
+        subtitle.text = categorySubtitle
         subtitle.translatesAutoresizingMaskIntoConstraints = false
         
         return subtitle
@@ -376,8 +394,23 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
+    private func categorySubtitleUpdate() {
+        if categorySubtitle == "" {
+            categoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        } else {
+            categoryButton.titleEdgeInsets = UIEdgeInsets(top: -15, left: 16, bottom: 0, right: 0)
+            categoryButton.addSubview(categoryButtonSubtitle)
+            NSLayoutConstraint.activate([
+                categoryButtonSubtitle.leadingAnchor.constraint(equalTo: categoryButton.leadingAnchor, constant: 16),
+                categoryButtonSubtitle.bottomAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: -14),
+                categoryButtonSubtitle.heightAnchor.constraint(equalToConstant: 22)
+            ])
+            categoryButtonSubtitle.text = categorySubtitle
+        }
+    }
+    
     private func createButtonUpdate() {
-        createButton.isEnabled = textField.text?.isEmpty == false && selectedColor != nil && selectedEmoji != nil
+        createButton.isEnabled = textField.text?.isEmpty == false && selectedColor != nil && selectedEmoji != nil && category != nil
         
         if event == .habit {
             createButton.isEnabled = createButton.isEnabled && !schedule.isEmpty
@@ -408,6 +441,8 @@ final class EventCreatorViewController: UIViewController {
     
     @objc private func categoryButtonDidTap(sender: AnyObject) {
         let categoryViewController = CategoryViewController()
+        categoryViewController.delegate = self
+        categoryViewController.selectedCategory = category
         present(categoryViewController, animated: true)
     }
     
@@ -430,12 +465,12 @@ final class EventCreatorViewController: UIViewController {
             tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule)
             
             guard let tracker else { return }
-            delegate?.createTracker(tracker: tracker, categoryName: "Радостные мелочи")
+            delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
         } else {
             tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases)
             
             guard let tracker else { return }
-            delegate?.createTracker(tracker: tracker, categoryName: "Важное")
+            delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
         }
     }
 }
@@ -481,6 +516,17 @@ extension EventCreatorViewController: ScheduleViewControllerDelegate {
         }
         
         scheduleSubtitleUpdate()
+    }
+}
+
+    // MARK: - CategoryViewControllerDelegate
+
+extension EventCreatorViewController: CategoryViewControllerDelegate {
+    func createCategory(category: TrackerCategory) {
+        self.category = category
+        let categoryString = category.categoryName
+        categorySubtitle = categoryString
+        categorySubtitleUpdate()
     }
 }
 
@@ -609,8 +655,10 @@ extension EventCreatorViewController: UICollectionViewDelegate {
         
         if section == 0 {
             selectedEmojiCell = nil
+            selectedEmoji = nil
         } else if section == 1 {
             selectedColorCell = nil
+            selectedColor = nil
         }
     }
 }
