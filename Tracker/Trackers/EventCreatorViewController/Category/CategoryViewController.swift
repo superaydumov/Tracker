@@ -116,7 +116,7 @@ final class CategoryViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc func createCategoryButtonDidTap(sender: AnyObject) {
-        //TODO: add code to jump to new category view controller
-        dismiss(animated: true)
+        let creationViewController = CategoryCreationViewController()
+        present(creationViewController, animated: true)
     }
 }
