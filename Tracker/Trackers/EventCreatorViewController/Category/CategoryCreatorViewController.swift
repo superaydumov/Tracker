@@ -1,13 +1,13 @@
 //
-//  CategoryCreationViewController.swift
+//  CategoryCreatorViewController.swift
 //  Tracker
 //
-//  Created by Эльдар Айдумов on 12.11.2023.
+//  Created by Эльдар Айдумов on 13.11.2023.
 //
 
 import UIKit
 
-final class CategoryCreationViewController: UIViewController {
+final class CategoryCreatorViewController: UIViewController {
     
     private let trackerCategoryStore = TrackerCategoryStore.shared
     

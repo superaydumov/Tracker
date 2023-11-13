@@ -148,7 +148,7 @@ final class CategoryViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc func createCategoryButtonDidTap(sender: AnyObject) {
-        let creationViewController = CategoryCreationViewController()
+        let creationViewController = CategoryCreatorViewController()
         present(creationViewController, animated: true)
     }
 }
