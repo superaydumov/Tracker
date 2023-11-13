@@ -31,6 +31,7 @@ final class CategoryCreatorViewController: UIViewController {
         textField.font = .systemFont(ofSize: 17)
         textField.indentSize(leftSize: 16)
         textField.clearButtonMode = .whileEditing
+        textField.becomeFirstResponder()
         textField.addTarget(self, action: #selector(textFieldDidChange(sender:)), for: .editingChanged)
         textField.translatesAutoresizingMaskIntoConstraints = false
         

@@ -92,11 +92,11 @@ final class CategoryViewController: UIViewController {
         
         view.backgroundColor = .trackerWhite
         
-        addSubViews()
-        constraintsSetup()
-        
         categories = trackerCategoryStore.trackerCategories
         trackerCategoryStore.delegate = self
+        
+        addSubViews()
+        constraintsSetup()
     }
     
     // MARK: - Private methods
@@ -165,14 +165,14 @@ extension CategoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
-        cell.backgroundColor = .trackerBackground
-        cell.selectionStyle = .none
         
         let categoryName = categories[indexPath.row].categoryName
         cell.cellLabel.text = categoryName
         
         cell.cellCheckMark.isHidden = selectedCategory?.categoryName != categoryName
         
+        cell.backgroundColor = .trackerBackground
+        cell.selectionStyle = .none
         cell.layer.cornerRadius = 0
         cell.layer.maskedCorners = []
         cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -184,8 +184,6 @@ extension CategoryViewController: UITableViewDataSource {
         } else if indexPath.row == categories.startIndex {
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
         
