@@ -173,6 +173,10 @@ extension CategoryViewController: UITableViewDataSource {
         
         cell.cellCheckMark.isHidden = selectedCategory?.categoryName != categoryName
         
+        cell.layer.cornerRadius = 0
+        cell.layer.maskedCorners = []
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
         if indexPath.row ==  categories.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             cell.layer.cornerRadius = 16

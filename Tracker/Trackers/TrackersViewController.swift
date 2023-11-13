@@ -241,7 +241,6 @@ final class TrackersViewController: UIViewController {
         plugImageView.image = text.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
         plugLabel.text = text.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
     }
-
     
     // MARK: - Obj-C methods
     
@@ -395,7 +394,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             record.trackerID == id && record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
         }) {
             completedTrackers.remove(at: index)
-            try? trackerRecordStore.deleteTrackerRecord(TrackerRecord(trackerID: id, date: datePicker.date))
+            try? trackerRecordStore.deleteTrackerRecord(with: id)
         } else {
             completedTrackers.append(TrackerRecord(trackerID: id, date: datePicker.date))
             try? trackerRecordStore.addNewTracker(TrackerRecord(trackerID: id, date: datePicker.date))
@@ -428,7 +427,23 @@ extension TrackersViewController: TrackerCreatorViewControllerDelegate {
 extension TrackersViewController: TrackerCategoryStoreDelegate {
     func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
         visibleCategories = trackerCategoryStore.trackerCategories
-        collectionView.reloadData()
+        
+        collectionView.performBatchUpdates {
+            let insertedIndexPaths = update.insertedIndexes.map { IndexPath(item: $0, section: 0)}
+            let deletedIndexPaths = update.deletedIndexes.map { IndexPath(item: $0, section: 0)}
+            let updatedIndexPaths = update.updatedIndexes.map { IndexPath(item: $0, section: 0)}
+            
+            collectionView.insertItems(at: insertedIndexPaths)
+            collectionView.insertItems(at: deletedIndexPaths)
+            collectionView.insertItems(at: updatedIndexPaths)
+            
+            for move in update.movedIndexes {
+                collectionView.moveItem(
+                    at: IndexPath(item: move.oldIndex, section: 0),
+                    to: IndexPath(item: move.newIndex, section: 0)
+                )
+            }
+        }
     }
 }
 
