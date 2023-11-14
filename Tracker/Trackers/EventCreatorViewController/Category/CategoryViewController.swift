@@ -11,6 +11,7 @@ final class CategoryViewController: UIViewController {
     
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private var categories = [TrackerCategory]()
+    private var alertPresenter: AlertPresenterProtocol?
     
     var selectedCategory: TrackerCategory?
     
@@ -95,6 +96,8 @@ final class CategoryViewController: UIViewController {
         categories = trackerCategoryStore.trackerCategories
         trackerCategoryStore.delegate = self
         
+        alertPresenter = AlertPresenter(delegate: self)
+        
         addSubViews()
         constraintsSetup()
     }
@@ -143,6 +146,21 @@ final class CategoryViewController: UIViewController {
             createCategoryButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             createCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
+    }
+    
+    private func categoryDeleteAlert(category: TrackerCategory) {
+        let model = AlertModel(title: "Эта категория точно не нужна?",
+                               message: "Это действие также удалит созданные ранее трекеры для данной категории.",
+                               firstButtonText: "Удалить",
+                               secondButtontext: "Отменить",
+                               firstCompletion: { [weak self] in
+            guard let self else { return }
+            try? self.trackerCategoryStore.deleteTrackerCategory(category)
+            
+            NotificationCenter.default.post(name: NSNotification.Name("reloadCollectionView"), object: nil)
+        })
+        
+        alertPresenter?.showAlert(model: model)
     }
     
     // MARK: - Obj-C methods
@@ -229,8 +247,7 @@ extension CategoryViewController: UITableViewDelegate {
                 },
                 UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
-                    //TODO: replace with alert
-                    try? trackerCategoryStore.deleteTrackerCategory(category)
+                    self.categoryDeleteAlert(category: category)
                 }
             ])
         })

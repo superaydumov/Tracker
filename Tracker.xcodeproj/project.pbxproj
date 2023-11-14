@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		C90F117A2ADC27200002D47B /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90F11792ADC27200002D47B /* UITextField+Extension.swift */; };
+		C9420F9F2B041010008C6B3E /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9420F9E2B041010008C6B3E /* AlertModel.swift */; };
+		C9420FA22B041B55008C6B3E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9420FA12B041B55008C6B3E /* AlertPresenter.swift */; };
+		C9420FA42B041B97008C6B3E /* AlertPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9420FA32B041B97008C6B3E /* AlertPresenterProtocol.swift */; };
 		C94A7EE72B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94A7EE62B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift */; };
 		C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D23F42AC85110004D9ADC /* AppDelegate.swift */; };
 		C94D23F72AC85110004D9ADC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D23F62AC85110004D9ADC /* SceneDelegate.swift */; };
@@ -56,6 +59,9 @@
 
 /* Begin PBXFileReference section */
 		C90F11792ADC27200002D47B /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
+		C9420F9E2B041010008C6B3E /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
+		C9420FA12B041B55008C6B3E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		C9420FA32B041B97008C6B3E /* AlertPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterProtocol.swift; sourceTree = "<group>"; };
 		C94A7EE62B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerDelegate.swift; sourceTree = "<group>"; };
 		C94D23F12AC85110004D9ADC /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C94D23F42AC85110004D9ADC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +121,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C9420FA02B041B3C008C6B3E /* AlertPresenter */ = {
+			isa = PBXGroup;
+			children = (
+				C9420FA12B041B55008C6B3E /* AlertPresenter.swift */,
+				C9420FA32B041B97008C6B3E /* AlertPresenterProtocol.swift */,
+			);
+			path = AlertPresenter;
+			sourceTree = "<group>";
+		};
 		C94D23E82AC85110004D9ADC = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +149,7 @@
 		C94D23F32AC85110004D9ADC /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				C9420FA02B041B3C008C6B3E /* AlertPresenter */,
 				C9F8E6462AE8103400BE65D0 /* CoreData */,
 				C9D31EB22AD4A1B700B9B596 /* Models */,
 				C9D31EA72AD20F0200B9B596 /* Statistics */,
@@ -238,6 +254,7 @@
 		C9D31EB22AD4A1B700B9B596 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C9420F9E2B041010008C6B3E /* AlertModel.swift */,
 				C9FF828C2AF4529000837113 /* DatabaseError.swift */,
 				C98BBE6D2AF9746E00F91D3A /* GeometricParams.swift */,
 				C9D31EBB2AD5FBB000B9B596 /* Trackers.swift */,
@@ -347,6 +364,7 @@
 				C9D31EAD2AD48D1100B9B596 /* CategoryViewController.swift in Sources */,
 				C9FF828D2AF4529100837113 /* DatabaseError.swift in Sources */,
 				C9D31EB62AD4B98100B9B596 /* ScheduleTableViewCell.swift in Sources */,
+				C9420FA22B041B55008C6B3E /* AlertPresenter.swift in Sources */,
 				C9D31EA92AD2100700B9B596 /* TrackerCreatorViewController.swift in Sources */,
 				C94D23F92AC85110004D9ADC /* TrackersViewController.swift in Sources */,
 				C9D31EC02AD5FD1F00B9B596 /* TrackerRecord.swift in Sources */,
@@ -362,11 +380,13 @@
 				C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */,
 				C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */,
 				C9E3A9FB2AF7D38300983B42 /* UIViewController+Extension.swift in Sources */,
+				C9420F9F2B041010008C6B3E /* AlertModel.swift in Sources */,
 				C9825C1A2AFEFADE002098BA /* UIView+Extension.swift in Sources */,
 				C9D31ECB2AD8B72900B9B596 /* TrackerCreatorViewControllerDelegate.swift in Sources */,
 				C97B8B572AEE9FD000AFCC1F /* TrackerStore.swift in Sources */,
 				C9D31EBC2AD5FBB000B9B596 /* Trackers.swift in Sources */,
 				C94FEEA02ADDCDE500F6E78F /* EventCreatorSuplementaryView.swift in Sources */,
+				C9420FA42B041B97008C6B3E /* AlertPresenterProtocol.swift in Sources */,
 				C9D31ECD2AD8BDC600B9B596 /* MockData.swift in Sources */,
 				C9D31EC52AD8892100B9B596 /* TrackersCellSuplementaryView.swift in Sources */,
 				C9D31EB82AD5606300B9B596 /* ScheduleTableViewCellDelegate.swift in Sources */,

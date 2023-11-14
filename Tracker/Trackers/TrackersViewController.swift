@@ -140,6 +140,9 @@ final class TrackersViewController: UIViewController {
         }
         
         trackerCategoryStore.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView(sender:)), name: NSNotification.Name("reloadCollectionView"), object: nil)
+
     }
     
     // MARK: - Private methods
@@ -277,6 +280,10 @@ final class TrackersViewController: UIViewController {
         
         widthAnchor?.constant = 0
         constraintsSetup()
+        updateCategories()
+    }
+    
+    @objc func reloadCollectionView(sender: AnyObject) {
         updateCategories()
     }
 }
