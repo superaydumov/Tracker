@@ -148,7 +148,7 @@ final class CategoryViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc func createCategoryButtonDidTap(sender: AnyObject) {
-        let creationViewController = CategoryCreatorViewController()
+        let creationViewController = CategoryCreatorViewController(categoryEvent: .creation)
         present(creationViewController, animated: true)
     }
 }
@@ -214,6 +214,26 @@ extension CategoryViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell else { return }
         
         cell.cellCheckMark.isHidden = true
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let category = categories[indexPath.row]
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            return UIMenu(children: [
+                UIAction(title: "Редактировать") { [weak self] _ in
+                    guard let self else { return }
+                    let creationViewController = CategoryCreatorViewController(categoryEvent: .editing)
+                    creationViewController.editableCategory = category
+                    self.present(creationViewController, animated: true)
+                },
+                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                    guard let self else { return }
+                    //TODO: replace with alert
+                    try? trackerCategoryStore.deleteTrackerCategory(category)
+                }
+            ])
+        })
     }
 }
 

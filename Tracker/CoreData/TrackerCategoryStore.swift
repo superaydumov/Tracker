@@ -110,6 +110,26 @@ final class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
+    func updateTrackerCategory(_ newName: String, _ editableCategory: TrackerCategory) throws {
+        let category = fetchedResultsController.fetchedObjects?.first {
+            $0.category == editableCategory.categoryName
+        }
+        
+        category?.category = newName
+        try context.save()
+    }
+    
+    func deleteTrackerCategory(_ deletedCategory: TrackerCategory) throws {
+        let category = fetchedResultsController.fetchedObjects?.first {
+            $0.category == deletedCategory.categoryName
+        }
+        
+        if let category = category {
+            context.delete(category)
+            try context.save()
+        }
+    }
+    
     func addTracker(_ tracker: Trackers, to trackerCategory: TrackerCategory) throws {
         let category = fetchedResultsController.fetchedObjects?.first {
             $0.category == trackerCategory.categoryName

@@ -7,13 +7,29 @@
 
 import UIKit
 
+enum CategoryEvent {
+    case creation
+    case editing
+    
+    var titleText: String {
+        switch self {
+        case .creation:
+            return "Новая категория"
+        case .editing:
+            return "Редактирование категории"
+        }
+    }
+}
+
 final class CategoryCreatorViewController: UIViewController {
     
+    var editableCategory: TrackerCategory?
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private let categoryEvent: CategoryEvent
     
     private lazy var topLabel: UILabel = {
        let topLabel = UILabel()
-        topLabel.text = "Новая категория"
+        topLabel.text = categoryEvent.titleText
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -50,6 +66,15 @@ final class CategoryCreatorViewController: UIViewController {
         return button
     }()
     
+    init(categoryEvent: CategoryEvent) {
+        self.categoryEvent = categoryEvent
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +83,10 @@ final class CategoryCreatorViewController: UIViewController {
         
         addSubViews()
         constraintsSetup()
+        
+        if categoryEvent == .editing {
+            textField.text = editableCategory?.categoryName
+        }
     }
     
     private func addSubViews() {
@@ -95,10 +124,16 @@ final class CategoryCreatorViewController: UIViewController {
     }
     
     @objc private func performButtonDidTap(sender: AnyObject) {
-        guard let name = textField.text else { return }
-        let category = TrackerCategory(categoryName: name, trackers: [])
-        try? trackerCategoryStore.addNewTrackerCategory(category)
-        
+        if categoryEvent == .creation {
+            guard let name = textField.text else { return }
+            let category = TrackerCategory(categoryName: name, trackers: [])
+            try? trackerCategoryStore.addNewTrackerCategory(category)
+        } else if categoryEvent == .editing {
+            guard let editableCategory else { return }
+            if let newName = textField.text {
+                try? trackerCategoryStore.updateTrackerCategory(newName, editableCategory)
+            }
+        }
         dismiss(animated: true)
     }
 }
