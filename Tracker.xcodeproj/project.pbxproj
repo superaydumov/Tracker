@@ -11,7 +11,7 @@
 		C9420F9F2B041010008C6B3E /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9420F9E2B041010008C6B3E /* AlertModel.swift */; };
 		C9420FA22B041B55008C6B3E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9420FA12B041B55008C6B3E /* AlertPresenter.swift */; };
 		C9420FA42B041B97008C6B3E /* AlertPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9420FA32B041B97008C6B3E /* AlertPresenterProtocol.swift */; };
-		C94A7EE72B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94A7EE62B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift */; };
+		C94A7EE72B016F4F009A0EA9 /* CategoryViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94A7EE62B016F4F009A0EA9 /* CategoryViewModelDelegate.swift */; };
 		C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D23F42AC85110004D9ADC /* AppDelegate.swift */; };
 		C94D23F72AC85110004D9ADC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D23F62AC85110004D9ADC /* SceneDelegate.swift */; };
 		C94D23F92AC85110004D9ADC /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D23F82AC85110004D9ADC /* TrackersViewController.swift */; };
@@ -19,6 +19,8 @@
 		C94D24042AC85114004D9ADC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C94D24022AC85114004D9ADC /* LaunchScreen.storyboard */; };
 		C94FEE9C2ADDCC8A00F6E78F /* EventCreatorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94FEE9B2ADDCC8A00F6E78F /* EventCreatorCollectionViewCell.swift */; };
 		C94FEEA02ADDCDE500F6E78F /* EventCreatorSuplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94FEE9F2ADDCDE500F6E78F /* EventCreatorSuplementaryView.swift */; };
+		C96950492B05628C00F91B1C /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96950482B05628C00F91B1C /* CategoryViewModel.swift */; };
+		C969504B2B0583FD00F91B1C /* CategoryCreatorViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C969504A2B0583FD00F91B1C /* CategoryCreatorViewControllerDelegate.swift */; };
 		C97B8B572AEE9FD000AFCC1F /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B8B562AEE9FD000AFCC1F /* TrackerStore.swift */; };
 		C97B8B592AEE9FFE00AFCC1F /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B8B582AEE9FFE00AFCC1F /* TrackerCategoryStore.swift */; };
 		C97B8B5B2AEEA01A00AFCC1F /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97B8B5A2AEEA01A00AFCC1F /* TrackerRecordStore.swift */; };
@@ -62,7 +64,7 @@
 		C9420F9E2B041010008C6B3E /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		C9420FA12B041B55008C6B3E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		C9420FA32B041B97008C6B3E /* AlertPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterProtocol.swift; sourceTree = "<group>"; };
-		C94A7EE62B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerDelegate.swift; sourceTree = "<group>"; };
+		C94A7EE62B016F4F009A0EA9 /* CategoryViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModelDelegate.swift; sourceTree = "<group>"; };
 		C94D23F12AC85110004D9ADC /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C94D23F42AC85110004D9ADC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C94D23F62AC85110004D9ADC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +74,8 @@
 		C94D24052AC85114004D9ADC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C94FEE9B2ADDCC8A00F6E78F /* EventCreatorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreatorCollectionViewCell.swift; sourceTree = "<group>"; };
 		C94FEE9F2ADDCDE500F6E78F /* EventCreatorSuplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreatorSuplementaryView.swift; sourceTree = "<group>"; };
+		C96950482B05628C00F91B1C /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		C969504A2B0583FD00F91B1C /* CategoryCreatorViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreatorViewControllerDelegate.swift; sourceTree = "<group>"; };
 		C97B8B562AEE9FD000AFCC1F /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		C97B8B582AEE9FFE00AFCC1F /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		C97B8B5A2AEEA01A00AFCC1F /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -234,8 +238,10 @@
 			children = (
 				C9D31EAC2AD48D1000B9B596 /* CategoryViewController.swift */,
 				C9E0F17C2B013B5C00AD80B3 /* CategoryTableViewCell.swift */,
-				C94A7EE62B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift */,
 				C9DDCCC02B0297ED00149BE0 /* CategoryCreatorViewController.swift */,
+				C96950482B05628C00F91B1C /* CategoryViewModel.swift */,
+				C94A7EE62B016F4F009A0EA9 /* CategoryViewModelDelegate.swift */,
+				C969504A2B0583FD00F91B1C /* CategoryCreatorViewControllerDelegate.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -362,6 +368,7 @@
 				C998F5DC2AD944D900351CF9 /* Date+Extension.swift in Sources */,
 				C9D74C1D2AF4350700EF794B /* String+Extension.swift in Sources */,
 				C9D31EAD2AD48D1100B9B596 /* CategoryViewController.swift in Sources */,
+				C96950492B05628C00F91B1C /* CategoryViewModel.swift in Sources */,
 				C9FF828D2AF4529100837113 /* DatabaseError.swift in Sources */,
 				C9D31EB62AD4B98100B9B596 /* ScheduleTableViewCell.swift in Sources */,
 				C9420FA22B041B55008C6B3E /* AlertPresenter.swift in Sources */,
@@ -404,7 +411,8 @@
 				C9D31EB12AD48DC400B9B596 /* ScheduleViewController.swift in Sources */,
 				C9F8E6492AE8106E00BE65D0 /* Tracker.xcdatamodeld in Sources */,
 				C981C6B32AC87179009D0228 /* UIColor+Extension.swift in Sources */,
-				C94A7EE72B016F4F009A0EA9 /* CategoryViewControllerDelegate.swift in Sources */,
+				C969504B2B0583FD00F91B1C /* CategoryCreatorViewControllerDelegate.swift in Sources */,
+				C94A7EE72B016F4F009A0EA9 /* CategoryViewModelDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

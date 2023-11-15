@@ -9,13 +9,8 @@ import UIKit
 
 final class CategoryViewController: UIViewController {
     
-    private let trackerCategoryStore = TrackerCategoryStore.shared
-    private var categories = [TrackerCategory]()
+    private var viewModel: CategoryViewModel
     private var alertPresenter: AlertPresenterProtocol?
-    
-    var selectedCategory: TrackerCategory?
-    
-    weak var delegate: CategoryViewControllerDelegate?
     
     // MARK: - Computed properties
     
@@ -88,18 +83,29 @@ final class CategoryViewController: UIViewController {
     
     // MARK: - Lifecycle
     
+    init(delegate: CategoryViewModelDelegate?, selectedCategory: TrackerCategory?) {
+        viewModel = CategoryViewModel(selectedCategory: selectedCategory, delegate: delegate)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .trackerWhite
         
-        categories = trackerCategoryStore.trackerCategories
-        trackerCategoryStore.delegate = self
-        
         alertPresenter = AlertPresenter(delegate: self)
         
         addSubViews()
         constraintsSetup()
+        
+        viewModel.onChange = { [weak self] in
+            guard let self else { return }
+            self.tableView.reloadData()
+        }
     }
     
     // MARK: - Private methods
@@ -155,7 +161,7 @@ final class CategoryViewController: UIViewController {
                                secondButtontext: "Отменить",
                                firstCompletion: { [weak self] in
             guard let self else { return }
-            try? self.trackerCategoryStore.deleteTrackerCategory(category)
+            self.viewModel.deleteTrackerCategory(category)
             
             NotificationCenter.default.post(name: NSNotification.Name("reloadCollectionView"), object: nil)
         })
@@ -175,7 +181,7 @@ final class CategoryViewController: UIViewController {
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let count = categories.count
+        let count = viewModel.categories.count
         tableView.isHidden = count == .zero
         
         return count
@@ -184,10 +190,10 @@ extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
-        let categoryName = categories[indexPath.row].categoryName
+        let categoryName = viewModel.categories[indexPath.row].categoryName
         cell.cellLabel.text = categoryName
         
-        cell.cellCheckMark.isHidden = selectedCategory?.categoryName != categoryName
+        cell.cellCheckMark.isHidden = viewModel.selectedCategory?.categoryName != categoryName
         
         cell.backgroundColor = .trackerBackground
         cell.selectionStyle = .none
@@ -195,11 +201,11 @@ extension CategoryViewController: UITableViewDataSource {
         cell.layer.maskedCorners = []
         cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
-        if indexPath.row ==  categories.count - 1 {
+        if indexPath.row == viewModel.categories.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: UIScreen.main.bounds.width)
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        } else if indexPath.row == categories.startIndex {
+        } else if indexPath.row == viewModel.categories.startIndex {
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -222,8 +228,7 @@ extension CategoryViewController: UITableViewDelegate {
         cell.cellCheckMark.isHidden = false
         
         guard let selectedCategoryName = cell.cellLabel.text else { return }
-        let category = TrackerCategory(categoryName: selectedCategoryName, trackers: [])
-        delegate?.createCategory(category: category)
+        viewModel.selectCategory(with: selectedCategoryName)
         
         dismiss(animated: true)
     }
@@ -235,7 +240,7 @@ extension CategoryViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let category = categories[indexPath.row]
+        let category = viewModel.categories[indexPath.row]
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
@@ -256,9 +261,9 @@ extension CategoryViewController: UITableViewDelegate {
 
     //MARK: TrackerCategoryStoreDelegate
 
-extension CategoryViewController: TrackerCategoryStoreDelegate {
-    func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
-        categories = trackerCategoryStore.trackerCategories
-        tableView.reloadData()
+extension CategoryViewController: CategoryCreatorViewControllerDelegate {
+    func createdCategory(_ category: TrackerCategory) {
+        viewModel.selectCategory(with: category.categoryName)
+        viewModel.selectedCategory(category)
     }
 }

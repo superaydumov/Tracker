@@ -440,9 +440,7 @@ final class EventCreatorViewController: UIViewController {
     }
     
     @objc private func categoryButtonDidTap(sender: AnyObject) {
-        let categoryViewController = CategoryViewController()
-        categoryViewController.delegate = self
-        categoryViewController.selectedCategory = category
+        let categoryViewController = CategoryViewController(delegate: self, selectedCategory: category)
         present(categoryViewController, animated: true)
     }
     
@@ -521,7 +519,7 @@ extension EventCreatorViewController: ScheduleViewControllerDelegate {
 
     // MARK: - CategoryViewControllerDelegate
 
-extension EventCreatorViewController: CategoryViewControllerDelegate {
+extension EventCreatorViewController: CategoryViewModelDelegate {
     func createCategory(category: TrackerCategory) {
         self.category = category
         let categoryString = category.categoryName

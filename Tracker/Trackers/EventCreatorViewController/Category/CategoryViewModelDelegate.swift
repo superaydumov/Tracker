@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol CategoryViewControllerDelegate: AnyObject {
+protocol CategoryViewModelDelegate: AnyObject {
     func createCategory(category: TrackerCategory)
 }

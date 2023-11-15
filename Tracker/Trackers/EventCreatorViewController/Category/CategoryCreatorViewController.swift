@@ -24,7 +24,9 @@ enum CategoryEvent {
 final class CategoryCreatorViewController: UIViewController {
     
     var editableCategory: TrackerCategory?
+    weak var delegate: CategoryCreatorViewControllerDelegate?
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private var viewModel: CategoryViewModel?
     private let categoryEvent: CategoryEvent
     
     private lazy var topLabel: UILabel = {
@@ -128,6 +130,7 @@ final class CategoryCreatorViewController: UIViewController {
             guard let name = textField.text else { return }
             let category = TrackerCategory(categoryName: name, trackers: [])
             try? trackerCategoryStore.addNewTrackerCategory(category)
+            delegate?.createdCategory(category)
         } else if categoryEvent == .editing {
             guard let editableCategory else { return }
             if let newName = textField.text {
