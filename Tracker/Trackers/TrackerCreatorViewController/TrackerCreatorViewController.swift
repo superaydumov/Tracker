@@ -9,13 +9,19 @@ import UIKit
 
 final class TrackerCreatorViewController: UIViewController {
     
+    private struct Keys {
+        static let topLabel = "Создание трекера"
+        static let habitButtonTitle = "Привычка"
+        static let nonRegularButtonTitle = "Нерегулярное событие"
+    }
+    
     weak var delegate: TrackerCreatorViewControllerDelegate?
     
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
         let topLabel = UILabel()
-        topLabel.text = "Создание трекера"
+        topLabel.text = Keys.topLabel
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -26,7 +32,7 @@ final class TrackerCreatorViewController: UIViewController {
     
     private lazy var habitButton: UIButton = {
         let habitButton = UIButton(type: .system)
-        habitButton.setTitle("Привычка", for: .normal)
+        habitButton.setTitle(Keys.habitButtonTitle, for: .normal)
         habitButton.setTitleColor(.trackerWhite, for: .normal)
         habitButton.backgroundColor = .trackerBlack
         habitButton.layer.cornerRadius = 16
@@ -38,7 +44,7 @@ final class TrackerCreatorViewController: UIViewController {
     
     private lazy var nonRegularButton: UIButton = {
         let nonRegularButton = UIButton(type: .system)
-        nonRegularButton.setTitle("Нерегулярное событие", for: .normal)
+        nonRegularButton.setTitle(Keys.nonRegularButtonTitle, for: .normal)
         nonRegularButton.setTitleColor(.trackerWhite, for: .normal)
         nonRegularButton.backgroundColor = .trackerBlack
         nonRegularButton.layer.cornerRadius = 16

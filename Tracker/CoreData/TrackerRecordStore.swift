@@ -32,11 +32,16 @@ final class TrackerRecordStore {
         try context.save()
     }
     
-    func deleteTrackerRecord(_ trackerRecord: TrackerRecord) throws {
-        let trackerRecordCoreData = TrackerRecordCoreData(context: context)
-        
-        trackerRecordCoreData.id = trackerRecord.trackerID
-        trackerRecordCoreData.date = trackerRecord.date
+    func deleteTrackerRecord(with id: UUID) throws {
+        let fetchRequest = TrackerRecordCoreData.fetchRequest()
+        let trackerRecordFromCoreData = try context.fetch(fetchRequest)
+        let record = trackerRecordFromCoreData.first {
+            $0.id == id
+        }
+        if let record = record {
+            context.delete(record)
+            try context.save()
+        }
     }
     
     func trackerRecord(from data: TrackerRecordCoreData) throws -> TrackerRecord {

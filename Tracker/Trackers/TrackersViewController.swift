@@ -22,6 +22,16 @@ final class TrackersViewController: UIViewController {
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
     
+    private let params = GeometricParams(cellCount: 2, cellHeight: 148, cellSpacing: 9, lineSpacing: 16)
+    
+    private struct Keys {
+        static let plugLabel = "Что будем отслеживать?"
+        static let notFoundPlugLabel = "Ничего не найдено"
+        static let searchTextFieldPlaceholder = "Поиск"
+        static let cancelButtonLabel = "Отменить"
+        static let trackersHeader = "Трекеры"
+    }
+    
     // MARK: - Computed properties
     
     private lazy var collectionView: UICollectionView = {
@@ -55,7 +65,6 @@ final class TrackersViewController: UIViewController {
         datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.heightAnchor.constraint(equalToConstant: 34).isActive = true
-        datePicker.widthAnchor.constraint(equalToConstant: 110).isActive = true
         
         return datePicker
     }()
@@ -79,7 +88,7 @@ final class TrackersViewController: UIViewController {
     private lazy var plugLabel: UILabel = {
        let plugLabel = UILabel()
         plugLabel.textColor = .trackerBlack
-        plugLabel.text = "Что будем отслеживать?"
+        plugLabel.text = Keys.plugLabel
         plugLabel.textAlignment = .center
         plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
         plugLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +98,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchTextField: UISearchTextField = {
         let searchTextField = UISearchTextField()
-        searchTextField.placeholder = "Поиск"
+        searchTextField.placeholder = Keys.searchTextFieldPlaceholder
         searchTextField.textColor = .trackerBlack
         searchTextField.font = .systemFont(ofSize: 17)
         searchTextField.backgroundColor = .trackerBackground
@@ -103,7 +112,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var cancelSearchTextFieldButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(Keys.cancelButtonLabel, for: .normal)
         cancelButton.setTitleColor(.trackerBlue, for: .normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(cancelButtonDidTap(sender:)), for: .touchUpInside)
@@ -139,13 +148,20 @@ final class TrackersViewController: UIViewController {
         }
         
         trackerCategoryStore.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView(sender:)), name: NSNotification.Name("reloadCollectionView"), object: nil)
+
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Private methods
     
     private func navBarSetup() {
         if let navigationBar = navigationController?.navigationBar {
-            title = "Трекеры"
+            title = Keys.trackersHeader
             navigationBar.prefersLargeTitles = true
             
             let addTrackerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddTrackerButton(sender:)))
@@ -238,9 +254,8 @@ final class TrackersViewController: UIViewController {
     
     private func changePlugs(_ text: String) {
         plugImageView.image = text.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
-        plugLabel.text = text.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
+        plugLabel.text = text.isEmpty ? Keys.plugLabel : Keys.notFoundPlugLabel
     }
-
     
     // MARK: - Obj-C methods
     
@@ -277,6 +292,10 @@ final class TrackersViewController: UIViewController {
         
         widthAnchor?.constant = 0
         constraintsSetup()
+        updateCategories()
+    }
+    
+    @objc func reloadCollectionView(sender: AnyObject) {
         updateCategories()
     }
 }
@@ -343,16 +362,18 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellSize = CGSize(width: 167, height: 148)
-        return cellSize
+        let availableWidth = collectionView.frame.width - params.paddingWidth
+        let cellWidth = availableWidth / CGFloat(params.cellCount)
+        
+        return CGSize(width: cellWidth, height: params.cellHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        return params.cellSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return params.lineSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -392,7 +413,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             record.trackerID == id && record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
         }) {
             completedTrackers.remove(at: index)
-            try? trackerRecordStore.deleteTrackerRecord(TrackerRecord(trackerID: id, date: datePicker.date))
+            try? trackerRecordStore.deleteTrackerRecord(with: id)
         } else {
             completedTrackers.append(TrackerRecord(trackerID: id, date: datePicker.date))
             try? trackerRecordStore.addNewTracker(TrackerRecord(trackerID: id, date: datePicker.date))
@@ -425,7 +446,23 @@ extension TrackersViewController: TrackerCreatorViewControllerDelegate {
 extension TrackersViewController: TrackerCategoryStoreDelegate {
     func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
         visibleCategories = trackerCategoryStore.trackerCategories
-        collectionView.reloadData()
+        
+        collectionView.performBatchUpdates {
+            let insertedIndexPaths = update.insertedIndexes.map { IndexPath(item: $0, section: 0)}
+            let deletedIndexPaths = update.deletedIndexes.map { IndexPath(item: $0, section: 0)}
+            let updatedIndexPaths = update.updatedIndexes.map { IndexPath(item: $0, section: 0)}
+            
+            collectionView.insertItems(at: insertedIndexPaths)
+            collectionView.insertItems(at: deletedIndexPaths)
+            collectionView.insertItems(at: updatedIndexPaths)
+            
+            for move in update.movedIndexes {
+                collectionView.moveItem(
+                    at: IndexPath(item: move.oldIndex, section: 0),
+                    to: IndexPath(item: move.newIndex, section: 0)
+                )
+            }
+        }
     }
 }
 

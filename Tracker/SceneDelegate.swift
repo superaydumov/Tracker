@@ -15,9 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         
-        let tabBarViewController = TabBarViewController()
-        
-        window.rootViewController = tabBarViewController
+        if UserDefaults.standard.value(forKey: "isOnboardingShown") == nil {
+            window.rootViewController = OnboardingViewController.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        } else {
+            window.rootViewController = TabBarViewController()
+        }
         self.window = window
         window.makeKeyAndVisible()
     }

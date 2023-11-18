@@ -17,7 +17,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     // MARK: - Computed properties
     
-    lazy var cellLabel: UILabel = {
+    private lazy var cellLabel: UILabel = {
         let cellLabel = UILabel()
         cellLabel.textColor = .trackerBlack
         cellLabel.font = .systemFont(ofSize: 17)
@@ -26,7 +26,7 @@ final class ScheduleTableViewCell: UITableViewCell {
         return cellLabel
     }()
     
-    lazy var cellSwitch: UISwitch = {
+    private lazy var cellSwitch: UISwitch = {
         let cellSwitch = UISwitch()
         cellSwitch.onTintColor = .trackerBlue
         cellSwitch.addTarget(self, action: #selector(cellSwitchValueChanged(sender:)), for: .valueChanged)
@@ -39,6 +39,9 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        
+        self.selectionStyle = .none
+        self.contentView.backgroundColor = .trackerBackground
         
         addSubviews()
         constraintsSetup()
@@ -63,6 +66,20 @@ final class ScheduleTableViewCell: UITableViewCell {
             cellSwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             cellSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
+    }
+    
+    // MARK: - Public methods
+    
+    func configureCell(checkProperty: Bool, dayRawValue: String, weekDay: WeekDay, scheduleDay: Bool) {
+        self.cellLabel.text = dayRawValue
+        self.weekDay = weekDay
+        self.cellSwitch.isOn = scheduleDay
+        
+        if checkProperty {
+            self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            self.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
     }
     
     // MARK: - Obj-C methods

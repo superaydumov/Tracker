@@ -11,6 +11,11 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Stored properties
     
+    private struct Keys {
+        static let topLabel = "Расписание"
+        static let performButton = "Готово"
+    }
+    
     weak var delegate: ScheduleViewControllerDelegate?
     var schedule = [WeekDay]()
     
@@ -18,7 +23,7 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var topLabel: UILabel = {
        let topLabel = UILabel()
-        topLabel.text = "Расписание"
+        topLabel.text = Keys.topLabel
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -57,7 +62,7 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var performButton: UIButton = {
         let performButton = UIButton(type: .system)
-        performButton.setTitle("Готово", for: .normal)
+        performButton.setTitle(Keys.performButton, for: .normal)
         performButton.setTitleColor(.trackerWhite, for: .normal)
         performButton.backgroundColor = .trackerGray
         performButton.layer.cornerRadius = 16
@@ -133,21 +138,18 @@ extension ScheduleViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleTableViewCell.reuseIdentifier, for: indexPath) as? ScheduleTableViewCell else { return UITableViewCell() }
-        cell.selectionStyle = .none
-        cell.contentView.backgroundColor = .trackerBackground
-        cell.cellLabel.text = WeekDay.allCases[indexPath.row].rawValue
-        
-        let weekDay = WeekDay.allCases[indexPath.row]
-        cell.weekDay = weekDay
-        cell.cellSwitch.isOn = schedule.contains(weekDay)
         
         cell.delegate = self
         
-        if indexPath.row == WeekDay.allCases.count - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-        } else {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        }
+        let dayRawValue = WeekDay.allCases[indexPath.row].rawValue
+        let weekDay = WeekDay.allCases[indexPath.row]
+        let scheduleDay = schedule.contains(weekDay)
+        let checkProperty = indexPath.row == WeekDay.allCases.count - 1
+        
+        cell.configureCell(checkProperty: checkProperty,
+                           dayRawValue: dayRawValue,
+                           weekDay: weekDay,
+                           scheduleDay: scheduleDay)
         
         return cell
     }

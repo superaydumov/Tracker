@@ -13,7 +13,7 @@ final class EventCreatorCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Computed proprties
     
-    lazy var emojiLabel: UILabel = {
+    private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -21,7 +21,7 @@ final class EventCreatorCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var colorView: UIView = {
+    private lazy var colorView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -33,6 +33,8 @@ final class EventCreatorCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.layer.cornerRadius = 16
         
         contentView.addSubview(emojiLabel)
         contentView.addSubview(colorView)
@@ -50,5 +52,28 @@ final class EventCreatorCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configureCell(indexPath: IndexPath, emoji: String, color: UIColor) {
+        
+        if indexPath.section == 0 {
+            self.emojiLabel.text = emoji
+        } else if indexPath.section == 1 {
+            self.colorView.backgroundColor = color
+        }
+    }
+    
+    func getCellText() -> String {
+        guard let selectedText = self.emojiLabel.text else { return "" }
+        
+        return selectedText
+    }
+    
+    func getCellColor() -> UIColor {
+        self.layer.borderWidth = 3
+        self.layer.borderColor = self.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+        guard let selectedColor = self.colorView.backgroundColor else { return UIColor() }
+        
+        return selectedColor
     }
 }
