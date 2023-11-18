@@ -136,6 +136,7 @@ final class CategoryCreatorViewController: UIViewController {
             if let newName = textField.text {
                 try? trackerCategoryStore.updateTrackerCategory(newName, editableCategory)
             }
+            NotificationCenter.default.post(name: NSNotification.Name("reloadCollectionView"), object: nil)
         }
         dismiss(animated: true)
     }

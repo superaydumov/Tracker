@@ -12,11 +12,19 @@ final class CategoryViewController: UIViewController {
     private var viewModel: CategoryViewModel
     private var alertPresenter: AlertPresenterProtocol?
     
+    private struct Keys {
+        static let topLabel = "Категория"
+        static let plugLabel = "Привычки и события можно\nобъединять по смыслу"
+        static let categoryButonTitle = "Добавить категорию"
+        static let contextMenuChange = "Редактировать"
+        static let contextMenuDelete = "Удалить"
+    }
+    
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
        let topLabel = UILabel()
-        topLabel.text = "Категория"
+        topLabel.text = Keys.topLabel
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -60,7 +68,7 @@ final class CategoryViewController: UIViewController {
     private lazy var plugLabel: UILabel = {
        let plugLabel = UILabel()
         plugLabel.textColor = .trackerBlack
-        plugLabel.text = "Привычки и события можно\nобъединять по смыслу"
+        plugLabel.text = Keys.plugLabel
         plugLabel.numberOfLines = 2
         plugLabel.textAlignment = .center
         plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
@@ -71,7 +79,7 @@ final class CategoryViewController: UIViewController {
     
     private lazy var createCategoryButton: UIButton = {
         let categoryButton = UIButton(type: .system)
-        categoryButton.setTitle("Добавить категорию", for: .normal)
+        categoryButton.setTitle(Keys.categoryButonTitle, for: .normal)
         categoryButton.setTitleColor(.trackerWhite, for: .normal)
         categoryButton.backgroundColor = .trackerBlack
         categoryButton.layer.cornerRadius = 16
@@ -191,25 +199,14 @@ extension CategoryViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
         let categoryName = viewModel.categories[indexPath.row].categoryName
-        cell.cellLabel.text = categoryName
+        let checkMarkIsHidden = viewModel.selectedCategory?.categoryName != categoryName
+        let startIndex = indexPath.row == viewModel.categories.startIndex
+        let endIndex = indexPath.row == viewModel.categories.count - 1
         
-        cell.cellCheckMark.isHidden = viewModel.selectedCategory?.categoryName != categoryName
-        
-        cell.backgroundColor = .trackerBackground
-        cell.selectionStyle = .none
-        cell.layer.cornerRadius = 0
-        cell.layer.maskedCorners = []
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        if indexPath.row == viewModel.categories.count - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: UIScreen.main.bounds.width)
-            cell.layer.cornerRadius = 16
-            cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        } else if indexPath.row == viewModel.categories.startIndex {
-            cell.layer.cornerRadius = 16
-            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        }
+        cell.configureCell(categoryName: categoryName,
+                           checkMarkIsHidden: checkMarkIsHidden,
+                           startIndexCheck: startIndex,
+                           endIndexCheck: endIndex)
         
         return cell
     }
@@ -225,9 +222,10 @@ extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell else { return }
         
-        cell.cellCheckMark.isHidden = false
+        let checkProperty = false
+        cell.checkMarkSetup(checkProperty: checkProperty)
         
-        guard let selectedCategoryName = cell.cellLabel.text else { return }
+        let selectedCategoryName = cell.getCelltext()
         viewModel.selectCategory(with: selectedCategoryName)
         
         dismiss(animated: true)
@@ -236,7 +234,8 @@ extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell else { return }
         
-        cell.cellCheckMark.isHidden = true
+        let checkProperty = true
+        cell.checkMarkSetup(checkProperty: checkProperty)
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -244,13 +243,13 @@ extension CategoryViewController: UITableViewDelegate {
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: "Редактировать") { [weak self] _ in
+                UIAction(title: Keys.contextMenuChange) { [weak self] _ in
                     guard let self else { return }
                     let creationViewController = CategoryCreatorViewController(categoryEvent: .editing)
                     creationViewController.editableCategory = category
                     self.present(creationViewController, animated: true)
                 },
-                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                UIAction(title: Keys.contextMenuDelete, attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.categoryDeleteAlert(category: category)
                 }

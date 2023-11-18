@@ -67,6 +67,17 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
+    private struct Keys {
+        static let textFieldPlaceHolder = "Введите название трекера"
+        static let categoryButtonLabel = "Категория"
+        static let scheduleButtonLabel = "Расписание"
+        static let cancelButtonLabel = "Отменить"
+        static let createButtonLabel = "Создать"
+        static let restrictorLabel = "Ограничение 38 символов"
+        static let emojiSectionLabel = "Emoji"
+        static let colorsSectionLabel = "Цвета"
+    }
+    
     weak var delegate: EventCreatorViewControllerDelegate?
     
     // MARK: - Computed properties
@@ -95,7 +106,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = Keys.textFieldPlaceHolder
         textField.textColor = .trackerBlack
         textField.backgroundColor = .trackerBackground
         textField.layer.cornerRadius = 16
@@ -154,7 +165,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var categoryButton: UIButton = {
         let categoryButton = UIButton(type: .system)
-        categoryButton.setTitle("Категория", for: .normal)
+        categoryButton.setTitle(Keys.categoryButtonLabel, for: .normal)
         categoryButton.setTitleColor(.trackerBlack, for: .normal)
         categoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         categoryButton.titleLabel?.font = .systemFont(ofSize: 17)
@@ -167,7 +178,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var scheduleButton: UIButton = {
         let scheduleButton = UIButton(type: .system)
-        scheduleButton.setTitle("Расписание", for: .normal)
+        scheduleButton.setTitle(Keys.scheduleButtonLabel, for: .normal)
         scheduleButton.setTitleColor(.trackerBlack, for: .normal)
         scheduleButton.titleLabel?.font = .systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
@@ -207,7 +218,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(Keys.cancelButtonLabel, for: .normal)
         cancelButton.setTitleColor(.trackerRed, for: .normal)
         cancelButton.backgroundColor = .clear
         cancelButton.layer.borderColor = UIColor.trackerRed.cgColor
@@ -221,7 +232,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var createButton: UIButton = {
         let createButton = UIButton(type: .system)
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(Keys.createButtonLabel, for: .normal)
         createButton.setTitleColor(.trackerWhite, for: .normal)
         createButton.backgroundColor = .trackerGray
         createButton.layer.cornerRadius = 16
@@ -434,7 +445,7 @@ final class EventCreatorViewController: UIViewController {
             errorLabel.text = ""
             heightAnchor?.constant = 0
         } else {
-            errorLabel.text = "Ограничение 38 символов"
+            errorLabel.text = Keys.restrictorLabel
             heightAnchor?.constant = 22
         }
     }
@@ -544,17 +555,13 @@ extension EventCreatorViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let section = indexPath.section
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventCreatorCollectionViewCell.cellIdentifier, for: indexPath) as? EventCreatorCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.layer.cornerRadius = 16
+        let emoji = emojies[indexPath.row]
+        let color = colors[indexPath.row]
         
-        if section == 0 {
-            cell.emojiLabel.text = emojies[indexPath.row]
-        } else if section == 1 {
-            cell.colorView.backgroundColor = colors[indexPath.row]
-        }
+        cell.configureCell(indexPath: indexPath, emoji: emoji, color: color)
         
         return cell
     }
@@ -595,9 +602,9 @@ extension EventCreatorViewController: UICollectionViewDelegateFlowLayout {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? EventCreatorSuplementaryView else { return UICollectionReusableView() }
         
         if section == 0 {
-            view.titleLabel.text = "Emoji"
+            view.titleLabel.text = Keys.emojiSectionLabel
         } else if section == 1 {
-            view.titleLabel.text = "Цвета"
+            view.titleLabel.text = Keys.colorsSectionLabel
         }
         
         return view
@@ -628,16 +635,14 @@ extension EventCreatorViewController: UICollectionViewDelegate {
                 collectionView.cellForItem(at: selectedEmojiCell!)?.backgroundColor = .trackerWhite
             }
             cell.backgroundColor = .trackerLightGray
-            selectedEmoji = cell.emojiLabel.text ?? ""
+            selectedEmoji = cell.getCellText()
             selectedEmojiCell = indexPath
         } else if section == 1 {
             if selectedColorCell != nil {
                 collectionView.deselectItem(at: selectedColorCell!, animated: true)
                 collectionView.cellForItem(at: selectedColorCell!)?.layer.borderWidth = 0
             }
-            cell.layer.borderWidth = 3
-            cell.layer.borderColor = cell.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
-            selectedColor = cell.colorView.backgroundColor ?? nil
+            selectedColor = cell.getCellColor()
             selectedColorCell = indexPath
         }
     }

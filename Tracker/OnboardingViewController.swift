@@ -11,6 +11,14 @@ final class OnboardingViewController: UIPageViewController {
     
     var checkProperty: Bool?
     
+    private struct Keys {
+        static let blueImage = "blueBackground.png"
+        static let redImage = "redBackground.png"
+        static let buttonTitle = "Вот это технологии!"
+        static let blueLabel = "Отслеживайте только то, что хотите"
+        static let redLabel = "Даже если это не литры воды и йога"
+    }
+    
     //MARK: ComputedProperties
     
     private lazy var pages: [UIViewController] = {
@@ -19,7 +27,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private lazy var blueViewController: UIViewController = {
         let bluePage = UIViewController()
-        let blueImage = "blueBackground.png"
+        let blueImage = Keys.blueImage
         bluePage.view.addBackground(image: blueImage)
         
         return bluePage
@@ -27,7 +35,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private lazy var redViewController: UIViewController = {
         let redPage = UIViewController()
-        let redImage = "redBackground.png"
+        let redImage = Keys.redImage
         redPage.view.addBackground(image: redImage)
         
         return redPage
@@ -48,7 +56,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private lazy var button: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(Keys.buttonTitle, for: .normal)
         button.setTitleColor(.trackerWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = .trackerBlack
@@ -62,7 +70,7 @@ final class OnboardingViewController: UIPageViewController {
     private lazy var blueLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.text = "Отслеживайте только то, что хотите"
+        label.text = Keys.blueLabel
         label.numberOfLines = 2
         label.textColor = .trackerBlack
         label.textAlignment = .center
@@ -74,7 +82,7 @@ final class OnboardingViewController: UIPageViewController {
     private lazy var redLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.text = "Даже если это не литры воды и йога"
+        label.text = Keys.redLabel
         label.numberOfLines = 2
         label.textColor = .trackerBlack
         label.textAlignment = .center

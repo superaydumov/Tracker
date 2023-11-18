@@ -24,6 +24,14 @@ final class TrackersViewController: UIViewController {
     
     private let params = GeometricParams(cellCount: 2, cellHeight: 148, cellSpacing: 9, lineSpacing: 16)
     
+    private struct Keys {
+        static let plugLabel = "Что будем отслеживать?"
+        static let notFoundPlugLabel = "Ничего не найдено"
+        static let searchTextFieldPlaceholder = "Поиск"
+        static let cancelButtonLabel = "Отменить"
+        static let trackersHeader = "Трекеры"
+    }
+    
     // MARK: - Computed properties
     
     private lazy var collectionView: UICollectionView = {
@@ -80,7 +88,7 @@ final class TrackersViewController: UIViewController {
     private lazy var plugLabel: UILabel = {
        let plugLabel = UILabel()
         plugLabel.textColor = .trackerBlack
-        plugLabel.text = "Что будем отслеживать?"
+        plugLabel.text = Keys.plugLabel
         plugLabel.textAlignment = .center
         plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
         plugLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +98,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchTextField: UISearchTextField = {
         let searchTextField = UISearchTextField()
-        searchTextField.placeholder = "Поиск"
+        searchTextField.placeholder = Keys.searchTextFieldPlaceholder
         searchTextField.textColor = .trackerBlack
         searchTextField.font = .systemFont(ofSize: 17)
         searchTextField.backgroundColor = .trackerBackground
@@ -104,7 +112,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var cancelSearchTextFieldButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(Keys.cancelButtonLabel, for: .normal)
         cancelButton.setTitleColor(.trackerBlue, for: .normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(cancelButtonDidTap(sender:)), for: .touchUpInside)
@@ -145,11 +153,15 @@ final class TrackersViewController: UIViewController {
 
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - Private methods
     
     private func navBarSetup() {
         if let navigationBar = navigationController?.navigationBar {
-            title = "Трекеры"
+            title = Keys.trackersHeader
             navigationBar.prefersLargeTitles = true
             
             let addTrackerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddTrackerButton(sender:)))
@@ -242,7 +254,7 @@ final class TrackersViewController: UIViewController {
     
     private func changePlugs(_ text: String) {
         plugImageView.image = text.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
-        plugLabel.text = text.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
+        plugLabel.text = text.isEmpty ? Keys.plugLabel : Keys.notFoundPlugLabel
     }
     
     // MARK: - Obj-C methods

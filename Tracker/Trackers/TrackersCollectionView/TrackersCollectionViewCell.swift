@@ -9,6 +9,11 @@ import UIKit
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
     
+    private struct Keys {
+        static let nameLabel = "Название трекера"
+        static let daysLabel = "0 дней"
+    }
+    
     // MARK: - Stored proprties
     
     static let cellIdentifier = "trackerCell"
@@ -47,7 +52,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .trackerWhite
         label.numberOfLines = 2
-        label.text = "Название трекера"
+        label.text = Keys.nameLabel
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -59,7 +64,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         label.textColor = .trackerBlack
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.text = "0 дней"
+        label.text = Keys.daysLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label

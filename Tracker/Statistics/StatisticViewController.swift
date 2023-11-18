@@ -9,6 +9,11 @@ import UIKit
 
 final class StatisticViewController: UIViewController {
     
+    private struct Keys {
+        static let statisticLabel = "Статистика"
+        static let plugLabel = "Анализировать пока нечего"
+    }
+    
     // MARK: - Computed properties
     
     private lazy var plugView: UIView = {
@@ -30,7 +35,7 @@ final class StatisticViewController: UIViewController {
     private lazy var plugLabel: UILabel = {
        let plugLabel = UILabel()
         plugLabel.textColor = .trackerBlack
-        plugLabel.text = "Анализировать пока нечего"
+        plugLabel.text = Keys.plugLabel
         plugLabel.textAlignment = .center
         plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
         plugLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +59,7 @@ final class StatisticViewController: UIViewController {
     
     private func navBarSetup() {
         if let navigationBar = navigationController?.navigationBar {
-            title = "Статистика"
+            title = Keys.statisticLabel
             navigationBar.prefersLargeTitles = true
         }
     }
