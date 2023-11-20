@@ -153,7 +153,9 @@ final class TrackersViewController: UIViewController {
 
     }
     
-    deinit {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
         NotificationCenter.default.removeObserver(self)
     }
     
