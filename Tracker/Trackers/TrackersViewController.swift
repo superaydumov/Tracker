@@ -64,7 +64,6 @@ final class TrackersViewController: UIViewController {
         datePicker.calendar.firstWeekday = 2
         datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
-        datePicker.heightAnchor.constraint(equalToConstant: 34).isActive = true
         
         return datePicker
     }()

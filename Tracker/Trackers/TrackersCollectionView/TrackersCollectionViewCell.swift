@@ -159,23 +159,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             checkButton.backgroundColor = color
         }
         checkButton.isEnabled = isEnabled
-        
-        let dividedBy10 = completedCount % 10
-        let dividedBy100 = completedCount % 100
-        let notFrom10To20 = dividedBy100 < 10 || dividedBy100 > 20
-        var daysString = "\(completedCount) "
-        
-        if completedCount == 0 {
-            daysString += "дней"
-        } else if dividedBy10 == 1 && notFrom10To20 {
-            daysString += "день"
-        } else if (dividedBy10 == 2 || dividedBy10 == 3 || dividedBy10 == 4) && notFrom10To20 {
-            daysString += "дня"
-        } else {
-            daysString += "дней"
-        }
-        
-        daysLabel.text = daysString
+        daysLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "Число выполненных дней трекера"), completedCount)
     }
     
     // MARK: - Objc methods
