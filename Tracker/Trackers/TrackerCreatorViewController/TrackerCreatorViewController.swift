@@ -9,11 +9,9 @@ import UIKit
 
 final class TrackerCreatorViewController: UIViewController {
     
-    private struct Keys {
-        static let topLabel = "Создание трекера"
-        static let habitButtonTitle = "Привычка"
-        static let nonRegularButtonTitle = "Нерегулярное событие"
-    }
+    private let topLabelText = NSLocalizedString("topLabel", comment: "TrackerCreator topLabel text")
+    private let habitButtonTitleText = NSLocalizedString("habitButtonTitle", comment: "TrackerCreator habitButtonTitle text")
+    private let nonRegularButtonTitleText = NSLocalizedString("nonRegularButtonTitle", comment: "TrackerCreator nonRegularButtonTitle text")
     
     weak var delegate: TrackerCreatorViewControllerDelegate?
     
@@ -21,7 +19,7 @@ final class TrackerCreatorViewController: UIViewController {
     
     private lazy var topLabel: UILabel = {
         let topLabel = UILabel()
-        topLabel.text = Keys.topLabel
+        topLabel.text = topLabelText
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -32,7 +30,7 @@ final class TrackerCreatorViewController: UIViewController {
     
     private lazy var habitButton: UIButton = {
         let habitButton = UIButton(type: .system)
-        habitButton.setTitle(Keys.habitButtonTitle, for: .normal)
+        habitButton.setTitle(habitButtonTitleText, for: .normal)
         habitButton.setTitleColor(.trackerWhite, for: .normal)
         habitButton.backgroundColor = .trackerBlack
         habitButton.layer.cornerRadius = 16
@@ -44,7 +42,7 @@ final class TrackerCreatorViewController: UIViewController {
     
     private lazy var nonRegularButton: UIButton = {
         let nonRegularButton = UIButton(type: .system)
-        nonRegularButton.setTitle(Keys.nonRegularButtonTitle, for: .normal)
+        nonRegularButton.setTitle(nonRegularButtonTitleText, for: .normal)
         nonRegularButton.setTitleColor(.trackerWhite, for: .normal)
         nonRegularButton.backgroundColor = .trackerBlack
         nonRegularButton.layer.cornerRadius = 16

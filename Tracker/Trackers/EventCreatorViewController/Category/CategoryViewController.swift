@@ -12,19 +12,22 @@ final class CategoryViewController: UIViewController {
     private var viewModel: CategoryViewModel
     private var alertPresenter: AlertPresenterProtocol?
     
-    private struct Keys {
-        static let topLabel = "Категория"
-        static let plugLabel = "Привычки и события можно\nобъединять по смыслу"
-        static let categoryButonTitle = "Добавить категорию"
-        static let contextMenuChange = "Редактировать"
-        static let contextMenuDelete = "Удалить"
-    }
+    private let topLabelText = NSLocalizedString("topLabel", comment: "CtaegoryVC topLabel text")
+    private let plugLabelText = NSLocalizedString("plugLabel", comment: "CtaegoryVC plugLabel text")
+    private let categoryButonTitleText = NSLocalizedString("categoryButonTitle", comment: "CtaegoryVC categoryButonTitle text")
+    private let contextMenuChangeText = NSLocalizedString("contextMenuChange", comment: "CtaegoryVC contextMenuChange text")
+    private let contextMenuDeleteText = NSLocalizedString("contextMenuDelete", comment: "CtaegoryVC contextMenuDelete text")
+    
+    private let alertTitleText = NSLocalizedString("alertTitle", comment: "")
+    private let alertMessageText = NSLocalizedString("alertMessage", comment: "")
+    private let alertFirstButtonText = NSLocalizedString("alertFirstButton", comment: "")
+    private let alertSecondButtonText = NSLocalizedString("alertSecondButton", comment: "")
     
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
        let topLabel = UILabel()
-        topLabel.text = Keys.topLabel
+        topLabel.text = topLabelText
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -68,7 +71,7 @@ final class CategoryViewController: UIViewController {
     private lazy var plugLabel: UILabel = {
        let plugLabel = UILabel()
         plugLabel.textColor = .trackerBlack
-        plugLabel.text = Keys.plugLabel
+        plugLabel.text = plugLabelText
         plugLabel.numberOfLines = 2
         plugLabel.textAlignment = .center
         plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
@@ -79,7 +82,7 @@ final class CategoryViewController: UIViewController {
     
     private lazy var createCategoryButton: UIButton = {
         let categoryButton = UIButton(type: .system)
-        categoryButton.setTitle(Keys.categoryButonTitle, for: .normal)
+        categoryButton.setTitle(categoryButonTitleText, for: .normal)
         categoryButton.setTitleColor(.trackerWhite, for: .normal)
         categoryButton.backgroundColor = .trackerBlack
         categoryButton.layer.cornerRadius = 16
@@ -163,10 +166,10 @@ final class CategoryViewController: UIViewController {
     }
     
     private func categoryDeleteAlert(category: TrackerCategory) {
-        let model = AlertModel(title: "Эта категория точно не нужна?",
-                               message: "Это действие также удалит созданные ранее трекеры для данной категории.",
-                               firstButtonText: "Удалить",
-                               secondButtontext: "Отменить",
+        let model = AlertModel(title: alertTitleText,
+                               message: alertMessageText,
+                               firstButtonText: alertFirstButtonText,
+                               secondButtontext: alertSecondButtonText,
                                firstCompletion: { [weak self] in
             guard let self else { return }
             self.viewModel.deleteTrackerCategory(category)
@@ -243,13 +246,13 @@ extension CategoryViewController: UITableViewDelegate {
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: Keys.contextMenuChange) { [weak self] _ in
+                UIAction(title: self.contextMenuChangeText) { [weak self] _ in
                     guard let self else { return }
                     let creationViewController = CategoryCreatorViewController(categoryEvent: .editing)
                     creationViewController.editableCategory = category
                     self.present(creationViewController, animated: true)
                 },
-                UIAction(title: Keys.contextMenuDelete, attributes: .destructive) { [weak self] _ in
+                UIAction(title: self.contextMenuDeleteText, attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.categoryDeleteAlert(category: category)
                 }

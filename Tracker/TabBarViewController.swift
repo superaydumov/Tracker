@@ -9,10 +9,8 @@ import UIKit
 
 final class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
-    private struct Keys {
-        static let trackersTitle = "Трекеры"
-        static let statisticTitle = "Статистика"
-    }
+    private let trackersTabBar = NSLocalizedString("trackersHeader", comment: "trackersHeader text")
+    private let statisticsTabBar = NSLocalizedString("statisticsHeader", comment: "NavBar statistics label")
     
     private struct imageKeys {
         static let trackersTabBarOn = UIImage(named: "trackersTabBar_On")
@@ -32,8 +30,8 @@ final class TabBarViewController: UITabBarController, UITabBarControllerDelegate
         let trackersViewController = UINavigationController(rootViewController: TrackersViewController())
         let statisticViewController = UINavigationController(rootViewController: StatisticViewController())
         
-        trackersViewController.tabBarItem = UITabBarItem(title: Keys.trackersTitle, image: imageKeys.trackersTabBarOff, selectedImage: imageKeys.trackersTabBarOn)
-        statisticViewController.tabBarItem = UITabBarItem(title: Keys.statisticTitle, image: imageKeys.statisticTabBarOff, selectedImage: imageKeys.statisticTabBarOn)
+        trackersViewController.tabBarItem = UITabBarItem(title: trackersTabBar, image: imageKeys.trackersTabBarOff, selectedImage: imageKeys.trackersTabBarOn)
+        statisticViewController.tabBarItem = UITabBarItem(title: statisticsTabBar, image: imageKeys.statisticTabBarOff, selectedImage: imageKeys.statisticTabBarOn)
         
         self.viewControllers = [trackersViewController, statisticViewController]
     }

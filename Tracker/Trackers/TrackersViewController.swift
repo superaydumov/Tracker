@@ -24,13 +24,11 @@ final class TrackersViewController: UIViewController {
     
     private let params = GeometricParams(cellCount: 2, cellHeight: 148, cellSpacing: 9, lineSpacing: 16)
     
-    private struct Keys {
-        static let plugLabel = "Что будем отслеживать?"
-        static let notFoundPlugLabel = "Ничего не найдено"
-        static let searchTextFieldPlaceholder = "Поиск"
-        static let cancelButtonLabel = "Отменить"
-        static let trackersHeader = "Трекеры"
-    }
+    private let trackersPlugLabelText = NSLocalizedString("trackersPlugLabel", comment: "Trackers plugLabel text")
+    private let trackersSearchPlugLabelText = NSLocalizedString("trackersSearchPlugLabel", comment: "Trackers searchPlugLabel text")
+    private let searchTextFieldPlaceholderText = NSLocalizedString("searchTextFieldPlaceholder", comment: "SearchTextField placeholder text")
+    private let cancelButtonLabelText = NSLocalizedString("cancelButtonLabel", comment: "cancelButton label text")
+    private let trackersHeaderText = NSLocalizedString("trackersHeader", comment: "trackersHeader text")
     
     // MARK: - Computed properties
     
@@ -60,7 +58,6 @@ final class TrackersViewController: UIViewController {
         
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.calendar.firstWeekday = 2
         datePicker.addTarget(self, action: #selector(didTapDateButton(sender:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +84,7 @@ final class TrackersViewController: UIViewController {
     private lazy var plugLabel: UILabel = {
        let plugLabel = UILabel()
         plugLabel.textColor = .trackerBlack
-        plugLabel.text = Keys.plugLabel
+        plugLabel.text = trackersPlugLabelText
         plugLabel.textAlignment = .center
         plugLabel.font = .systemFont(ofSize: 12, weight: .medium)
         plugLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -97,7 +94,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchTextField: UISearchTextField = {
         let searchTextField = UISearchTextField()
-        searchTextField.placeholder = Keys.searchTextFieldPlaceholder
+        searchTextField.placeholder = searchTextFieldPlaceholderText
         searchTextField.textColor = .trackerBlack
         searchTextField.font = .systemFont(ofSize: 17)
         searchTextField.backgroundColor = .trackerBackground
@@ -111,7 +108,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var cancelSearchTextFieldButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle(Keys.cancelButtonLabel, for: .normal)
+        cancelButton.setTitle(cancelButtonLabelText, for: .normal)
         cancelButton.setTitleColor(.trackerBlue, for: .normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(cancelButtonDidTap(sender:)), for: .touchUpInside)
@@ -162,7 +159,7 @@ final class TrackersViewController: UIViewController {
     
     private func navBarSetup() {
         if let navigationBar = navigationController?.navigationBar {
-            title = Keys.trackersHeader
+            title = trackersHeaderText
             navigationBar.prefersLargeTitles = true
             
             let addTrackerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddTrackerButton(sender:)))
@@ -255,7 +252,7 @@ final class TrackersViewController: UIViewController {
     
     private func changePlugs(_ text: String) {
         plugImageView.image = text.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
-        plugLabel.text = text.isEmpty ? Keys.plugLabel : Keys.notFoundPlugLabel
+        plugLabel.text = text.isEmpty ? trackersPlugLabelText : trackersSearchPlugLabelText
     }
     
     // MARK: - Obj-C methods

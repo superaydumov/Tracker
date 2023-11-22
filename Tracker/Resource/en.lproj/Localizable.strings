@@ -5,3 +5,69 @@
   Created by Эльдар Айдумов on 22.11.2023.
   
 */
+"buttonTitle" = "Wow. This is pure technology!";
+"blueLabel" = "Track only what you want";
+"redLabel" = "Even if it's not liters of water and yoga";
+
+"statisticsHeader" = "Statistics";
+"statisticsPlugLabel" = "There's no data to analyze";
+
+"trackersPlugLabel" = "What are we gonna track?";
+"trackersSearchPlugLabel" = "Nothing found";
+"searchTextFieldPlaceholder" = "Search";
+"cancelButtonText" = "Cancel";
+"trackersHeader" = "Trackers";
+
+"topLabel" = "Tracker creation";
+"habitButtonTitle" = "Habit";
+"nonRegularButtonTitle" = "Irregular event";
+
+"newHabit" = "New habit";
+"newIrregular" = "New irregular event";
+"textFieldPlaceHolder" = "Enter tracker name";
+"categoryButtonLabel" = "Category";
+"scheduleButtonLabel" = "Schedule";
+"cancelButtonLabel" = "Cancel";
+"createButtonLabel" = "Create";
+"restrictorLabel" = "There is 38 characters limit";
+"emojiSectionLabel" = "Emojies";
+"colorsSectionLabel" = "Colors";
+
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+
+"mondayShort" = "Mon";
+"tuesdayShort" = "Tue";
+"wednesdayShort" = "Wed";
+"thursdayShort" = "Thu";
+"fridayShort" = "Fri";
+"saturdayShort" = "Sat";
+"sundayShort" = "Sun";
+
+"everyDay" = "Everyday";
+"workDays" = "Weekdays";
+"weekEnds" = "Weekends";
+
+"topLabel" = "Schedule";
+"performButton" = "Done";
+
+"topLabel" = "Category";
+"plugLabel" = "Habits and events\ncan be combined by their meaning";
+"categoryButonTitle" = "Add a category";
+"contextMenuChange" = "Edit";
+"contextMenuDelete" = "Delete";
+
+"alertTitle" = "Are you sure you don't need this category?";
+"alertMessage" = "This action also deletes trackers, which were created for this category.";
+"alertFirstButton" = "Delete";
+"alertSecondButton" = "Cancel";
+
+"newCategory" = "New category";
+"editCategory" = "Edit category";
+"categoryTextFieldPlaceholder" = "Enter category name";
+"categoryPerformButton" = "Done";

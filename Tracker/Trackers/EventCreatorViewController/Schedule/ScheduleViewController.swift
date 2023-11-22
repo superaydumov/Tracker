@@ -11,6 +11,9 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Stored properties
     
+    private let topLabelText = NSLocalizedString("topLabel", comment: "ScheduleVC topLabel text")
+    private let performButtonText = NSLocalizedString("performButton", comment: "ScheduleVC performButton text")
+    
     private struct Keys {
         static let topLabel = "Расписание"
         static let performButton = "Готово"
@@ -23,7 +26,7 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var topLabel: UILabel = {
        let topLabel = UILabel()
-        topLabel.text = Keys.topLabel
+        topLabel.text = topLabelText
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
@@ -62,7 +65,7 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var performButton: UIButton = {
         let performButton = UIButton(type: .system)
-        performButton.setTitle(Keys.performButton, for: .normal)
+        performButton.setTitle(performButtonText, for: .normal)
         performButton.setTitleColor(.trackerWhite, for: .normal)
         performButton.backgroundColor = .trackerGray
         performButton.layer.cornerRadius = 16
@@ -141,7 +144,7 @@ extension ScheduleViewController: UITableViewDataSource {
         
         cell.delegate = self
         
-        let dayRawValue = WeekDay.allCases[indexPath.row].rawValue
+        let dayRawValue = WeekDay.allCases[indexPath.row].localized
         let weekDay = WeekDay.allCases[indexPath.row]
         let scheduleDay = schedule.contains(weekDay)
         let checkProperty = indexPath.row == WeekDay.allCases.count - 1

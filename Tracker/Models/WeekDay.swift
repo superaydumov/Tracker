@@ -8,13 +8,13 @@
 import Foundation
 
 enum WeekDay: String, CaseIterable {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thursday = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
     
     var numberOfDay: Int {
         switch self {
@@ -38,21 +38,39 @@ enum WeekDay: String, CaseIterable {
     
     var shortName: String {
         switch self {
-            
         case .monday:
-            return "Пн"
+            return NSLocalizedString("mondayShort", comment: "")
         case .tuesday:
-            return "Вт"
+            return NSLocalizedString("tuesdayShort", comment: "")
         case .wednesday:
-            return "Ср"
+            return NSLocalizedString("wednesdayShort", comment: "")
         case .thursday:
-            return "Чт"
+            return NSLocalizedString("thursdayShort", comment: "")
         case .friday:
-            return "Пт"
+            return NSLocalizedString("fridayShort", comment: "")
         case .saturday:
-            return "Сб"
+            return NSLocalizedString("saturdayShort", comment: "")
         case .sunday:
-            return "Вс"
+            return NSLocalizedString("sundayShort", comment: "")
+        }
+    }
+    
+    var localized: String {
+        switch self {
+        case .monday:
+            return NSLocalizedString("monday", comment: "")
+        case .tuesday:
+            return NSLocalizedString("tuesday", comment: "")
+        case .wednesday:
+            return NSLocalizedString("wednesday", comment: "")
+        case .thursday:
+            return NSLocalizedString("thursday", comment: "")
+        case .friday:
+            return NSLocalizedString("friday", comment: "")
+        case .saturday:
+            return NSLocalizedString("saturday", comment: "")
+        case .sunday:
+            return NSLocalizedString("sunday", comment: "")
         }
     }
 }

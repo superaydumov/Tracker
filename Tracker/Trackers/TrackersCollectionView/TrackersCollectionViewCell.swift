@@ -159,7 +159,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             checkButton.backgroundColor = color
         }
         checkButton.isEnabled = isEnabled
-        daysLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "Число выполненных дней трекера"), completedCount)
+        daysLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "Tracker completed days"), completedCount)
     }
     
     // MARK: - Objc methods
