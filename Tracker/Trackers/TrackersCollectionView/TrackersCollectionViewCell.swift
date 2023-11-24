@@ -50,7 +50,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .trackerWhite
+        label.textColor = .white
         label.numberOfLines = 2
         label.text = Keys.nameLabel
         label.font = .systemFont(ofSize: 12, weight: .medium)
