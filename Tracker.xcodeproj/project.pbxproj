@@ -57,6 +57,7 @@
 		C9E3A9FB2AF7D38300983B42 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E3A9FA2AF7D38300983B42 /* UIViewController+Extension.swift */; };
 		C9F8E6492AE8106E00BE65D0 /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9F8E6472AE8106E00BE65D0 /* Tracker.xcdatamodeld */; };
 		C9F8E6502AE9854000BE65D0 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8E64F2AE9854000BE65D0 /* DatabaseManager.swift */; };
+		C9FE15062B13F9DF00C4D079 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FE15052B13F9DF00C4D079 /* AnalyticsService.swift */; };
 		C9FF828D2AF4529100837113 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF828C2AF4529000837113 /* DatabaseError.swift */; };
 		C9FF828F2AF5648900837113 /* TrackerCategoryStoreUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF828E2AF5648900837113 /* TrackerCategoryStoreUpdate.swift */; };
 		C9FF82912AF565B000837113 /* TrackerCategoryStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */; };
@@ -119,6 +120,7 @@
 		C9E3A9FA2AF7D38300983B42 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		C9F8E6482AE8106E00BE65D0 /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		C9F8E64F2AE9854000BE65D0 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		C9FE15052B13F9DF00C4D079 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		C9FF828C2AF4529000837113 /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		C9FF828E2AF5648900837113 /* TrackerCategoryStoreUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStoreUpdate.swift; sourceTree = "<group>"; };
 		C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStoreDelegate.swift; sourceTree = "<group>"; };
@@ -150,7 +152,6 @@
 				A13A15B9489EB7A153649895 /* Pods-Tracker.debug.xcconfig */,
 				C1060D244B4B59B024748D00 /* Pods-Tracker.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -193,10 +194,11 @@
 		C94D23F32AC85110004D9ADC /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				C90AA6732B0D5C6E003D556B /* Resource */,
+				C9FE15042B13F9BF00C4D079 /* Analytics */,
 				C9420FA02B041B3C008C6B3E /* AlertPresenter */,
 				C9F8E6462AE8103400BE65D0 /* CoreData */,
 				C9D31EB22AD4A1B700B9B596 /* Models */,
+				C90AA6732B0D5C6E003D556B /* Resource */,
 				C9D31EA72AD20F0200B9B596 /* Statistics */,
 				C9D31EA42AD20E4900B9B596 /* Trackers */,
 				C981C6B12AC87158009D0228 /* Helpers */,
@@ -334,6 +336,14 @@
 				C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		C9FE15042B13F9BF00C4D079 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				C9FE15052B13F9DF00C4D079 /* AnalyticsService.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -479,6 +489,7 @@
 				C9825C1A2AFEFADE002098BA /* UIView+Extension.swift in Sources */,
 				C9D31ECB2AD8B72900B9B596 /* TrackerCreatorViewControllerDelegate.swift in Sources */,
 				C97B8B572AEE9FD000AFCC1F /* TrackerStore.swift in Sources */,
+				C9FE15062B13F9DF00C4D079 /* AnalyticsService.swift in Sources */,
 				C9D31EBC2AD5FBB000B9B596 /* Trackers.swift in Sources */,
 				C94FEEA02ADDCDE500F6E78F /* EventCreatorSuplementaryView.swift in Sources */,
 				C9420FA42B041B97008C6B3E /* AlertPresenterProtocol.swift in Sources */,
