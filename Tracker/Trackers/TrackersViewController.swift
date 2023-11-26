@@ -113,6 +113,7 @@ final class TrackersViewController: UIViewController {
         let cancelButton = UIButton(type: .system)
         cancelButton.setTitle(cancelButtonLabelText, for: .normal)
         cancelButton.setTitleColor(.trackerBlue, for: .normal)
+        cancelButton.titleLabel?.font = .systemFont(ofSize: 17)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(cancelButtonDidTap(sender:)), for: .touchUpInside)
         
@@ -221,7 +222,7 @@ final class TrackersViewController: UIViewController {
             searchTextField.heightAnchor.constraint(equalToConstant: 36),
             
             cancelSearchTextFieldButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            cancelSearchTextFieldButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7),
+            cancelSearchTextFieldButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             cancelSearchTextFieldButton.centerXAnchor.constraint(equalTo: searchTextField.centerXAnchor),
             widthAnchor!
         ])
@@ -279,7 +280,7 @@ final class TrackersViewController: UIViewController {
         
         changePlugs(searchText)
         
-        widthAnchor?.constant = 85
+        widthAnchor?.constant = 83
         
         visibleCategories = trackerCategoryStore.predicateFetch(trackerName: searchText)
         updateCategories()
