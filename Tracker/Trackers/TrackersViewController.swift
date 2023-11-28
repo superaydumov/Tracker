@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    // MARK: - Stored proprties
+    // MARK: - Stored properties
     
     private var currentDate: Int?
     private var searchText: String = ""
@@ -20,10 +20,14 @@ final class TrackersViewController: UIViewController {
     private var completedTrackers = [TrackerRecord]()
     private var pinnedTrackers = [Trackers]()
     
+    private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
+    private var alertPresenter: AlertPresenterProtocol?
     
     private let params = GeometricParams(cellCount: 2, cellHeight: 148, cellSpacing: 9, lineSpacing: 16)
+    
+    // MARK: - Localized strings
     
     private let trackersPlugLabelText = NSLocalizedString("trackersPlugLabel", comment: "Trackers plugLabel text")
     private let trackersSearchPlugLabelText = NSLocalizedString("trackersSearchPlugLabel", comment: "Trackers searchPlugLabel text")
@@ -35,6 +39,9 @@ final class TrackersViewController: UIViewController {
     private let unpinTrackerText = NSLocalizedString("unpinTracker", comment: "Unpin tracker in context menu")
     private let trackerContextMenuChangeText = NSLocalizedString("trackerContextMenuChange", comment: "Change tracker in context menu")
     private let trackerContextMenuDeleteText = NSLocalizedString("trackerContextMenuDelete", comment: "Delete tracker in context menu")
+    private let trackerAlertMessageText = NSLocalizedString("trackerAlertMessage", comment: "")
+    private let trackerAlertFirstButtonText = NSLocalizedString("trackerAlertFirstButton", comment: "")
+    private let trackerAlertSecondButtonText = NSLocalizedString("trackerAlertSecondButton", comment: "")
     
     // MARK: - Computed properties
     
@@ -154,6 +161,9 @@ final class TrackersViewController: UIViewController {
         }
         
         trackerCategoryStore.delegate = self
+        trackerStore.delegate = self
+        
+        alertPresenter = AlertPresenter(delegate: self)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView(sender:)), name: NSNotification.Name("reloadCollectionView"), object: nil)
 
@@ -197,8 +207,8 @@ final class TrackersViewController: UIViewController {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
             plugView.heightAnchor.constraint(equalToConstant: 110),
             plugView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -272,6 +282,20 @@ final class TrackersViewController: UIViewController {
         plugLabel.text = text.isEmpty ? trackersPlugLabelText : trackersSearchPlugLabelText
     }
     
+    private func trackerDeleteAlert(trackerToDelete: Trackers) {
+        let model = AlertModel(
+            title: trackerAlertMessageText,
+            message: nil,
+            firstButtonText: trackerAlertFirstButtonText,
+            secondButtontext: trackerAlertSecondButtonText,
+            firstCompletion: { [weak self] in
+                guard let self else { return }
+                try? self.trackerStore.deleteTracker(trackerToDelete)
+            })
+        
+        alertPresenter?.showAlert(model: model)
+    }
+    
     private func makeContextMenu(indexPath: IndexPath) -> UIMenu {
         let tracker: Trackers
         if indexPath.section == 0 {
@@ -283,6 +307,7 @@ final class TrackersViewController: UIViewController {
         let pinnedTitle = tracker.pinned == true ? unpinTrackerText : pinTrackerText
         let pin = UIAction(title: pinnedTitle, handler: { [weak self] action in
             guard let self else { return }
+            try? self.trackerStore.togglePinTracker(tracker)
             print("tracker pinned")
         })
         
@@ -293,10 +318,47 @@ final class TrackersViewController: UIViewController {
         
         let delete = UIAction(title: trackerContextMenuDeleteText, attributes: .destructive, handler: { [weak self] action in
             guard let self else { return }
-            print("tracker edeleting")
+            self.trackerDeleteAlert(trackerToDelete: tracker)
+            print("tracker deleting")
         })
         
         return UIMenu(children: [pin, edit, delete])
+    }
+    
+    private func startPerformBatchUpdates(with update: StoreUpdate) {
+        collectionView.performBatchUpdates {
+            let insertedIndexPaths = update.insertedIndexes.compactMap { index -> IndexPath? in
+                if index <= collectionView.numberOfItems(inSection: 0) {
+                    return IndexPath(item: index, section: 0)
+                }
+                return nil
+            }
+            let deletedIndexPaths = update.deletedIndexes.compactMap { index -> IndexPath? in
+                if index < collectionView.numberOfItems(inSection: 0) {
+                    return IndexPath(item: index, section: 0)
+                }
+                return nil
+            }
+            let updatedIndexPaths = update.updatedIndexes.compactMap { index -> IndexPath? in
+                if index < collectionView.numberOfItems(inSection: 0) {
+                    return IndexPath(item: index, section: 0)
+                }
+                return nil
+            }
+            
+            collectionView.insertItems(at: insertedIndexPaths)
+            collectionView.deleteItems(at: deletedIndexPaths)
+            collectionView.reloadItems(at: updatedIndexPaths)
+            
+            for move in update.movedIndexes {
+                if move.oldIndex < collectionView.numberOfItems(inSection: 0) && move.newIndex < collectionView.numberOfItems(inSection: 0) {
+                    collectionView.moveItem(
+                        at: IndexPath(item: move.oldIndex, section: 0),
+                        to: IndexPath(item: move.newIndex, section: 0)
+                    )
+                }
+            }
+        }
     }
     
     // MARK: - Obj-C methods
@@ -317,23 +379,19 @@ final class TrackersViewController: UIViewController {
     
     @objc private func textFieldDidChanged(sender: AnyObject) {
         searchText = searchTextField.text ?? ""
-        
         changePlugs(searchText)
-        
         widthAnchor?.constant = 83
         
-        //visibleCategories = trackerCategoryStore.predicateFetch(trackerName: searchText)
         updateCategories(with: trackerCategoryStore.predicateFetch(trackerName: searchText))
     }
     
     @objc private func cancelButtonDidTap(sender: AnyObject) {
         searchTextField.text = ""
         searchText = ""
-        
         changePlugs(searchText)
-        
         widthAnchor?.constant = 0
         constraintsSetup()
+        
         updateCategories(with: trackerCategoryStore.trackerCategories)
     }
     
@@ -421,7 +479,8 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.frame.width - params.paddingWidth
+        let collectionViewSizeCompensator: CGFloat = 32
+        let availableWidth = collectionView.frame.width - params.paddingWidth - collectionViewSizeCompensator
         let cellWidth = availableWidth / CGFloat(params.cellCount)
         
         return CGSize(width: cellWidth, height: params.cellHeight)
@@ -442,11 +501,18 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        let headerViewSize = headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                                       height: UIView.layoutFittingExpandedSize.height),
-                                                                withHorizontalFittingPriority: .required,
-                                                                verticalFittingPriority: .fittingSizeLevel)
+        
+        let headerViewSize = headerView.systemLayoutSizeFitting(
+            CGSize(width: collectionView.frame.width,
+                   height: UIView.layoutFittingExpandedSize.height),
+            withHorizontalFittingPriority: .defaultHigh,
+            verticalFittingPriority: .fittingSizeLevel)
+        
         return headerViewSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
 }
 
@@ -536,25 +602,18 @@ extension TrackersViewController: TrackerCreatorViewControllerDelegate {
 }
 
 extension TrackersViewController: TrackerCategoryStoreDelegate {
-    func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
+    func store(_ store: TrackerCategoryStore, didUpdate update: StoreUpdate) {
         updateCategories(with: trackerCategoryStore.trackerCategories)
         
-        collectionView.performBatchUpdates {
-            let insertedIndexPaths = update.insertedIndexes.map { IndexPath(item: $0, section: 0)}
-            let deletedIndexPaths = update.deletedIndexes.map { IndexPath(item: $0, section: 0)}
-            let updatedIndexPaths = update.updatedIndexes.map { IndexPath(item: $0, section: 0)}
-            
-            collectionView.insertItems(at: insertedIndexPaths)
-            collectionView.insertItems(at: deletedIndexPaths)
-            collectionView.insertItems(at: updatedIndexPaths)
-            
-            for move in update.movedIndexes {
-                collectionView.moveItem(
-                    at: IndexPath(item: move.oldIndex, section: 0),
-                    to: IndexPath(item: move.newIndex, section: 0)
-                )
-            }
-        }
+        startPerformBatchUpdates(with: update)
+    }
+}
+
+extension TrackersViewController: TrackerStoreDelegate {
+    func store(_ store: TrackerStore, didUpdate update: StoreUpdate) {
+        updateCategories(with: trackerCategoryStore.trackerCategories)
+        
+        startPerformBatchUpdates(with: update)
     }
 }
 

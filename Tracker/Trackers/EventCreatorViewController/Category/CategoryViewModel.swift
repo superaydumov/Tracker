@@ -47,7 +47,7 @@ final class CategoryViewModel: NSObject {
 }
 
 extension CategoryViewModel: TrackerCategoryStoreDelegate {
-    func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
+    func store(_ store: TrackerCategoryStore, didUpdate update: StoreUpdate) {
         categories = trackerCategoryStore.trackerCategories
     }
 }

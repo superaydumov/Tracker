@@ -19,7 +19,7 @@ final class TrackerCategoryStore: NSObject {
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
     private var updatedIndexes: IndexSet?
-    private var movedIndexes: Set<TrackerCategoryStoreUpdate.Move>?
+    private var movedIndexes: Set<StoreUpdate.Move>?
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -170,7 +170,7 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         insertedIndexes = IndexSet()
         deletedIndexes = IndexSet()
         updatedIndexes = IndexSet()
-        movedIndexes = Set<TrackerCategoryStoreUpdate.Move>()
+        movedIndexes = Set<StoreUpdate.Move>()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -183,7 +183,7 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         
         delegate?.store(
             self,
-            didUpdate: TrackerCategoryStoreUpdate(
+            didUpdate: StoreUpdate(
                 insertedIndexes: insertedIndexes,
                 deletedIndexes: deletedIndexes,
                 updatedIndexes: updatedIndexes,

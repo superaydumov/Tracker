@@ -22,6 +22,9 @@
 "unpinTracker" = "Unpin";
 "trackerContextMenuChange" = "Edit";
 "trackerContextMenuDelete" = "Delete";
+"trackerAlertMessage" = "Do you really want to delete this tracker?";
+"trackerAlertFirstButton" = "Delete";
+"trackerAlertSecondButton" = "Cancel";
 
 "topLabel" = "Tracker creation";
 "habitButtonTitle" = "Habit";

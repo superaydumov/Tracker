@@ -22,6 +22,9 @@
 "unpinTracker" = "Открепить";
 "trackerContextMenuChange" = "Редактировать";
 "trackerContextMenuDelete" = "Удалить";
+"trackerAlertMessage" = "Уверены, что хотите удалить трекер?";
+"trackerAlertFirstButton" = "Удалить";
+"trackerAlertSecondButton" = "Отменить";
 
 "topLabel" = "Создание трекера";
 "habitButtonTitle" = "Привычка";
