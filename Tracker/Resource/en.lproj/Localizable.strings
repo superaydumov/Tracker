@@ -17,6 +17,11 @@
 "searchTextFieldPlaceholder" = "Search";
 "cancelButtonText" = "Cancel";
 "trackersHeader" = "Trackers";
+"pinnedCategories" = "Pinned";
+"pinTracker" = "Pin";
+"unpinTracker" = "Unpin";
+"trackerContextMenuChange" = "Edit";
+"trackerContextMenuDelete" = "Delete";
 
 "topLabel" = "Tracker creation";
 "habitButtonTitle" = "Habit";

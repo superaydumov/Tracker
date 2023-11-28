@@ -73,6 +73,7 @@ final class TrackerCategoryStore: NSObject {
                 let color = trackerCoreData.color?.color,
                 let emoji = trackerCoreData.emoji
             else { return nil }
+            let pinned = trackerCoreData.pinned
 
             return Trackers(
                 id: id,
@@ -80,7 +81,8 @@ final class TrackerCategoryStore: NSObject {
                 color: color,
                 emoji: emoji,
                 schedule: trackerCoreData.schedule?.compactMap {
-                    WeekDay(rawValue: $0) }
+                    WeekDay(rawValue: $0) },
+                pinned: pinned
             )
         } ?? []
 

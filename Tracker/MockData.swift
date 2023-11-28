@@ -17,14 +17,16 @@ final class MockData {
                     name: "Играть в прятки как ниндзя",
                     color: .colorSelection2,
                     emoji: "🥷🏻",
-                    schedule: [.monday, .wednesday, .friday]
+                    schedule: [.monday, .wednesday, .friday],
+                    pinned: false
                 ),
                 Trackers(
                     id: UUID(),
                     name: "Стать самураем",
                     color: .colorSelection12,
                     emoji: "🐥",
-                    schedule: [.tuesday, .thursday, .saturday]
+                    schedule: [.tuesday, .thursday, .saturday],
+                    pinned: false
                 )
             ]
         ),
@@ -37,21 +39,24 @@ final class MockData {
                     name: "Заказать покушац",
                     color: .colorSelection18,
                     emoji: "🍞",
-                    schedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+                    schedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday],
+                    pinned: false
                 ),
                 Trackers(
                     id: UUID(),
                     name: "Посмотреть фильм",
                     color: .colorSelection12,
                     emoji: "📺",
-                    schedule: [.saturday, .sunday]
+                    schedule: [.saturday, .sunday],
+                    pinned: false
                 ),
                 Trackers(
                     id: UUID(),
                     name: "Выпить кофе",
                     color: .colorSelection11,
                     emoji: "☕️",
-                    schedule: [.monday, .tuesday, .thursday]
+                    schedule: [.monday, .tuesday, .thursday],
+                    pinned: false
                 )
             ]
         ),
@@ -64,21 +69,24 @@ final class MockData {
                     name: "Принести хворост",
                     color: .colorSelection13,
                     emoji: "🪵",
-                    schedule: [.tuesday, .wednesday, .friday]
+                    schedule: [.tuesday, .wednesday, .friday],
+                    pinned: false
                 ),
                 Trackers(
                     id: UUID(),
                     name: "Покормить белку",
                     color: .colorSelection14,
                     emoji: "🐿️",
-                    schedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+                    schedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday],
+                    pinned: false
                 ),
                 Trackers(
                     id: UUID(),
                     name: "Разжечь костер",
                     color: .colorSelection14,
                     emoji: "🔥",
-                    schedule: [.tuesday, .wednesday, .friday]
+                    schedule: [.tuesday, .wednesday, .friday],
+                    pinned: false
                 )
             ]
         )

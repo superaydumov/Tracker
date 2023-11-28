@@ -43,13 +43,15 @@ final class TrackerStore {
             let color = data.color,
             let schedule = data.schedule
         else { throw DatabaseError.databaseError }
+        let pinned = data.pinned
         
         return Trackers(
             id: id,
             name: name,
             color: color.color,
             emoji: emoji,
-            schedule: schedule.compactMap { WeekDay(rawValue: $0) }
+            schedule: schedule.compactMap { WeekDay(rawValue: $0) },
+            pinned: pinned
         )
     }
     

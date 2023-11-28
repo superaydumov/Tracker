@@ -17,6 +17,11 @@
 "searchTextFieldPlaceholder" = "Поиск";
 "cancelButtonText" = "Отменить";
 "trackersHeader" = "Трекеры";
+"pinnedCategories" = "Закреплённые";
+"pinTracker" = "Закрепить";
+"unpinTracker" = "Открепить";
+"trackerContextMenuChange" = "Редактировать";
+"trackerContextMenuDelete" = "Удалить";
 
 "topLabel" = "Создание трекера";
 "habitButtonTitle" = "Привычка";

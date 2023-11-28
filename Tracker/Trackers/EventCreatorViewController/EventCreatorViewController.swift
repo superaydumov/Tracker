@@ -469,12 +469,12 @@ final class EventCreatorViewController: UIViewController {
         guard let selectedEmoji, let selectedColor else { return }
         
         if event == .habit {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule)
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule, pinned: false)
             
             guard let tracker else { return }
             delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
         } else {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases)
+            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases, pinned: false)
             
             guard let tracker else { return }
             delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
