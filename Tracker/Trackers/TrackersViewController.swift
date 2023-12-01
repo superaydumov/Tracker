@@ -133,6 +133,19 @@ final class TrackersViewController: UIViewController {
         return cancelButton
     }()
     
+    private lazy var filtersButton: UIButton = {
+        let filtersButton = UIButton(type: .system)
+        filtersButton.backgroundColor = .trackerBlue
+        filtersButton.layer.cornerRadius = 16
+        filtersButton.setTitle("Filters", for: .normal)
+        filtersButton.setTitleColor(.trackerWhite, for: .normal)
+        filtersButton.titleLabel?.font = .systemFont(ofSize: 17)
+        filtersButton.translatesAutoresizingMaskIntoConstraints = false
+        filtersButton.addTarget(self, action: #selector(filtersButtonDidTap(sender:)), for: .touchUpInside)
+        
+        return filtersButton
+    }()
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -201,6 +214,7 @@ final class TrackersViewController: UIViewController {
         view.addSubview(searchTextField)
         view.addSubview(cancelSearchTextFieldButton)
         view.addSubview(collectionView)
+        view.addSubview(filtersButton)
     }
     
     private func constraintsSetup() {
@@ -224,7 +238,12 @@ final class TrackersViewController: UIViewController {
             plugLabel.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
             plugLabel.leadingAnchor.constraint(equalTo: plugView.leadingAnchor, constant: 16),
             plugLabel.trailingAnchor.constraint(equalTo: plugView.trailingAnchor, constant: -16),
-            plugLabel.heightAnchor.constraint(equalToConstant: 18)
+            plugLabel.heightAnchor.constraint(equalToConstant: 18),
+            
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filtersButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114)
         ])
     }
     
@@ -414,6 +433,11 @@ final class TrackersViewController: UIViewController {
     @objc func reloadCollectionView(sender: AnyObject) {
         updateCategories(with: trackerCategoryStore.trackerCategories)
     }
+    
+    @objc func filtersButtonDidTap(sender: AnyObject) {
+        let filtersViewController = FiltersViewController()
+        present(filtersViewController, animated: true)
+    }
 }
 
     // MARK: - UICollectionViewDataSource
@@ -558,6 +582,19 @@ extension TrackersViewController: UICollectionViewDelegate {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else { return nil }
         
         return UITargetedPreview(view: cell.menuView)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let collectionView = scrollView as? UICollectionView else { return }
+        
+        let bottomOffset = collectionView.contentOffset.y + collectionView.frame.height
+        let contentHeight = collectionView.contentSize.height
+        
+        if bottomOffset >= contentHeight - 80 {
+            filtersButton.isHidden = true
+        } else {
+            filtersButton.isHidden = false
+        }
     }
 }
 
