@@ -25,9 +25,9 @@
 "trackerAlertMessage" = "Do you really want to delete this tracker?";
 "trackerAlertFirstButton" = "Delete";
 "trackerAlertSecondButton" = "Cancel";
-"editTitle" = "Habit editing";
+"filtersButton" = "Filters";
 
-"topLabel" = "Tracker creation";
+"topLabelText" = "Tracker creation";
 "habitButtonTitle" = "Habit";
 "nonRegularButtonTitle" = "Irregular event";
 
@@ -42,6 +42,7 @@
 "emojiSectionLabel" = "Emojies";
 "colorsSectionLabel" = "Colors";
 "saveButtonTitle" = "Save";
+"editTitle" = "Habit editing";
 
 "monday" = "Monday";
 "tuesday" = "Tuesday";
@@ -81,3 +82,9 @@
 "editCategory" = "Edit category";
 "categoryTextFieldPlaceholder" = "Enter category name";
 "categoryPerformButton" = "Done";
+
+"filtersTopLabel" = "Filters";
+"allTrackers" = "All trackers";
+"todayTrackers" = "Today's trackers";
+"completedTrackers" = "Completed";
+"inCompletedTrackers" = "Incomplete";

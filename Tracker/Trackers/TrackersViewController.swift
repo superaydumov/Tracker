@@ -19,6 +19,7 @@ final class TrackersViewController: UIViewController {
     private var visibleCategories = [TrackerCategory]()
     private var completedTrackers = [TrackerRecord]()
     private var pinnedTrackers = [Trackers]()
+    private var selectedFilter: Filters?
     
     private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
@@ -42,6 +43,7 @@ final class TrackersViewController: UIViewController {
     private let trackerAlertMessageText = NSLocalizedString("trackerAlertMessage", comment: "")
     private let trackerAlertFirstButtonText = NSLocalizedString("trackerAlertFirstButton", comment: "")
     private let trackerAlertSecondButtonText = NSLocalizedString("trackerAlertSecondButton", comment: "")
+    private let filtersButtonText = NSLocalizedString("filtersButton", comment: "Filters button in collectionView")
     
     // MARK: - Computed properties
     
@@ -137,7 +139,7 @@ final class TrackersViewController: UIViewController {
         let filtersButton = UIButton(type: .system)
         filtersButton.backgroundColor = .trackerBlue
         filtersButton.layer.cornerRadius = 16
-        filtersButton.setTitle("Filters", for: .normal)
+        filtersButton.setTitle(filtersButtonText, for: .normal)
         filtersButton.setTitleColor(.trackerWhite, for: .normal)
         filtersButton.titleLabel?.font = .systemFont(ofSize: 17)
         filtersButton.translatesAutoresizingMaskIntoConstraints = false
@@ -277,8 +279,30 @@ final class TrackersViewController: UIViewController {
             for tracker in category.visibleTrackers(filterString: searchText, pinned: nil) {
                 guard let schedule = tracker.schedule else { return }
                 let scheduleNumbers = schedule.map { $0.numberOfDay }
-                if let day = currentDate, scheduleNumbers.contains(day) && (searchText.isEmpty || tracker.name.lowercased().contains(searchText.lowercased()))
-                {
+                if let day = currentDate, scheduleNumbers.contains(day) {
+                    
+                    if selectedFilter == .completedTrackers {
+                        filtersButton.setTitleColor(.trackerRed, for: .normal)
+                        showSearchPlug(filter: .completedTrackers)
+                        if !completedTrackers.contains(where: { record in
+                            record.trackerID == tracker.id &&
+                            record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
+                        }) {
+                            continue
+                        }
+                    }
+                    
+                    if selectedFilter == .inCompletedTrackers {
+                        filtersButton.setTitleColor(.trackerRed, for: .normal)
+                        showSearchPlug(filter: .inCompletedTrackers)
+                        if completedTrackers.contains(where: { record in
+                            record.trackerID == tracker.id &&
+                            record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
+                        }) {
+                            continue
+                        }
+                    }
+                    
                     if tracker.pinned == true {
                         pinnedTrackers.append(tracker)
                     } else {
@@ -299,6 +323,12 @@ final class TrackersViewController: UIViewController {
     private func changePlugs(_ text: String) {
         plugImageView.image = text.isEmpty ? UIImage(named: "trackersPlugImage") : UIImage(named: "trackersNotFoundPlugImage")
         plugLabel.text = text.isEmpty ? trackersPlugLabelText : trackersSearchPlugLabelText
+    }
+    
+    private func showSearchPlug(filter: Filters) {
+        let changeProperty: Bool = selectedFilter == filter
+        plugImageView.image = changeProperty ? UIImage(named: "trackersNotFoundPlugImage") : UIImage(named: "trackersPlugImage")
+        plugLabel.text = changeProperty ? trackersSearchPlugLabelText: trackersPlugLabelText
     }
     
     private func trackerDeleteAlert(trackerToDelete: Trackers) {
@@ -410,6 +440,9 @@ final class TrackersViewController: UIViewController {
             currentDate = day
             updateCategories(with: trackerCategoryStore.trackerCategories)
         }
+        if selectedFilter == .todayTrackers {
+            selectedFilter = .allTrackers
+        }
     }
     
     @objc private func textFieldDidChanged(sender: AnyObject) {
@@ -436,6 +469,8 @@ final class TrackersViewController: UIViewController {
     
     @objc func filtersButtonDidTap(sender: AnyObject) {
         let filtersViewController = FiltersViewController()
+        filtersViewController.selectedFilter = selectedFilter
+        filtersViewController.delegate = self
         present(filtersViewController, animated: true)
     }
 }
@@ -510,6 +545,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         let count = visibleCategories.count
         collectionView.isHidden = count == .zero && pinnedTrackers.count == .zero
+        filtersButton.isHidden = collectionView.isHidden && (selectedFilter == .allTrackers || selectedFilter == nil)
         
         return count + 1
     }
@@ -590,7 +626,7 @@ extension TrackersViewController: UICollectionViewDelegate {
         let bottomOffset = collectionView.contentOffset.y + collectionView.frame.height
         let contentHeight = collectionView.contentSize.height
         
-        if bottomOffset >= contentHeight - 80 {
+        if bottomOffset >= contentHeight {
             filtersButton.isHidden = true
         } else {
             filtersButton.isHidden = false
@@ -654,6 +690,30 @@ extension TrackersViewController: TrackerCreatorViewControllerDelegate {
         }
         updateCategories(with: trackerCategoryStore.trackerCategories)
         dismiss(animated: true)
+    }
+}
+
+    // MARK: - FilterViewControllerDelegate
+
+extension TrackersViewController: FilterViewControllerDelegate {
+    func filterSelected(filter: Filters) {
+        self.selectedFilter = filter
+        searchText = ""
+        switch filter {
+        case .allTrackers:
+            filtersButton.setTitleColor(.trackerWhite, for: .normal)
+            changePlugs(searchText)
+            updateCategories(with: trackerCategoryStore.trackerCategories)
+        case .todayTrackers:
+            filtersButton.setTitleColor(.trackerWhite, for: .normal)
+            changePlugs(searchText)
+            datePicker.date = Date()
+            didTapDateButton(sender: datePicker)
+        case .completedTrackers:
+            updateCategories(with: trackerCategoryStore.trackerCategories)
+        case .inCompletedTrackers:
+            updateCategories(with: trackerCategoryStore.trackerCategories)
+        }
     }
 }
 

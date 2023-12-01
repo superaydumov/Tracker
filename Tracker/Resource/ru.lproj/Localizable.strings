@@ -25,9 +25,9 @@
 "trackerAlertMessage" = "Уверены, что хотите удалить трекер?";
 "trackerAlertFirstButton" = "Удалить";
 "trackerAlertSecondButton" = "Отменить";
-"editTitle" = "Редактирование привычки";
+"filtersButton" = "Фильтры";
 
-"topLabel" = "Создание трекера";
+"topLabelText" = "Создание трекера";
 "habitButtonTitle" = "Привычка";
 "nonRegularButtonTitle" = "Нерегулярное событие";
 
@@ -42,6 +42,7 @@
 "emojiSectionLabel" = "Эмодзи";
 "colorsSectionLabel" = "Цвета";
 "saveButtonTitle" = "Сохранить";
+"editTitle" = "Редактирование привычки";
 
 "monday" = "Понедельник";
 "tuesday" = "Вторник";
@@ -81,3 +82,9 @@
 "editCategory" = "Редактирование категории";
 "categoryTextFieldPlaceholder" = "Введите название категории";
 "categoryPerformButton" = "Готово";
+
+"filtersTopLabel" = "Фильтры";
+"allTrackers" = "Все трекеры";
+"todayTrackers" = "Трекеры на сегодня";
+"completedTrackers" = "Завершенные";
+"inCompletedTrackers" = "Не завершенные";

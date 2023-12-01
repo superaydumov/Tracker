@@ -12,11 +12,11 @@ final class CategoryViewController: UIViewController {
     private var viewModel: CategoryViewModel
     private var alertPresenter: AlertPresenterProtocol?
     
-    private let topLabelText = NSLocalizedString("topLabel", comment: "CtaegoryVC topLabel text")
-    private let plugLabelText = NSLocalizedString("plugLabel", comment: "CtaegoryVC plugLabel text")
-    private let categoryButonTitleText = NSLocalizedString("categoryButonTitle", comment: "CtaegoryVC categoryButonTitle text")
-    private let contextMenuChangeText = NSLocalizedString("contextMenuChange", comment: "CtaegoryVC contextMenuChange text")
-    private let contextMenuDeleteText = NSLocalizedString("contextMenuDelete", comment: "CtaegoryVC contextMenuDelete text")
+    private let topLabelText = NSLocalizedString("topLabel", comment: "CategoryVC topLabel text")
+    private let plugLabelText = NSLocalizedString("plugLabel", comment: "CategoryVC plugLabel text")
+    private let categoryButonTitleText = NSLocalizedString("categoryButonTitle", comment: "CategoryVC categoryButonTitle text")
+    private let contextMenuChangeText = NSLocalizedString("contextMenuChange", comment: "CategoryVC contextMenuChange text")
+    private let contextMenuDeleteText = NSLocalizedString("contextMenuDelete", comment: "CategoryVC contextMenuDelete text")
     
     private let alertTitleText = NSLocalizedString("alertTitle", comment: "")
     private let alertMessageText = NSLocalizedString("alertMessage", comment: "")

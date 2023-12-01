@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerCreatorViewController: UIViewController {
     
-    private let topLabelText = NSLocalizedString("topLabel", comment: "TrackerCreator topLabel text")
+    private let topLabelText = NSLocalizedString("topLabelText", comment: "TrackerCreator topLabel text")
     private let habitButtonTitleText = NSLocalizedString("habitButtonTitle", comment: "TrackerCreator habitButtonTitle text")
     private let nonRegularButtonTitleText = NSLocalizedString("nonRegularButtonTitle", comment: "TrackerCreator nonRegularButtonTitle text")
     
