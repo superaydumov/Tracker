@@ -304,14 +304,24 @@ final class TrackersViewController: UIViewController {
             tracker = visibleCategories[indexPath.section - 1].visibleTrackers(filterString: searchText, pinned: false)[indexPath.row]
         }
         
+        var pinnedImage: UIImage
+        if tracker.pinned == false {
+            pinnedImage = UIImage(systemName: "pin.fill") ?? UIImage()
+        } else {
+            pinnedImage = UIImage(systemName: "pin.slash.fill") ?? UIImage()
+        }
+        
         let pinnedTitle = tracker.pinned == true ? unpinTrackerText : pinTrackerText
-        let pin = UIAction(title: pinnedTitle, handler: { [weak self] action in
+        let pin = UIAction(title: pinnedTitle, image: pinnedImage,
+                           handler: { [weak self] action in
             guard let self else { return }
             try? self.trackerStore.togglePinTracker(tracker)
             print("tracker pinned")
         })
         
-        let edit = UIAction(title: trackerContextMenuChangeText, handler: { [weak self] action in
+        let editImage = UIImage(systemName: "square.and.pencil")
+        let edit = UIAction(title: trackerContextMenuChangeText, image: editImage,
+                            handler: { [weak self] action in
             guard let self else { return }
             let editViewController = EventCreatorViewController(event: .habit)
             editViewController.editTracker = tracker
@@ -320,7 +330,9 @@ final class TrackersViewController: UIViewController {
             print("tracker editing")
         })
         
-        let delete = UIAction(title: trackerContextMenuDeleteText, attributes: .destructive, handler: { [weak self] action in
+        let deleteImage = UIImage(systemName: "trash")
+        let delete = UIAction(title: trackerContextMenuDeleteText, image: deleteImage, attributes: .destructive,
+                              handler: { [weak self] action in
             guard let self else { return }
             self.trackerDeleteAlert(trackerToDelete: tracker)
             print("tracker deleting")
