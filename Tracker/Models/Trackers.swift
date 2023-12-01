@@ -14,4 +14,7 @@ struct Trackers: Hashable {
     let emoji: String
     let schedule: [WeekDay]?
     let pinned: Bool?
+    var category: TrackerCategory? {
+        return TrackerCategoryStore().category(for: self)
+    }
 }

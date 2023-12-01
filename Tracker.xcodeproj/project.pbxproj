@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C89989699B366F2D2ECE4F28 /* Pods_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FFAC5E932D59E0BF23C2DEF /* Pods_Tracker.framework */; };
+		C90464392B17DDFD00F59632 /* TrackerRecordStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90464382B17DDFD00F59632 /* TrackerRecordStoreDelegate.swift */; };
 		C90AA67E2B0D6218003D556B /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = C90AA6802B0D6218003D556B /* Localizable.stringsdict */; };
 		C90AA6832B0D62D8003D556B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C90AA6852B0D62D8003D556B /* Localizable.strings */; };
 		C90F117A2ADC27200002D47B /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90F11792ADC27200002D47B /* UITextField+Extension.swift */; };
@@ -68,6 +69,7 @@
 		3FFAC5E932D59E0BF23C2DEF /* Pods_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A13A15B9489EB7A153649895 /* Pods-Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 		C1060D244B4B59B024748D00 /* Pods-Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.release.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.release.xcconfig"; sourceTree = "<group>"; };
+		C90464382B17DDFD00F59632 /* TrackerRecordStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStoreDelegate.swift; sourceTree = "<group>"; };
 		C90AA67F2B0D6218003D556B /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C90AA6822B0D6262003D556B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C90AA6842B0D62D8003D556B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 			children = (
 				C9FF82902AF565B000837113 /* TrackerCategoryStoreDelegate.swift */,
 				C93D765D2B167E6100284D45 /* TrackerStoreDelegate.swift */,
+				C90464382B17DDFD00F59632 /* TrackerRecordStoreDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -490,6 +493,7 @@
 				C9D31EB62AD4B98100B9B596 /* ScheduleTableViewCell.swift in Sources */,
 				C9420FA22B041B55008C6B3E /* AlertPresenter.swift in Sources */,
 				C9D31EA92AD2100700B9B596 /* TrackerCreatorViewController.swift in Sources */,
+				C90464392B17DDFD00F59632 /* TrackerRecordStoreDelegate.swift in Sources */,
 				C94D23F92AC85110004D9ADC /* TrackersViewController.swift in Sources */,
 				C9D31EC02AD5FD1F00B9B596 /* TrackerRecord.swift in Sources */,
 				C9D31EBE2AD5FCB900B9B596 /* TrackerCategory.swift in Sources */,

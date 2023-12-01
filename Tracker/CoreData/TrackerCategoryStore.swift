@@ -132,6 +132,24 @@ final class TrackerCategoryStore: NSObject {
         }
     }
     
+    func category(_ categoryName: String) -> TrackerCategoryCoreData? {
+        return fetchedResultsController.fetchedObjects?.first {
+            $0.category == categoryName
+        }
+    }
+    
+    func category(for tracker: Trackers) -> TrackerCategory? {
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.returnsObjectsAsFaults = false
+        request.predicate = NSPredicate(format: "ANY trackers.id == %@", tracker.id.uuidString)
+        guard let trackerCategoriesCoreData = try? context.fetch(request)
+            else { return nil }
+        guard let categories = try? trackerCategoriesCoreData.map ({ try self.trackerCategory(from: $0) })
+            else { return nil }
+        
+        return categories.first
+    }
+    
     func addTracker(_ tracker: Trackers, to trackerCategory: TrackerCategory) throws {
         let category = fetchedResultsController.fetchedObjects?.first {
             $0.category == trackerCategory.categoryName

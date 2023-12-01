@@ -25,6 +25,7 @@
 "trackerAlertMessage" = "Do you really want to delete this tracker?";
 "trackerAlertFirstButton" = "Delete";
 "trackerAlertSecondButton" = "Cancel";
+"editTitle" = "Habit editing";
 
 "topLabel" = "Tracker creation";
 "habitButtonTitle" = "Habit";
@@ -40,6 +41,7 @@
 "restrictorLabel" = "There is 38 characters limit";
 "emojiSectionLabel" = "Emojies";
 "colorsSectionLabel" = "Colors";
+"saveButtonTitle" = "Save";
 
 "monday" = "Monday";
 "tuesday" = "Tuesday";

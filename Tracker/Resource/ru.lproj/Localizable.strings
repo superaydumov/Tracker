@@ -25,6 +25,7 @@
 "trackerAlertMessage" = "Уверены, что хотите удалить трекер?";
 "trackerAlertFirstButton" = "Удалить";
 "trackerAlertSecondButton" = "Отменить";
+"editTitle" = "Редактирование привычки";
 
 "topLabel" = "Создание трекера";
 "habitButtonTitle" = "Привычка";
@@ -40,6 +41,7 @@
 "restrictorLabel" = "Ограничение 38 символов";
 "emojiSectionLabel" = "Эмодзи";
 "colorsSectionLabel" = "Цвета";
+"saveButtonTitle" = "Сохранить";
 
 "monday" = "Понедельник";
 "tuesday" = "Вторник";

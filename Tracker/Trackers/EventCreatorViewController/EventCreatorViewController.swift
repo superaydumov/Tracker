@@ -19,6 +19,15 @@ enum Event {
             return NSLocalizedString("newIrregular", comment: "")
         }
     }
+    
+    var editTitleText: String {
+        switch self {
+        case .habit:
+            return NSLocalizedString("editTitle", comment: "")
+        case .nonRegular:
+            return NSLocalizedString("editTitle", comment: "")
+        }
+    }
 }
 
 final class EventCreatorViewController: UIViewController {
@@ -38,6 +47,9 @@ final class EventCreatorViewController: UIViewController {
     private var charactersNumber = 0
     private let charactersLimitNumber = 38
     private var heightAnchor: NSLayoutConstraint?
+    private let trackerRecordStore = TrackerRecordStore.shared
+    private let trackerStore = TrackerStore.shared
+    private var completedTrackers = [TrackerRecord]()
     
     private var scheduleSubtitle = ""
     private var schedule = [WeekDay]() {
@@ -47,7 +59,7 @@ final class EventCreatorViewController: UIViewController {
     }
     
     private var categorySubtitle = ""
-    private var category: TrackerCategory? = nil {
+    var category: TrackerCategory? = nil {
         didSet {
             createButtonUpdate()
         }
@@ -67,6 +79,11 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
+    var editTracker: Trackers?
+    weak var delegate: EventCreatorViewControllerDelegate?
+    
+    // MARK: - Localized strings
+    
     private let textFieldPlaceHolderText = NSLocalizedString("textFieldPlaceHolder", comment: "EventCreator textFieldPlaceHolder text")
     private let categoryButtonLabelText = NSLocalizedString("categoryButtonLabel", comment: "EventCreator categoryButtonLabel text")
     private let scheduleButtonLabelText = NSLocalizedString("scheduleButtonLabel", comment: "EventCreator scheduleButtonLabel text")
@@ -75,20 +92,36 @@ final class EventCreatorViewController: UIViewController {
     private let restrictorLabelText = NSLocalizedString("restrictorLabel", comment: "EventCreator restrictorLabel text")
     private let emojiSectionLabelText = NSLocalizedString("emojiSectionLabel", comment: "EventCreator emojiSectionLabel text")
     private let colorsSectionLabelText = NSLocalizedString("colorsSectionLabel", comment: "EventCreator colorsSectionLabel text")
-    
-    weak var delegate: EventCreatorViewControllerDelegate?
+    private let saveButtonTitleText = NSLocalizedString("saveButtonTitle", comment: "EventCreator saveButtonLabel text")
     
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
         let topLabel = UILabel()
-        topLabel.text = event.titleText
+        topLabel.text = editTracker == nil ? event.titleText : event.editTitleText
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         
         return topLabel
+    }()
+    
+    private lazy var daysLabel: UILabel = {
+        let daysLabel = UILabel()
+        
+        completedTrackers = trackerRecordStore.trackerRecords
+        let completedCount = completedTrackers.filter({ record in
+            record.trackerID == editTracker?.id
+        }).count
+        
+        daysLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "дней"), completedCount)
+        daysLabel.textColor = .trackerBlack
+        daysLabel.textAlignment = .center
+        daysLabel.font = .systemFont(ofSize: 38, weight: .bold)
+        daysLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        return daysLabel
     }()
     
     private lazy var scrollView: UIScrollView = {
@@ -230,7 +263,8 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var createButton: UIButton = {
         let createButton = UIButton(type: .system)
-        createButton.setTitle(createButtonLabelText, for: .normal)
+        var title = editTracker == nil ? createButtonLabelText : saveButtonTitleText
+        createButton.setTitle(title, for: .normal)
         createButton.setTitleColor(.trackerWhite, for: .normal)
         createButton.backgroundColor = .trackerGray
         createButton.layer.cornerRadius = 16
@@ -277,7 +311,25 @@ final class EventCreatorViewController: UIViewController {
         addSubviews()
         constraintsSetup()
         
+        categorySubtitleUpdate()
         scheduleSubtitleUpdate()
+        editingTrackerElementsSetup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard let indexPathEmoji = emojies.firstIndex(where: {$0 == selectedEmoji}) else { return }
+        let cellEmoji = self.collectionView.cellForItem(at: IndexPath(row: indexPathEmoji, section: 0))
+        cellEmoji?.backgroundColor = .trackerLightGray
+        selectedEmojiCell = IndexPath(row: indexPathEmoji, section: 0)
+        
+        guard let indexPathColor = colors.firstIndex(where: {$0.hexString == selectedColor?.hexString}) else { return }
+        let cellColor = self.collectionView.cellForItem(at: IndexPath(row: indexPathColor, section: 1))
+        cellColor?.layer.borderWidth = 3
+        cellColor?.layer.cornerRadius = 16
+        cellColor?.layer.borderColor = selectedColor?.withAlphaComponent(0.3).cgColor
+        selectedColorCell = IndexPath(item: indexPathColor, section: 1)
     }
     
     // MARK: - Private methods
@@ -305,10 +357,14 @@ final class EventCreatorViewController: UIViewController {
             
             scheduleButton.addSubview(scheduleChevronImage)
         }
+        
+        if editTracker != nil {
+            scrollView.addSubview(daysLabel)
+        }
     }
     
     private func constraintsSetup() {
-        
+        let topInset: CGFloat = editTracker == nil ? 0 : 78
         heightAnchor = errorLabel.heightAnchor.constraint(equalToConstant: 0)
         
         var constraints = [
@@ -320,7 +376,7 @@ final class EventCreatorViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            textField.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            textField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: topInset),
             textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
@@ -385,6 +441,13 @@ final class EventCreatorViewController: UIViewController {
                 ]
             }
         
+        if editTracker != nil {
+            constraints += [
+                daysLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                daysLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+            ]
+        }
+        
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -432,6 +495,20 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
+    private func editingTrackerElementsSetup() {
+        if let editTracker = editTracker {
+            textField.text = editTracker.name
+            categorySubtitle = category?.categoryName ?? ""
+            schedule = editTracker.schedule ?? []
+            selectedEmoji = editTracker.emoji
+            selectedColor = editTracker.color
+            
+            categorySubtitleUpdate()
+            createSchedule(schedule: schedule)
+            scheduleSubtitleUpdate()
+        }
+    }
+    
     // MARK: - Obj-C methods
     
     @objc private func textFieldDidChange(sender: AnyObject) {
@@ -468,16 +545,30 @@ final class EventCreatorViewController: UIViewController {
         var tracker: Trackers?
         guard let selectedEmoji, let selectedColor else { return }
         
-        if event == .habit {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule, pinned: false)
-            
-            guard let tracker else { return }
-            delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
-        } else {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases, pinned: false)
-            
-            guard let tracker else { return }
-            delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
+        if editTracker == nil {
+            if event == .habit {
+                tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule, pinned: false)
+                
+                guard let tracker else { return }
+                delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
+            } else {
+                tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases, pinned: false)
+                
+                guard let tracker else { return }
+                delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
+            }
+        }
+        else {
+            guard let editTracker else { return }
+
+            try? trackerStore.updateTracker(newName: textField.text ?? "",
+                                            newCategory: category?.categoryName ?? "Без категории",
+                                            newSchedule: schedule,
+                                            newEmoji: selectedEmoji,
+                                            newColor: selectedColor.hexString,
+                                            editableTracker: editTracker)
+            delegate?.createTracker(tracker: editTracker, categoryName: category?.categoryName ?? "Без категории")
+            dismiss(animated: true)
         }
     }
 }

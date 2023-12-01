@@ -313,6 +313,10 @@ final class TrackersViewController: UIViewController {
         
         let edit = UIAction(title: trackerContextMenuChangeText, handler: { [weak self] action in
             guard let self else { return }
+            let editViewController = EventCreatorViewController(event: .habit)
+            editViewController.editTracker = tracker
+            editViewController.category = tracker.category
+            self.present(editViewController, animated: true)
             print("tracker editing")
         })
         
@@ -580,6 +584,8 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
 }
 
+    // MARK: - TrackerCreatorViewControllerDelegate
+
 extension TrackersViewController: TrackerCreatorViewControllerDelegate {
     func createTracker(tracker: Trackers, categoryName: String) {
         var updatedCategory: TrackerCategory?
@@ -598,8 +604,11 @@ extension TrackersViewController: TrackerCreatorViewControllerDelegate {
             try? trackerCategoryStore.addNewTrackerCategory(updatedCategory!)
         }
         updateCategories(with: trackerCategoryStore.trackerCategories)
+        dismiss(animated: true)
     }
 }
+
+    // MARK: - TrackerCategoryStoreDelegate
 
 extension TrackersViewController: TrackerCategoryStoreDelegate {
     func store(_ store: TrackerCategoryStore, didUpdate update: StoreUpdate) {
@@ -608,6 +617,8 @@ extension TrackersViewController: TrackerCategoryStoreDelegate {
         startPerformBatchUpdates(with: update)
     }
 }
+
+    // MARK: - TrackerStoreDelegate
 
 extension TrackersViewController: TrackerStoreDelegate {
     func store(_ store: TrackerStore, didUpdate update: StoreUpdate) {

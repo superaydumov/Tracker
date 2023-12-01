@@ -79,6 +79,28 @@ final class TrackerStore: NSObject {
         }
     }
     
+    func updateTracker(newName: String,
+                       newCategory: String,
+                       newSchedule: [WeekDay],
+                       newEmoji: String,
+                       newColor: String,
+                       editableTracker: Trackers) throws {
+        let tracker = fetchedResultsController.fetchedObjects?.first {
+            $0.id == editableTracker.id
+        }
+        guard let tracker else { return }
+        
+        tracker.name = newName
+        if tracker.category?.category != newCategory {
+            tracker.category = TrackerCategoryStore().category(newCategory)
+        }
+        tracker.schedule = newSchedule.compactMap { $0.rawValue }
+        tracker.emoji = newEmoji
+        tracker.color = newColor
+        
+        try context.save()
+    }
+    
     func tracker(from data: TrackerCoreData) throws -> Trackers {
         guard
             let name = data.name,
