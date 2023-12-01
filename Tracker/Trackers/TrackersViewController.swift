@@ -177,6 +177,7 @@ final class TrackersViewController: UIViewController {
         
         trackerCategoryStore.delegate = self
         trackerStore.delegate = self
+        trackerRecordStore.delegate = self
         
         alertPresenter = AlertPresenter(delegate: self)
         
@@ -733,6 +734,15 @@ extension TrackersViewController: TrackerStoreDelegate {
     func store(_ store: TrackerStore, didUpdate update: StoreUpdate) {
         updateCategories(with: trackerCategoryStore.trackerCategories)
         
+        startPerformBatchUpdates(with: update)
+    }
+}
+
+    // MARK: - TrackerRecordStoreDelegate
+
+extension TrackersViewController: TrackerRecordStoreDelegate {
+    func store(_ store: TrackerRecordStore, didUpdate update: StoreUpdate) {
+        completedTrackers = trackerRecordStore.trackerRecords
         startPerformBatchUpdates(with: update)
     }
 }
