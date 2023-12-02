@@ -244,15 +244,21 @@ extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let category = viewModel.categories[indexPath.row]
         
+        let editImage = UIImage(systemName: "square.and.pencil")
+        let deleteImage = UIImage(systemName: "trash")
+        
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: self.contextMenuChangeText) { [weak self] _ in
+                UIAction(title: self.contextMenuChangeText,
+                         image: editImage) { [weak self] _ in
                     guard let self else { return }
                     let creationViewController = CategoryCreatorViewController(categoryEvent: .editing)
                     creationViewController.editableCategory = category
                     self.present(creationViewController, animated: true)
                 },
-                UIAction(title: self.contextMenuDeleteText, attributes: .destructive) { [weak self] _ in
+                UIAction(title: self.contextMenuDeleteText,
+                         image: deleteImage,
+                         attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.categoryDeleteAlert(category: category)
                 }
