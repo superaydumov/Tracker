@@ -647,9 +647,9 @@ extension TrackersViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
+        textField.resignFirstResponder()
         
-        return false
+        return true
     }
 }
 
@@ -743,6 +743,7 @@ extension TrackersViewController: TrackerStoreDelegate {
 extension TrackersViewController: TrackerRecordStoreDelegate {
     func store(_ store: TrackerRecordStore, didUpdate update: StoreUpdate) {
         completedTrackers = trackerRecordStore.trackerRecords
+        
         startPerformBatchUpdates(with: update)
     }
 }

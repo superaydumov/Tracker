@@ -172,7 +172,7 @@ final class TrackerCategoryStore: NSObject {
         } else {
             let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
             request.returnsObjectsAsFaults = false
-            request.predicate = NSPredicate(format: "ANY trackers.category CONTAINS[cd] %@", trackerName)
+            request.predicate = NSPredicate(format: "ANY trackers.name CONTAINS[cd] %@", trackerName)
             guard let trackerCategoriesCoreData = try? context.fetch(request)
                 else { return [] }
             guard let categories = try? trackerCategoriesCoreData.map ({ try self.trackerCategory(from: $0) })
