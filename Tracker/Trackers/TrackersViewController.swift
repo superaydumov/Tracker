@@ -149,6 +149,14 @@ final class TrackersViewController: UIViewController {
         return filtersButton
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .trackerBlack
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        return indicator
+    }()
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -220,6 +228,8 @@ final class TrackersViewController: UIViewController {
         view.addSubview(cancelSearchTextFieldButton)
         view.addSubview(collectionView)
         view.addSubview(filtersButton)
+        
+        collectionView.addSubview(activityIndicator)
     }
     
     private func constraintsSetup() {
@@ -248,7 +258,12 @@ final class TrackersViewController: UIViewController {
             filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             filtersButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             filtersButton.heightAnchor.constraint(equalToConstant: 50),
-            filtersButton.widthAnchor.constraint(equalToConstant: 114)
+            filtersButton.widthAnchor.constraint(equalToConstant: 114),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 51),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 51)
         ])
     }
     
@@ -277,6 +292,7 @@ final class TrackersViewController: UIViewController {
         var newCategories = [TrackerCategory]()
         var pinnedTrackers = [Trackers]()
         
+        activityIndicator.startAnimating()
         for category in categories {
             var newTrackers = [Trackers]()
             for tracker in category.visibleTrackers(filterString: searchText, pinned: nil) {
@@ -321,6 +337,7 @@ final class TrackersViewController: UIViewController {
         visibleCategories = newCategories
         self.pinnedTrackers = pinnedTrackers
         collectionView.reloadData()
+        activityIndicator.stopAnimating()
     }
     
     private func changePlugs(_ text: String) {
