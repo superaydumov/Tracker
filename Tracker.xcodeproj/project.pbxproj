@@ -35,6 +35,8 @@
 		C9825C1A2AFEFADE002098BA /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9825C192AFEFADE002098BA /* UIView+Extension.swift */; };
 		C98536242B1C54830094511D /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = C98536232B1C54830094511D /* InlineSnapshotTesting */; };
 		C98536262B1C54830094511D /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = C98536252B1C54830094511D /* SnapshotTesting */; };
+		C98536282B1CB03B0094511D /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98536272B1CB03B0094511D /* AnalyticsEvent.swift */; };
+		C985362A2B1CB0530094511D /* AnalyticsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98536292B1CB0530094511D /* AnalyticsItem.swift */; };
 		C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9886D5D2AD033F100E3C85F /* StatisticViewController.swift */; };
 		C9886D602AD03B0400E3C85F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9886D5F2AD03B0400E3C85F /* TabBarViewController.swift */; };
 		C98BBE6E2AF9746E00F91D3A /* GeometricParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98BBE6D2AF9746E00F91D3A /* GeometricParams.swift */; };
@@ -119,6 +121,8 @@
 		C981C6B22AC87179009D0228 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		C9825C172AFEB630002098BA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		C9825C192AFEFADE002098BA /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		C98536272B1CB03B0094511D /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		C98536292B1CB0530094511D /* AnalyticsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsItem.swift; sourceTree = "<group>"; };
 		C9886D5D2AD033F100E3C85F /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		C9886D5F2AD03B0400E3C85F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C98BBE6D2AF9746E00F91D3A /* GeometricParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricParams.swift; sourceTree = "<group>"; };
@@ -387,6 +391,8 @@
 			isa = PBXGroup;
 			children = (
 				C9420F9E2B041010008C6B3E /* AlertModel.swift */,
+				C98536272B1CB03B0094511D /* AnalyticsEvent.swift */,
+				C98536292B1CB0530094511D /* AnalyticsItem.swift */,
 				C9FF828C2AF4529000837113 /* DatabaseError.swift */,
 				C996D8532B1A4CFE00BB35EE /* Filters.swift */,
 				C98BBE6D2AF9746E00F91D3A /* GeometricParams.swift */,
@@ -632,6 +638,7 @@
 				C97B8B5B2AEEA01A00AFCC1F /* TrackerRecordStore.swift in Sources */,
 				C94D23F52AC85110004D9ADC /* AppDelegate.swift in Sources */,
 				C9886D5E2AD033F100E3C85F /* StatisticViewController.swift in Sources */,
+				C98536282B1CB03B0094511D /* AnalyticsEvent.swift in Sources */,
 				C9E3A9FB2AF7D38300983B42 /* UIViewController+Extension.swift in Sources */,
 				C9420F9F2B041010008C6B3E /* AlertModel.swift in Sources */,
 				C9825C1A2AFEFADE002098BA /* UIView+Extension.swift in Sources */,
@@ -652,6 +659,7 @@
 				C9D31EC92AD8B59900B9B596 /* EventCreatorViewControllerDelegate.swift in Sources */,
 				C9D31EB42AD4A1D000B9B596 /* WeekDay.swift in Sources */,
 				C9D31EAB2AD2E49700B9B596 /* EventCreatorViewController.swift in Sources */,
+				C985362A2B1CB0530094511D /* AnalyticsItem.swift in Sources */,
 				C97B8B592AEE9FFE00AFCC1F /* TrackerCategoryStore.swift in Sources */,
 				C9886D602AD03B0400E3C85F /* TabBarViewController.swift in Sources */,
 				C94FEE9C2ADDCC8A00F6E78F /* EventCreatorCollectionViewCell.swift in Sources */,

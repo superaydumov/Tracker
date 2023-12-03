@@ -25,6 +25,7 @@ final class TrackersViewController: UIViewController {
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
     private var alertPresenter: AlertPresenterProtocol?
+    private let analyticsService = AnalyticsService()
     
     private let params = GeometricParams(cellCount: 2, cellHeight: 148, cellSpacing: 9, lineSpacing: 16)
     
@@ -162,6 +163,8 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        analyticsService.report(event: .open, params: ["Screen":"Main"])
+        
         view.backgroundColor = .trackerWhite
         
         self.hideKeyboardWhenTappedAround()
@@ -197,6 +200,8 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        analyticsService.report(event: .close, params: ["Screen":"Main"])
         
         NotificationCenter.default.removeObserver(self)
     }
@@ -393,6 +398,7 @@ final class TrackersViewController: UIViewController {
         let edit = UIAction(title: trackerContextMenuChangeText, image: editImage,
                             handler: { [weak self] action in
             guard let self else { return }
+            self.analyticsService.report(event: .click, params: ["Screen":"Main", "Item":AnalyticsItem.edit.rawValue])
             let editViewController = EventCreatorViewController(event: .habit)
             editViewController.editTracker = tracker
             editViewController.category = tracker.category
@@ -404,6 +410,7 @@ final class TrackersViewController: UIViewController {
         let delete = UIAction(title: trackerContextMenuDeleteText, image: deleteImage, attributes: .destructive,
                               handler: { [weak self] action in
             guard let self else { return }
+            self.analyticsService.report(event: .click, params: ["Screen":"Main", "Item":AnalyticsItem.delete.rawValue])
             self.trackerDeleteAlert(trackerToDelete: tracker)
             print("tracker deleting")
         })
@@ -414,6 +421,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Obj-C methods
     
     @objc private func didTapAddTrackerButton(sender: AnyObject) {
+        analyticsService.report(event: .click, params: ["Screen":"Main", "Item":AnalyticsItem.addTrack.rawValue])
         let trackerCreator = TrackerCreatorViewController()
         trackerCreator.delegate = self
         present(trackerCreator, animated: true)
@@ -453,6 +461,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc func filtersButtonDidTap(sender: AnyObject) {
+        analyticsService.report(event: .click, params: ["Screen":"Main", "Item":AnalyticsItem.filter.rawValue])
         let filtersViewController = FiltersViewController()
         filtersViewController.selectedFilter = selectedFilter
         filtersViewController.delegate = self
@@ -647,6 +656,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             completedTrackers.remove(at: index)
             try? trackerRecordStore.deleteTrackerRecord(with: id)
         } else {
+            analyticsService.report(event: .click, params: ["Screen":"Main", "Item":AnalyticsItem.track.rawValue])
             completedTrackers.append(TrackerRecord(trackerID: id, date: datePicker.date))
             try? trackerRecordStore.addNewTracker(TrackerRecord(trackerID: id, date: datePicker.date))
         }

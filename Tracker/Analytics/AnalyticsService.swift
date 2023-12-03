@@ -14,8 +14,8 @@ struct AnalyticsService {
         YMMYandexMetrica.activate(with: configuration)
     }
     
-    func report(event: String, params: [AnyHashable: Any]) {
-        YMMYandexMetrica.reportEvent(event, parameters: params, onFailure: { error in
+    func report(event: AnalyticsEvent, params: [AnyHashable: Any]) {
+        YMMYandexMetrica.reportEvent(event.rawValue, parameters: params, onFailure: { error in
             print("Report ERROR: %@", error.localizedDescription)
         })
     }
