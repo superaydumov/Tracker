@@ -137,6 +137,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var filtersButton: UIButton = {
         let filtersButton = UIButton(type: .system)
+        filtersButton.overrideUserInterfaceStyle = .light
         filtersButton.backgroundColor = .trackerBlue
         filtersButton.layer.cornerRadius = 16
         filtersButton.setTitle(filtersButtonText, for: .normal)
@@ -164,6 +165,7 @@ final class TrackersViewController: UIViewController {
         
         setWeekDay()
         updateCategories(with: trackerCategoryStore.trackerCategories)
+        completedTrackers = trackerRecordStore.trackerRecords
         navBarSetup()
         addSubViews()
         constraintsSetup()
@@ -341,6 +343,7 @@ final class TrackersViewController: UIViewController {
             firstCompletion: { [weak self] in
                 guard let self else { return }
                 try? self.trackerStore.deleteTracker(trackerToDelete)
+                try? self.trackerRecordStore.deleteAllRecords(with: trackerToDelete.id)
             })
         
         alertPresenter?.showAlert(model: model)
@@ -389,42 +392,6 @@ final class TrackersViewController: UIViewController {
         })
         
         return UIMenu(children: [pin, edit, delete])
-    }
-    
-    private func startPerformBatchUpdates(with update: StoreUpdate) {
-        collectionView.performBatchUpdates {
-            let insertedIndexPaths = update.insertedIndexes.compactMap { index -> IndexPath? in
-                if index <= collectionView.numberOfItems(inSection: 0) {
-                    return IndexPath(item: index, section: 0)
-                }
-                return nil
-            }
-            let deletedIndexPaths = update.deletedIndexes.compactMap { index -> IndexPath? in
-                if index < collectionView.numberOfItems(inSection: 0) {
-                    return IndexPath(item: index, section: 0)
-                }
-                return nil
-            }
-            let updatedIndexPaths = update.updatedIndexes.compactMap { index -> IndexPath? in
-                if index < collectionView.numberOfItems(inSection: 0) {
-                    return IndexPath(item: index, section: 0)
-                }
-                return nil
-            }
-            
-            collectionView.insertItems(at: insertedIndexPaths)
-            collectionView.deleteItems(at: deletedIndexPaths)
-            collectionView.reloadItems(at: updatedIndexPaths)
-            
-            for move in update.movedIndexes {
-                if move.oldIndex < collectionView.numberOfItems(inSection: 0) && move.newIndex < collectionView.numberOfItems(inSection: 0) {
-                    collectionView.moveItem(
-                        at: IndexPath(item: move.oldIndex, section: 0),
-                        to: IndexPath(item: move.newIndex, section: 0)
-                    )
-                }
-            }
-        }
     }
     
     // MARK: - Obj-C methods
@@ -724,7 +691,7 @@ extension TrackersViewController: TrackerCategoryStoreDelegate {
     func store(_ store: TrackerCategoryStore, didUpdate update: StoreUpdate) {
         updateCategories(with: trackerCategoryStore.trackerCategories)
         
-        startPerformBatchUpdates(with: update)
+        collectionView.reloadData()
     }
 }
 
@@ -734,7 +701,7 @@ extension TrackersViewController: TrackerStoreDelegate {
     func store(_ store: TrackerStore, didUpdate update: StoreUpdate) {
         updateCategories(with: trackerCategoryStore.trackerCategories)
         
-        startPerformBatchUpdates(with: update)
+        collectionView.reloadData()
     }
 }
 
@@ -744,7 +711,7 @@ extension TrackersViewController: TrackerRecordStoreDelegate {
     func store(_ store: TrackerRecordStore, didUpdate update: StoreUpdate) {
         completedTrackers = trackerRecordStore.trackerRecords
         
-        startPerformBatchUpdates(with: update)
+        collectionView.reloadData()
     }
 }
 

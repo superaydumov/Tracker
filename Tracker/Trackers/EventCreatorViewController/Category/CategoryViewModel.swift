@@ -18,6 +18,7 @@ final class CategoryViewModel: NSObject {
     }
     
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private let trackerRecordStore = TrackerRecordStore.shared
     private(set) var selectedCategory: TrackerCategory?
     private weak var delegate: CategoryViewModelDelegate?
     
@@ -33,6 +34,9 @@ final class CategoryViewModel: NSObject {
     
     func deleteTrackerCategory(_ category: TrackerCategory) {
         try? self.trackerCategoryStore.deleteTrackerCategory(category)
+        category.trackers.forEach({ tracker in
+            try? self.trackerRecordStore.deleteAllRecords(with: tracker.id)
+        })
     }
     
     func selectCategory(with categoryName: String) {

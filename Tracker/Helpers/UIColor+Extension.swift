@@ -18,6 +18,9 @@ extension UIColor {
     static var trackerSearchTextField: UIColor! { UIColor(named: "tracker_searchTextField")}
     static var trackerSearchTextFieldPlaceholder: UIColor! { UIColor(named: "tracker_searchTextFieldPlaceholder")}
     static var trackerWhite: UIColor! { UIColor(named: "tracker_White")}
+    static var redGradient: UIColor! { UIColor(named: "redGradient")}
+    static var greenGradient: UIColor! { UIColor(named: "greenGradient")}
+    static var blueGradient: UIColor! { UIColor(named: "blueGradient")}
 }
 
 extension UIColor {
