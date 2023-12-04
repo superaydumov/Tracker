@@ -22,6 +22,10 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: TrackersCollectionViewCellDelegate?
     
+    public var menuView: UIView {
+        return colorView
+    }
+    
     // MARK: - Computed proprties
     
     private lazy var colorView: UIView = {
@@ -50,7 +54,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .trackerWhite
+        label.textColor = .white
         label.numberOfLines = 2
         label.text = Keys.nameLabel
         label.font = .systemFont(ofSize: 12, weight: .medium)
@@ -81,6 +85,15 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    private lazy var pinImageView: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "pinImage")
+        image.isHidden = false
+        image.translatesAutoresizingMaskIntoConstraints = false
+        
+        return image
+    }()
+    
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -103,6 +116,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         
         colorView.addSubview(emojiView)
         colorView.addSubview(nameLabel)
+        colorView.addSubview(pinImageView)
         emojiView.addSubview(emojiLabel)
     }
     
@@ -112,6 +126,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             colorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             colorView.heightAnchor.constraint(equalToConstant: 90),
+            
+            pinImageView.heightAnchor.constraint(equalToConstant: 24),
+            pinImageView.widthAnchor.constraint(equalToConstant: 24),
+            pinImageView.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 12),
+            pinImageView.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -4),
             
             emojiView.heightAnchor.constraint(equalToConstant: 24),
             emojiView.widthAnchor.constraint(equalToConstant: 24),
@@ -146,7 +165,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
                        emoji: String,
                        isCompleted: Bool,
                        isEnabled: Bool,
-                       completedCount: Int) {
+                       completedCount: Int,
+                       pinned: Bool) {
         trackerID = id
         nameLabel.text = name
         colorView.backgroundColor = color
@@ -159,23 +179,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             checkButton.backgroundColor = color
         }
         checkButton.isEnabled = isEnabled
-        
-        let dividedBy10 = completedCount % 10
-        let dividedBy100 = completedCount % 100
-        let notFrom10To20 = dividedBy100 < 10 || dividedBy100 > 20
-        var daysString = "\(completedCount) "
-        
-        if completedCount == 0 {
-            daysString += "дней"
-        } else if dividedBy10 == 1 && notFrom10To20 {
-            daysString += "день"
-        } else if (dividedBy10 == 2 || dividedBy10 == 3 || dividedBy10 == 4) && notFrom10To20 {
-            daysString += "дня"
-        } else {
-            daysString += "дней"
-        }
-        
-        daysLabel.text = daysString
+        daysLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "Tracker completed days"), completedCount)
+        pinImageView.isHidden = !pinned
     }
     
     // MARK: - Objc methods

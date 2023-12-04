@@ -14,9 +14,18 @@ enum Event {
     var titleText: String {
         switch self {
         case .habit:
-            return "Новая привычка"
+            return NSLocalizedString("newHabit", comment: "")
         case .nonRegular:
-            return "Новое нерегулярное событие"
+            return NSLocalizedString("newIrregular", comment: "")
+        }
+    }
+    
+    var editTitleText: String {
+        switch self {
+        case .habit:
+            return NSLocalizedString("editTitle", comment: "")
+        case .nonRegular:
+            return NSLocalizedString("editTitle", comment: "")
         }
     }
 }
@@ -38,6 +47,9 @@ final class EventCreatorViewController: UIViewController {
     private var charactersNumber = 0
     private let charactersLimitNumber = 38
     private var heightAnchor: NSLayoutConstraint?
+    private let trackerRecordStore = TrackerRecordStore.shared
+    private let trackerStore = TrackerStore.shared
+    private var completedTrackers = [TrackerRecord]()
     
     private var scheduleSubtitle = ""
     private var schedule = [WeekDay]() {
@@ -47,7 +59,7 @@ final class EventCreatorViewController: UIViewController {
     }
     
     private var categorySubtitle = ""
-    private var category: TrackerCategory? = nil {
+    var category: TrackerCategory? = nil {
         didSet {
             createButtonUpdate()
         }
@@ -67,30 +79,49 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
-    private struct Keys {
-        static let textFieldPlaceHolder = "Введите название трекера"
-        static let categoryButtonLabel = "Категория"
-        static let scheduleButtonLabel = "Расписание"
-        static let cancelButtonLabel = "Отменить"
-        static let createButtonLabel = "Создать"
-        static let restrictorLabel = "Ограничение 38 символов"
-        static let emojiSectionLabel = "Emoji"
-        static let colorsSectionLabel = "Цвета"
-    }
-    
+    var editTracker: Trackers?
     weak var delegate: EventCreatorViewControllerDelegate?
+    
+    // MARK: - Localized strings
+    
+    private let textFieldPlaceHolderText = NSLocalizedString("textFieldPlaceHolder", comment: "EventCreator textFieldPlaceHolder text")
+    private let categoryButtonLabelText = NSLocalizedString("categoryButtonLabel", comment: "EventCreator categoryButtonLabel text")
+    private let scheduleButtonLabelText = NSLocalizedString("scheduleButtonLabel", comment: "EventCreator scheduleButtonLabel text")
+    private let cancelButtonLabelText = NSLocalizedString("cancelButtonLabel", comment: "EventCreator cancelButtonLabel text")
+    private let createButtonLabelText = NSLocalizedString("createButtonLabel", comment: "EventCreator createButtonLabel text")
+    private let restrictorLabelText = NSLocalizedString("restrictorLabel", comment: "EventCreator restrictorLabel text")
+    private let emojiSectionLabelText = NSLocalizedString("emojiSectionLabel", comment: "EventCreator emojiSectionLabel text")
+    private let colorsSectionLabelText = NSLocalizedString("colorsSectionLabel", comment: "EventCreator colorsSectionLabel text")
+    private let saveButtonTitleText = NSLocalizedString("saveButtonTitle", comment: "EventCreator saveButtonLabel text")
     
     // MARK: - Computed properties
     
     private lazy var topLabel: UILabel = {
         let topLabel = UILabel()
-        topLabel.text = event.titleText
+        topLabel.text = editTracker == nil ? event.titleText : event.editTitleText
         topLabel.textColor = .trackerBlack
         topLabel.textAlignment = .center
         topLabel.font = .systemFont(ofSize: 16, weight: .medium)
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         
         return topLabel
+    }()
+    
+    private lazy var daysLabel: UILabel = {
+        let daysLabel = UILabel()
+        
+        completedTrackers = trackerRecordStore.trackerRecords
+        let completedCount = completedTrackers.filter({ record in
+            record.trackerID == editTracker?.id
+        }).count
+        
+        daysLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "дней"), completedCount)
+        daysLabel.textColor = .trackerBlack
+        daysLabel.textAlignment = .center
+        daysLabel.font = .systemFont(ofSize: 38, weight: .bold)
+        daysLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        return daysLabel
     }()
     
     private lazy var scrollView: UIScrollView = {
@@ -106,7 +137,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = Keys.textFieldPlaceHolder
+        textField.placeholder = textFieldPlaceHolderText
         textField.textColor = .trackerBlack
         textField.backgroundColor = .trackerBackground
         textField.layer.cornerRadius = 16
@@ -165,7 +196,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var categoryButton: UIButton = {
         let categoryButton = UIButton(type: .system)
-        categoryButton.setTitle(Keys.categoryButtonLabel, for: .normal)
+        categoryButton.setTitle(categoryButtonLabelText, for: .normal)
         categoryButton.setTitleColor(.trackerBlack, for: .normal)
         categoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         categoryButton.titleLabel?.font = .systemFont(ofSize: 17)
@@ -178,7 +209,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var scheduleButton: UIButton = {
         let scheduleButton = UIButton(type: .system)
-        scheduleButton.setTitle(Keys.scheduleButtonLabel, for: .normal)
+        scheduleButton.setTitle(scheduleButtonLabelText, for: .normal)
         scheduleButton.setTitleColor(.trackerBlack, for: .normal)
         scheduleButton.titleLabel?.font = .systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
@@ -218,7 +249,7 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle(Keys.cancelButtonLabel, for: .normal)
+        cancelButton.setTitle(cancelButtonLabelText, for: .normal)
         cancelButton.setTitleColor(.trackerRed, for: .normal)
         cancelButton.backgroundColor = .clear
         cancelButton.layer.borderColor = UIColor.trackerRed.cgColor
@@ -232,7 +263,8 @@ final class EventCreatorViewController: UIViewController {
     
     private lazy var createButton: UIButton = {
         let createButton = UIButton(type: .system)
-        createButton.setTitle(Keys.createButtonLabel, for: .normal)
+        var title = editTracker == nil ? createButtonLabelText : saveButtonTitleText
+        createButton.setTitle(title, for: .normal)
         createButton.setTitleColor(.trackerWhite, for: .normal)
         createButton.backgroundColor = .trackerGray
         createButton.layer.cornerRadius = 16
@@ -279,7 +311,25 @@ final class EventCreatorViewController: UIViewController {
         addSubviews()
         constraintsSetup()
         
+        categorySubtitleUpdate()
         scheduleSubtitleUpdate()
+        editingTrackerElementsSetup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard let indexPathEmoji = emojies.firstIndex(where: {$0 == selectedEmoji}) else { return }
+        let cellEmoji = self.collectionView.cellForItem(at: IndexPath(row: indexPathEmoji, section: 0))
+        cellEmoji?.backgroundColor = .trackerLightGray
+        selectedEmojiCell = IndexPath(row: indexPathEmoji, section: 0)
+        
+        guard let indexPathColor = colors.firstIndex(where: {$0.hexString == selectedColor?.hexString}) else { return }
+        let cellColor = self.collectionView.cellForItem(at: IndexPath(row: indexPathColor, section: 1))
+        cellColor?.layer.borderWidth = 3
+        cellColor?.layer.cornerRadius = 16
+        cellColor?.layer.borderColor = selectedColor?.withAlphaComponent(0.3).cgColor
+        selectedColorCell = IndexPath(item: indexPathColor, section: 1)
     }
     
     // MARK: - Private methods
@@ -307,10 +357,14 @@ final class EventCreatorViewController: UIViewController {
             
             scheduleButton.addSubview(scheduleChevronImage)
         }
+        
+        if editTracker != nil {
+            scrollView.addSubview(daysLabel)
+        }
     }
     
     private func constraintsSetup() {
-        
+        let topInset: CGFloat = editTracker == nil ? 0 : 78
         heightAnchor = errorLabel.heightAnchor.constraint(equalToConstant: 0)
         
         var constraints = [
@@ -322,7 +376,7 @@ final class EventCreatorViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            textField.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            textField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: topInset),
             textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
@@ -387,6 +441,13 @@ final class EventCreatorViewController: UIViewController {
                 ]
             }
         
+        if editTracker != nil {
+            constraints += [
+                daysLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                daysLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+            ]
+        }
+        
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -434,6 +495,20 @@ final class EventCreatorViewController: UIViewController {
         }
     }
     
+    private func editingTrackerElementsSetup() {
+        if let editTracker = editTracker {
+            textField.text = editTracker.name
+            categorySubtitle = category?.categoryName ?? ""
+            schedule = editTracker.schedule ?? []
+            selectedEmoji = editTracker.emoji
+            selectedColor = editTracker.color
+            
+            categorySubtitleUpdate()
+            createSchedule(schedule: schedule)
+            scheduleSubtitleUpdate()
+        }
+    }
+    
     // MARK: - Obj-C methods
     
     @objc private func textFieldDidChange(sender: AnyObject) {
@@ -445,7 +520,7 @@ final class EventCreatorViewController: UIViewController {
             errorLabel.text = ""
             heightAnchor?.constant = 0
         } else {
-            errorLabel.text = Keys.restrictorLabel
+            errorLabel.text = restrictorLabelText
             heightAnchor?.constant = 22
         }
     }
@@ -470,16 +545,30 @@ final class EventCreatorViewController: UIViewController {
         var tracker: Trackers?
         guard let selectedEmoji, let selectedColor else { return }
         
-        if event == .habit {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule)
-            
-            guard let tracker else { return }
-            delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
-        } else {
-            tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases)
-            
-            guard let tracker else { return }
-            delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
+        if editTracker == nil {
+            if event == .habit {
+                tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: schedule, pinned: false)
+                
+                guard let tracker else { return }
+                delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
+            } else {
+                tracker = Trackers(id: UUID(), name: textField.text ?? "", color: selectedColor, emoji: selectedEmoji, schedule: WeekDay.allCases, pinned: false)
+                
+                guard let tracker else { return }
+                delegate?.createTracker(tracker: tracker, categoryName: category?.categoryName ?? "Без категории")
+            }
+        }
+        else {
+            guard let editTracker else { return }
+
+            try? trackerStore.updateTracker(newName: textField.text ?? "",
+                                            newCategory: category?.categoryName ?? "Без категории",
+                                            newSchedule: schedule,
+                                            newEmoji: selectedEmoji,
+                                            newColor: selectedColor.hexString,
+                                            editableTracker: editTracker)
+            delegate?.createTracker(tracker: editTracker, categoryName: category?.categoryName ?? "Без категории")
+            dismiss(animated: true)
         }
     }
 }
@@ -510,16 +599,29 @@ extension EventCreatorViewController: ScheduleViewControllerDelegate {
         
         let scheduleString = schedule.map { $0.shortName }.joined(separator: ", ")
         
-        let allDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-        let workDaysArray: [String] = ["Пн", "Вт", "Ср", "Чт", "Пт"]
-        let holidaysArray: [String] = ["Сб", "Вс"]
+        let allDaysArray: [String] = [NSLocalizedString("mondayShort", comment: ""),
+                                      NSLocalizedString("tuesdayShort", comment: ""),
+                                      NSLocalizedString("wednesdayShort", comment: ""),
+                                      NSLocalizedString("thursdayShort", comment: ""),
+                                      NSLocalizedString("fridayShort", comment: ""),
+                                      NSLocalizedString("saturdayShort", comment: ""),
+                                      NSLocalizedString("sundayShort", comment: "")]
+        
+        let workDaysArray: [String] = [NSLocalizedString("mondayShort", comment: ""),
+                                       NSLocalizedString("tuesdayShort", comment: ""),
+                                       NSLocalizedString("wednesdayShort", comment: ""),
+                                       NSLocalizedString("thursdayShort", comment: ""),
+                                       NSLocalizedString("fridayShort", comment: "")]
+        
+        let holidaysArray: [String] = [NSLocalizedString("saturdayShort", comment: ""),
+                                       NSLocalizedString("sundayShort", comment: "")]
         
         if allDaysArray.allSatisfy(scheduleString.contains) {
-            scheduleSubtitle = "Каждый день"
+            scheduleSubtitle = NSLocalizedString("everyDay", comment: "")
         } else if scheduleString == workDaysArray.map({$0}).joined(separator: ", ") {
-            scheduleSubtitle = "Будни"
+            scheduleSubtitle = NSLocalizedString("workDays", comment: "")
         } else if scheduleString == holidaysArray.map({$0}).joined(separator: ", ") {
-            scheduleSubtitle = "Выходные"
+            scheduleSubtitle = NSLocalizedString("weekEnds", comment: "")
         } else {
             scheduleSubtitle = scheduleString
         }
@@ -602,9 +704,9 @@ extension EventCreatorViewController: UICollectionViewDelegateFlowLayout {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? EventCreatorSuplementaryView else { return UICollectionReusableView() }
         
         if section == 0 {
-            view.titleLabel.text = Keys.emojiSectionLabel
+            view.titleLabel.text = emojiSectionLabelText
         } else if section == 1 {
-            view.titleLabel.text = Keys.colorsSectionLabel
+            view.titleLabel.text = colorsSectionLabelText
         }
         
         return view

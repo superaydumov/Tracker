@@ -1,0 +1,90 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Эльдар Айдумов on 22.11.2023.
+  
+*/
+"buttonTitle" = "Вот это технологии!";
+"blueLabel" = "Отслеживайте только то, что хотите";
+"redLabel" = "Даже если это не литры воды и йога";
+
+"statisticsHeader" = "Статистика";
+"statisticsPlugLabel" = "Анализировать пока нечего";
+
+"trackersPlugLabel" = "Что будем отслеживать?";
+"trackersSearchPlugLabel" = "Ничего не найдено";
+"searchTextFieldPlaceholder" = "Поиск";
+"cancelButtonText" = "Отменить";
+"trackersHeader" = "Трекеры";
+"pinnedCategories" = "Закреплённые";
+"pinTracker" = "Закрепить";
+"unpinTracker" = "Открепить";
+"trackerContextMenuChange" = "Редактировать";
+"trackerContextMenuDelete" = "Удалить";
+"trackerAlertMessage" = "Уверены, что хотите удалить трекер?";
+"trackerAlertFirstButton" = "Удалить";
+"trackerAlertSecondButton" = "Отменить";
+"filtersButton" = "Фильтры";
+
+"topLabelText" = "Создание трекера";
+"habitButtonTitle" = "Привычка";
+"nonRegularButtonTitle" = "Нерегулярное событие";
+
+"newHabit" = "Новая привычка";
+"newIrregular" = "Новое нерегулярное событие";
+"textFieldPlaceHolder" = "Введите название трекера";
+"categoryButtonLabel" = "Категория";
+"scheduleButtonLabel" = "Расписание";
+"cancelButtonLabel" = "Отменить";
+"createButtonLabel" = "Создать";
+"restrictorLabel" = "Ограничение 38 символов";
+"emojiSectionLabel" = "Эмодзи";
+"colorsSectionLabel" = "Цвета";
+"saveButtonTitle" = "Сохранить";
+"editTitle" = "Редактирование привычки";
+
+"monday" = "Понедельник";
+"tuesday" = "Вторник";
+"wednesday" = "Среда";
+"thursday" = "Четверг";
+"friday" = "Пятница";
+"saturday" = "Суббота";
+"sunday" = "Воскресенье";
+
+"mondayShort" = "Пн";
+"tuesdayShort" = "Вт";
+"wednesdayShort" = "Ср";
+"thursdayShort" = "Чт";
+"fridayShort" = "Пт";
+"saturdayShort" = "Сб";
+"sundayShort" = "Вс";
+
+"everyDay" = "Каждый день";
+"workDays" = "Будни";
+"weekEnds" = "Выходные";
+
+"topLabel" = "Расписание";
+"performButton" = "Готово";
+
+"topLabel" = "Категория";
+"plugLabel" = "Привычки и события можно\nобъединять по смыслу";
+"categoryButonTitle" = "Добавить категорию";
+"contextMenuChange" = "Редактировать";
+"contextMenuDelete" = "Удалить";
+
+"alertTitle" = "Эта категория точно не нужна?";
+"alertMessage" = "Это действие также удалит созданные ранее трекеры для данной категории.";
+"alertFirstButton" = "Удалить";
+"alertSecondButton" = "Отменить";
+
+"newCategory" = "Новая категория";
+"editCategory" = "Редактирование категории";
+"categoryTextFieldPlaceholder" = "Введите название категории";
+"categoryPerformButton" = "Готово";
+
+"filtersTopLabel" = "Фильтры";
+"allTrackers" = "Все трекеры";
+"todayTrackers" = "Трекеры на сегодня";
+"completedTrackers" = "Завершенные";
+"inCompletedTrackers" = "Не завершенные";

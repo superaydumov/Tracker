@@ -14,9 +14,9 @@ enum CategoryEvent {
     var titleText: String {
         switch self {
         case .creation:
-            return "Новая категория"
+            return NSLocalizedString("newCategory", comment: "")
         case .editing:
-            return "Редактирование категории"
+            return NSLocalizedString("editCategory", comment: "")
         }
     }
 }
@@ -28,6 +28,10 @@ final class CategoryCreatorViewController: UIViewController {
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private var viewModel: CategoryViewModel?
     private let categoryEvent: CategoryEvent
+    
+    private let textFieldPlaceholderText = NSLocalizedString("categoryTextFieldPlaceholder", comment: "CategoryCreatorVC textField placeholder text")
+    private let performButtonText = NSLocalizedString("categoryPerformButton", comment: "CategoryCreatorVC performButton text")
+    
     
     private lazy var topLabel: UILabel = {
        let topLabel = UILabel()
@@ -42,7 +46,7 @@ final class CategoryCreatorViewController: UIViewController {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = textFieldPlaceholderText
         textField.textColor = .trackerBlack
         textField.backgroundColor = .trackerBackground
         textField.layer.cornerRadius = 16
@@ -58,7 +62,7 @@ final class CategoryCreatorViewController: UIViewController {
     
     private lazy var performButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(performButtonText, for: .normal)
         button.setTitleColor(.trackerWhite, for: .normal)
         button.backgroundColor = .trackerGray
         button.layer.cornerRadius = 16

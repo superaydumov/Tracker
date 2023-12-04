@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TrackerCategoryStoreUpdate {
+struct StoreUpdate {
     struct Move: Hashable {
         let oldIndex: Int
         let newIndex: Int

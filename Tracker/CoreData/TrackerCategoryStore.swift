@@ -19,7 +19,7 @@ final class TrackerCategoryStore: NSObject {
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
     private var updatedIndexes: IndexSet?
-    private var movedIndexes: Set<TrackerCategoryStoreUpdate.Move>?
+    private var movedIndexes: Set<StoreUpdate.Move>?
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -73,6 +73,7 @@ final class TrackerCategoryStore: NSObject {
                 let color = trackerCoreData.color?.color,
                 let emoji = trackerCoreData.emoji
             else { return nil }
+            let pinned = trackerCoreData.pinned
 
             return Trackers(
                 id: id,
@@ -80,7 +81,8 @@ final class TrackerCategoryStore: NSObject {
                 color: color,
                 emoji: emoji,
                 schedule: trackerCoreData.schedule?.compactMap {
-                    WeekDay(rawValue: $0) }
+                    WeekDay(rawValue: $0) },
+                pinned: pinned
             )
         } ?? []
 
@@ -130,6 +132,24 @@ final class TrackerCategoryStore: NSObject {
         }
     }
     
+    func category(_ categoryName: String) -> TrackerCategoryCoreData? {
+        return fetchedResultsController.fetchedObjects?.first {
+            $0.category == categoryName
+        }
+    }
+    
+    func category(for tracker: Trackers) -> TrackerCategory? {
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.returnsObjectsAsFaults = false
+        request.predicate = NSPredicate(format: "ANY trackers.id == %@", tracker.id.uuidString)
+        guard let trackerCategoriesCoreData = try? context.fetch(request)
+            else { return nil }
+        guard let categories = try? trackerCategoriesCoreData.map ({ try self.trackerCategory(from: $0) })
+            else { return nil }
+        
+        return categories.first
+    }
+    
     func addTracker(_ tracker: Trackers, to trackerCategory: TrackerCategory) throws {
         let category = fetchedResultsController.fetchedObjects?.first {
             $0.category == trackerCategory.categoryName
@@ -152,7 +172,7 @@ final class TrackerCategoryStore: NSObject {
         } else {
             let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
             request.returnsObjectsAsFaults = false
-            request.predicate = NSPredicate(format: "ANY trackers.category CONTAINS[cd] %@", trackerName)
+            request.predicate = NSPredicate(format: "ANY trackers.name CONTAINS[cd] %@", trackerName)
             guard let trackerCategoriesCoreData = try? context.fetch(request)
                 else { return [] }
             guard let categories = try? trackerCategoriesCoreData.map ({ try self.trackerCategory(from: $0) })
@@ -168,7 +188,7 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         insertedIndexes = IndexSet()
         deletedIndexes = IndexSet()
         updatedIndexes = IndexSet()
-        movedIndexes = Set<TrackerCategoryStoreUpdate.Move>()
+        movedIndexes = Set<StoreUpdate.Move>()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -181,7 +201,7 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         
         delegate?.store(
             self,
-            didUpdate: TrackerCategoryStoreUpdate(
+            didUpdate: StoreUpdate(
                 insertedIndexes: insertedIndexes,
                 deletedIndexes: deletedIndexes,
                 updatedIndexes: updatedIndexes,

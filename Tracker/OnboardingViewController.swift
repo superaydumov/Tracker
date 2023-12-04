@@ -11,12 +11,13 @@ final class OnboardingViewController: UIPageViewController {
     
     var checkProperty: Bool?
     
+    private let buttonTitleText = NSLocalizedString("buttonTitle", comment: "Onboarding button label text")
+    private let blueLabelText = NSLocalizedString("blueLabel", comment: "Onboarding blueLabel text")
+    private let redLabelText = NSLocalizedString("redLabel", comment: "Onboarding redLabel text")
+    
     private struct Keys {
         static let blueImage = "blueBackground.png"
         static let redImage = "redBackground.png"
-        static let buttonTitle = "Вот это технологии!"
-        static let blueLabel = "Отслеживайте только то, что хотите"
-        static let redLabel = "Даже если это не литры воды и йога"
     }
     
     //MARK: ComputedProperties
@@ -56,7 +57,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private lazy var button: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Keys.buttonTitle, for: .normal)
+        button.setTitle(buttonTitleText, for: .normal)
         button.setTitleColor(.trackerWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = .trackerBlack
@@ -70,7 +71,7 @@ final class OnboardingViewController: UIPageViewController {
     private lazy var blueLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.text = Keys.blueLabel
+        label.text = blueLabelText
         label.numberOfLines = 2
         label.textColor = .trackerBlack
         label.textAlignment = .center
@@ -82,7 +83,7 @@ final class OnboardingViewController: UIPageViewController {
     private lazy var redLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.text = Keys.redLabel
+        label.text = redLabelText
         label.numberOfLines = 2
         label.textColor = .trackerBlack
         label.textAlignment = .center

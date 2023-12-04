@@ -7,16 +7,18 @@
 
 import Foundation
 
-struct TrackerCategory {
+struct TrackerCategory: Hashable {
     let categoryName: String
     let trackers: [Trackers]
     
-    func visibleTrackers(filterString: String) -> [Trackers] {
+    func visibleTrackers(filterString: String, pinned: Bool?) -> [Trackers] {
         if filterString.isEmpty {
-            return trackers
+            return pinned == nil ? trackers : trackers.filter { $0.pinned == pinned }
         } else {
-            return trackers.filter {
-                $0.name.lowercased().contains(filterString.lowercased()) }
+            return pinned == nil ? trackers.filter { $0.name.lowercased().contains(filterString.lowercased()) } :
+            trackers
+                .filter { $0.name.lowercased().contains(filterString.lowercased()) }
+                .filter { $0.pinned == pinned }
         }
     }
 }
