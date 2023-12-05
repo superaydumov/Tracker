@@ -92,6 +92,22 @@ final class OnboardingViewController: UIPageViewController {
         return label
     }()
     
+    private lazy var blueLogoView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "appLogo")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }()
+    
+    private lazy var redLogoView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "appLogo")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }()
+    
     //MARK: LifeCycle
     
     override func viewDidLoad() {
@@ -113,12 +129,25 @@ final class OnboardingViewController: UIPageViewController {
     private func addSubviews() {
         view.addSubview(pageControl)
         view.addSubview(button)
+        
+        blueViewController.view.addSubview(blueLogoView)
+        redViewController.view.addSubview(redLogoView)
         blueViewController.view.addSubview(blueLabel)
         redViewController.view.addSubview(redLabel)
     }
     
     private func constraintsSetup() {
         NSLayoutConstraint.activate([
+            blueLogoView.topAnchor.constraint(equalTo: blueViewController.view.topAnchor, constant: 80),
+            blueLogoView.centerXAnchor.constraint(equalTo: blueViewController.view.centerXAnchor),
+            blueLogoView.heightAnchor.constraint(equalToConstant: 80),
+            blueLogoView.widthAnchor.constraint(equalToConstant: 80),
+            
+            redLogoView.topAnchor.constraint(equalTo: redViewController.view.topAnchor, constant: 80),
+            redLogoView.centerXAnchor.constraint(equalTo: redViewController.view.centerXAnchor),
+            redLogoView.heightAnchor.constraint(equalToConstant: 80),
+            redLogoView.widthAnchor.constraint(equalToConstant: 80),
+            
             button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             button.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
@@ -130,12 +159,12 @@ final class OnboardingViewController: UIPageViewController {
             blueLabel.leadingAnchor.constraint(equalTo: blueViewController.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             blueLabel.trailingAnchor.constraint(equalTo: blueViewController.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             blueLabel.centerXAnchor.constraint(equalTo: blueViewController.view.centerXAnchor),
-            blueLabel.bottomAnchor.constraint(equalTo: blueViewController.view.safeAreaLayoutGuide.bottomAnchor, constant: -270),
+            blueLabel.topAnchor.constraint(equalTo: blueLogoView.bottomAnchor, constant: 35),
             
             redLabel.leadingAnchor.constraint(equalTo: redViewController.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             redLabel.trailingAnchor.constraint(equalTo: redViewController.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             redLabel.centerXAnchor.constraint(equalTo: redViewController.view.centerXAnchor),
-            redLabel.bottomAnchor.constraint(equalTo: redViewController.view.safeAreaLayoutGuide.bottomAnchor, constant: -270),
+            redLabel.topAnchor.constraint(equalTo: redLogoView.bottomAnchor, constant: 35)
         ])
     }
     
